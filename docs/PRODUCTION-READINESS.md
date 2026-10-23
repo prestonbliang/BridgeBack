@@ -55,6 +55,8 @@ For this cloud's trusted network proxy, Node checks use `NODE_USE_ENV_PROXY=1`. 
 
 ## Dependency maintenance
 
+During the contact-workflow release, CI caught a newly reported high-severity Zod advisory, [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5). The release upgrades to Zod 4.6.7, above the patched 4.6.6 boundary. Legacy records use explicit key/value schemas; the County evidence inventory uses `partialRecord` so an enum-keyed record does not accidentally require both OR alternatives. All 93 unit cases, both builds, 28 browser cases and eight bundled browser cases pass after migration. The new production audit is zero known advisories; CI's audit gate remains enabled.
+
 The production audit on October 23 found advisories inherited through Sharp/PostCSS. `package.json` explicitly overrides PostCSS to 8.5.31 and ties the transitive Sharp version to the patched direct 0.35.5 development-tool version. The lockfile and license inventory are updated together. CI runs `npm audit --omit=dev --audit-level=high`; the current production audit is zero, with the full report in `production-dependency-audit.json`. This is a known-advisory check, not a security certification. Re-run compatibility/build/browser checks when removing or updating the overrides.
 
 ## Human and release gates

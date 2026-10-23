@@ -26,6 +26,9 @@ on:
         default: "https://bridge-back-one.vercel.app"
 permissions:
   contents: read
+concurrency:
+  group: public-deployment-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   public-site:
     runs-on: ubuntu-latest
@@ -59,6 +62,9 @@ jobs:
               lines += ["Checked: " + data["checkedAt"], "", "Transport: " + data["transport"], ""]
               for item in data["results"]:
                   lines.append(("PASS: " if item["passed"] else "FAIL: ") + item["name"] + (" — " + item["detail"] if "detail" in item else ""))
+                  if not item["passed"]:
+                      detail = item.get("detail", "No detail").replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+                      print("::error title=" + item["name"] + "::" + detail)
               lines += ["", "Source review warnings: " + str(len(data["warnings"]))]
               lines += data["warnings"]
               print("::notice title=Source-review report::" + str(len(data["warnings"])) + " source-review warnings. Page checks do not establish live assistance.")

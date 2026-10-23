@@ -66,7 +66,20 @@ async function check(name, run) {
     const detail =
       error instanceof assert.AssertionError
         ? error.message.split("\n")[0]
-        : "Request or validation failed";
+        : error instanceof z.ZodError
+          ? "Invalid public response fields: " +
+            error.issues
+              .map((issue) => issue.path.join(".") + ": " + issue.message)
+              .join("; ")
+              .slice(0, 1000)
+          : "Request failed" +
+            (error?.cause?.code
+              ? " (" +
+                String(error.cause.code)
+                  .replace(/[^A-Z0-9_]/g, "")
+                  .slice(0, 80) +
+                ")"
+              : "");
     results.push({ name, passed: false, detail });
     console.error(`FAIL ${name}: ${detail}`);
   }

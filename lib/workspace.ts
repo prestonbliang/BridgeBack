@@ -270,8 +270,8 @@ export const legacyWorkspaceSchema = z.object({
   active: z.boolean(),
   demo: z.boolean(),
   theme: z.enum(["light", "dark"]),
-  expires: z.record(z.string()).default({}),
-  difficulty: z.record(z.number().int().min(1).max(5)).default({}),
+  expires: z.record(z.string(), z.string()).default({}),
+  difficulty: z.record(z.string(), z.number().int().min(1).max(5)).default({}),
   history: z.array(z.string()).max(30),
 });
 

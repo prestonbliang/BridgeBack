@@ -1,5 +1,5 @@
 {
-  "observedAt": "2026-10-23T22:01:43.066203+00:00",
+  "observedAt": "2026-10-23T22:14:59.455351+00:00",
   "scope": "Local production build; native tests use a browser bridge shim, not an Apple runtime. CI/public-origin verification is recorded separately.",
   "results": {
     "unit": {
@@ -7,11 +7,11 @@
     },
     "browser": {
       "passed": 28,
-      "duration": "53.9s"
+      "duration": "55.3s"
     },
     "bundledBrowser": {
       "passed": 8,
-      "duration": "7.7s"
+      "duration": "8.1s"
     },
     "checks": [
       "lint",
@@ -20,5 +20,11 @@
       "native bundle and configuration",
       "live 11-source and 5-contact audits"
     ]
+  },
+  "dependencyRemediation": {
+    "advisory": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+    "package": "zod",
+    "installedPatchedVersion": "4.6.7",
+    "note": "93 units, lint, type checking, native and normal builds, 28 browser cases and 8 bundled browser cases pass after migrating record schemas. Production audit reports zero known advisories."
   }
 }

@@ -1,8 +1,5 @@
 name: Inspect public release evidence
 on:
-  push:
-    branches: [main]
-    paths: [".github/workflows/inspect-release-evidence.yml"]
   workflow_dispatch:
     inputs:
       run_id:
@@ -20,7 +17,7 @@ jobs:
       - uses: actions/download-artifact@v6
         with:
           name: public-deployment-check
-          run-id: ${{ inputs.run_id || '40031010945' }}
+          run-id: ${{ inputs.run_id }}
           github-token: ${{ github.token }}
           path: evidence
       - name: Show only public HTTP verification fields

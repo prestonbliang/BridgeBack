@@ -22,7 +22,10 @@ export const officialStepIdSchema = z.enum(ids);
 export const officialPlanSchema = z
   .object({
     documents: z
-      .record(z.enum(["recent-paystubs", "employer-statement"]), z.boolean())
+      .partialRecord(
+        z.enum(["recent-paystubs", "employer-statement"]),
+        z.boolean(),
+      )
       .default({}),
     programId: officialProgramIdSchema,
     role: officialRoleSchema,

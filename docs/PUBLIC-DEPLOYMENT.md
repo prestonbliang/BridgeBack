@@ -38,6 +38,8 @@ The second check runs the existing desktop/mobile regression suite on the actual
 
 Code pushes also trigger the public workflow. It waits up to six minutes for `/api/release` to expose the expected Git revision before running checks; an older deployment cannot substitute for the new release. Vercel's system Git metadata supplies the revision. The route returns only a validated public SHA, record/catalog versions, target and feature marker. It never returns applicant data or the environment. Manual workflow runs can select another origin without asserting an expected revision. The HTTP checker now also validates this release metadata. A missing/mismatched revision is a failed verification, not proof that the new app reached production.
 
+If `/api/release` returns 404, inspect the Vercel project's latest Production deployment and its source commit. Confirm that Settings → Git connects **prestonbliang/BridgeBack** and production branch **main**. A previous Ready deployment does not publish newer code. Inspect any failed/blocked build and deploy the current source before rerunning verification. The read-only **Inspect public release evidence** workflow can publish the retained HTTP report's public result fields as annotations; it never publishes browser workspace exports or hosting credentials.
+
 Alternatively, open the repository's **Actions → Check a public deployment → Run workflow**, select the deployed revision, and enter the production HTTPS origin. The workflow uses no hosting secret. Its evidence is uploaded as an artifact. If Vercel authentication protection is still enabled, the check should fail; do not bypass protection with tokens in URLs.
 
 ## Check the visitor experience
