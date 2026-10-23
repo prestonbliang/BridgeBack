@@ -47,6 +47,7 @@ jobs:
         run: |
           xcodebuild -version
           xcrun --sdk iphoneos --show-sdk-version
+          python3 -c 'import subprocess; assert int(subprocess.check_output(["xcrun", "--sdk", "iphoneos", "--show-sdk-version"], text=True).strip().split(".")[0]) >= 26, "The reviewed Apple upload rules require iOS SDK 26+"'
           python3 -c 'import re, subprocess; v = subprocess.check_output(["xcodebuild", "-version"], text=True); assert int(re.search(r"Xcode (\d+)", v).group(1)) >= 26, "Capacitor 8 requires Xcode 26+"'
       - name: Compile unsigned simulator app
         run: >-

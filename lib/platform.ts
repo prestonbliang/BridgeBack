@@ -1,7 +1,14 @@
-import { Capacitor } from "@capacitor/core";
+import { Capacitor, SystemBars, SystemBarsStyle } from "@capacitor/core";
 
 export function isNativeApp(): boolean {
   return Capacitor.isNativePlatform();
+}
+
+export async function setNativeTheme(theme: "light" | "dark"): Promise<void> {
+  if (!isNativeApp()) return;
+  await SystemBars.setStyle({
+    style: theme === "dark" ? SystemBarsStyle.Dark : SystemBarsStyle.Light,
+  });
 }
 
 export type ExportResult = "downloaded" | "shared" | "cancelled";

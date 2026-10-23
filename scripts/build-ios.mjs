@@ -1,6 +1,10 @@
 import { execFileSync } from "node:child_process";
 import { rm, access } from "node:fs/promises";
 
+execFileSync(process.execPath, ["scripts/check-notices.mjs"], {
+  stdio: "inherit",
+});
+
 execFileSync(process.execPath, ["node_modules/next/dist/bin/next", "build"], {
   stdio: "inherit",
   env: { ...process.env, BRIDGEBACK_NATIVE: "1" },

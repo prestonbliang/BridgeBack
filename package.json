@@ -18,7 +18,13 @@
     "ios:open": "cap open ios",
     "ios:check": "python3 scripts/check-ios.py",
     "ios:art": "node scripts/generate-ios-art.mjs",
-    "test:ios-web": "playwright test --config playwright.native.config.ts"
+    "test:ios-web": "playwright test --config playwright.native.config.ts",
+    "notices:generate": "node scripts/generate-notices.mjs",
+    "notices:check": "node scripts/check-notices.mjs",
+    "prebuild": "npm run notices:check",
+    "ci:evidence": "python3 scripts/record-ci-evidence.py",
+    "submission:pack": "node scripts/package-submission.mjs",
+    "demo:record": "node scripts/record-demo.mjs"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.3",

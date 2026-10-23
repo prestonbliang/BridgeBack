@@ -33,6 +33,7 @@ assert project.count("PRODUCT_BUNDLE_IDENTIFIER = org.bridgeback.app;") == 2
 public = APP / "public"
 assert (public / "index.html").exists(), "Run npm run ios:bundle first"
 assert (public / "privacy.html").exists()
+assert (public / "notices.html").exists()
 assert not (public / "sw.js").exists(), "Native bundle must not ship a browser worker"
 html = (public / "index.html").read_text()
 assets = re.findall(r'(?:src|href)="([^" ]+)"', html)

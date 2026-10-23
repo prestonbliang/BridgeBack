@@ -46,3 +46,7 @@ The person controls website visits, phone calls and exports. The app does not cl
 ## District-review opening
 
 For a presentation to Scott Peters or district reviewers, start with Overview → Find a real person to help, then move into the fictional dependency example. The real-contact path requires no sample program or income profile. Use the [district brief](DISTRICT-BRIEF.md) for defensible claims and [iOS handoff](IOS.md) for the next platform phase. Do not present the native candidate as signed, Apple approved or device tested.
+
+## Recorded route and narration
+
+`npm run demo:record` produces a separate two-minute support-focused review route from actual browser interactions. Use [the timed narration draft](DEMO-NARRATION.md), add the actual participant names and your own accurate narration/disclosure, then check the current official video requirements in [the submission guide](SUBMISSION.md). The recording does not upload or submit anything.

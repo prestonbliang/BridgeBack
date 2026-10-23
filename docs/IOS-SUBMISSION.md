@@ -44,3 +44,7 @@ The plist sets `ITSAppUsesNonExemptEncryption` to false for this implementation.
 - **Screenshots:** capture the running native app at App Store Connect’s currently required device sizes. Repository Chromium screenshots are design-review evidence, not certified native App Store screenshots. Avoid household information and invented impact claims.
 
 Suggested screenshot captions: “Know what to do next”; “Find the paper that unlocks the next step”; “Work through a stuck step”; “Bring clear questions to a real helper”; “Your progress stays on your device.” Keep the fictional-example banner and source dates visible wherever applicable.
+
+## Current upload gate
+
+Apple’s upload requirements and review guidelines were read October 23, 2026; see [the dated source record](submission-sources.json) and [release gates](IOS.md). Use Xcode 26+ and iOS 26 SDK+, complete the current age-rating questionnaire, and start with TestFlight while device testing is incomplete. Both unsigned native compile targets passed in macOS CI; this does not establish actual-device behavior or App Store acceptance. Retain the in-app open-source acknowledgments and review final archive SDK notices/privacy declarations.

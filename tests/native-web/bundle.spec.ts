@@ -21,6 +21,10 @@ test.beforeEach(async ({ page, context }) => {
           })),
         },
         { name: "Share", methods: [{ name: "share", rtype: "promise" }] },
+        {
+          name: "SystemBars",
+          methods: [{ name: "setStyle", rtype: "promise" }],
+        },
       ],
       nativePromise: async (plugin: string, method: string) => {
         (host.__nativeCalls as string[]).push(`${plugin}.${method}`);
@@ -110,10 +114,36 @@ test("first launch needs only the bundled files; local help and privacy work wit
   await expect(page.getByLabel("Household size", { exact: true })).toHaveValue(
     "3",
   );
+  await page.getByLabel("Appearance").selectOption("dark");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (
+            window as unknown as { __nativeCalls: string[] }
+          ).__nativeCalls.filter((call) => call === "SystemBars.setStyle")
+            .length,
+      ),
+    )
+    .toBeGreaterThan(1);
+  await page
+    .getByRole("link", { name: "Open-source acknowledgments", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Built with open-source software." }),
+  ).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByText("Atkinson Hyperlegible fonts", { exact: false }).click();
+  await expect(
+    page.getByText("SIL OPEN FONT LICENSE", { exact: false }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "← Return to BridgeBack" }).click();
+  await nav(page, "Settings");
   await page.getByRole("link", { name: "Read the privacy policy" }).click();
   await expect(
     page.getByRole("heading", { name: "Your paperwork stays with you." }),
   ).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(
     (
       await new AxeBuilder({ page })

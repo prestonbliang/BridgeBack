@@ -6,9 +6,12 @@ const mocks = vi.hoisted(() => ({
   remove: vi.fn(),
   read: vi.fn(),
   share: vi.fn(),
+  style: vi.fn(),
 }));
 vi.mock("@capacitor/core", () => ({
   Capacitor: { isNativePlatform: mocks.native },
+  SystemBars: { setStyle: mocks.style },
+  SystemBarsStyle: { Dark: "DARK", Light: "LIGHT" },
 }));
 vi.mock("@capacitor/filesystem", () => ({
   Filesystem: {
@@ -20,13 +23,18 @@ vi.mock("@capacitor/filesystem", () => ({
   Encoding: { UTF8: "utf8" },
 }));
 vi.mock("@capacitor/share", () => ({ Share: { share: mocks.share } }));
-import { clearInterruptedExports, exportText } from "../lib/platform";
+import {
+  clearInterruptedExports,
+  exportText,
+  setNativeTheme,
+} from "../lib/platform";
 
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.native.mockReturnValue(true);
   mocks.write.mockResolvedValue({ uri: "file:///cache/preparation.txt" });
   mocks.remove.mockResolvedValue(undefined);
+  mocks.style.mockResolvedValue(undefined);
   mocks.share.mockResolvedValue({
     activityType: "com.apple.UIKit.activity.SaveToFiles",
   });
@@ -118,4 +126,16 @@ it("does not silently ignore a failed temporary-file cleanup", async () => {
   await expect(exportText("questions.txt", "Questions")).rejects.toThrow(
     "Cache cleanup failed",
   );
+});
+
+it("keeps native status-bar text readable with either app theme without calling it on the web", async () => {
+  await setNativeTheme("dark");
+  await setNativeTheme("light");
+  expect(mocks.style.mock.calls).toEqual([
+    [{ style: "DARK" }],
+    [{ style: "LIGHT" }],
+  ]);
+  mocks.native.mockReturnValue(false);
+  await setNativeTheme("dark");
+  expect(mocks.style).toHaveBeenCalledTimes(2);
 });

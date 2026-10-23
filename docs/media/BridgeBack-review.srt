@@ -1,0 +1,58 @@
+1
+00:00:00,000 --> 00:00:07,003
+BridgeBack helps people understand housing paperwork and prepare their next useful step.
+
+2
+00:00:07,003 --> 00:00:16,003
+Fictional practice: two forms are waiting for income proof. Checklist progress is
+calculated from state.
+
+3
+00:00:16,003 --> 00:00:26,007
+The dependency graph connects shared documents to separate program requirements. OR means
+one accepted option.
+
+4
+00:00:26,007 --> 00:00:38,013
+Preview one action with the same engine. The hypothetical result leaves saved progress
+untouched.
+
+5
+00:00:38,013 --> 00:00:48,022
+Apply the document only when it is actually available. The two fictional forms can now
+proceed.
+
+6
+00:00:48,022 --> 00:01:00,025
+Cannot get the pay stub? Route Rescue checks the exact alternatives instead of inventing
+an exception.
+
+7
+00:01:00,025 --> 00:01:12,033
+A stuck step gets smaller instructions. Reviewing help or requesting a paper does not mark
+it ready.
+
+8
+00:01:12,033 --> 00:01:20,038
+A short fictional exercise explains gross pay. Learning answers do not change personal
+income or readiness.
+
+9
+00:01:20,038 --> 00:01:34,043
+Real public counselor listings are separate from the sample rules. Source date, languages
+and search area are visible.
+
+10
+00:01:34,043 --> 00:01:44,050
+Prepare focused questions and record that you are waiting. No call, application or
+document completion is fabricated.
+
+11
+00:01:44,050 --> 00:01:53,058
+No account or document uploads. People control exports and deletion; browser storage is
+not encrypted secure storage.
+
+12
+00:01:53,058 --> 00:02:00,062
+TypeScript, Next.js/React, IndexedDB and Capacitor/Swift. Review footage: add entrant
+names, your own narration and full AI disclosure.

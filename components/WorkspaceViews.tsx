@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useNativeApp } from "../hooks/useNativeApp";
 import {
   ArrowRight,
@@ -494,13 +495,24 @@ export function SettingsView({
                 ? " This iOS app includes its checklists and dated resource information for offline use from first launch. Browser and app storage are separate; progress does not sync between them."
                 : " First load online, then install through your browser menu; on iPhone use Safari → Share → Add to Home Screen."}
             </p>
-            <a
-              href={native ? "/privacy.html" : "/privacy"}
+            <Link
+              prefetch={false}
+              href="/privacy"
               target={native ? undefined : "_blank"}
               rel="noreferrer noopener"
             >
               Read the privacy policy
-            </a>
+            </Link>
+            <p>
+              <Link
+                prefetch={false}
+                href="/notices"
+                target={native ? undefined : "_blank"}
+                rel="noreferrer noopener"
+              >
+                Open-source acknowledgments
+              </Link>
+            </p>
           </section>
         </div>
       </div>

@@ -1,6 +1,6 @@
 # BridgeBack: a practical San Diego demonstration
 
-Prepared for a Congressional App Challenge presentation to Representative Scott Peters and district reviewers. This brief emphasizes the local public-service problem and demonstrable engineering. It does not claim his endorsement, an office partnership or knowledge of his personal preferences. His current issue and challenge pages could not be read from this environment, so no current policy position or local judging rule is attributed to him.
+Prepared for a Congressional App Challenge presentation to Representative Scott Peters and district reviewers. This brief emphasizes the local public-service problem and demonstrable engineering. It does not claim his endorsement, an office partnership or knowledge of his personal preferences. His [housing and homelessness page](https://scottpeters.house.gov/issues/housing-and-homelessness), reviewed October 23, 2026, emphasizes supportive services and access to benefits and care. BridgeBack addresses an administrative part of that access problem; it does not create housing supply. The [2025 winners release](https://scottpeters.house.gov/press-releases/rep-peters-congratulates-2025-congressional-app-challenge-winners) describes judging for purpose, concept, technicality, creativity and design. That is useful presentation context, not a guarantee of 2026 scoring or endorsement.
 
 ## Opening: the problem a person can recognize
 
@@ -29,3 +29,5 @@ San Diego County is the starting service area. Do not equate county boundaries o
 ## Two-minute route
 
 Use the existing [competition script](DEMO.md), shortening the graph tour if necessary to include a stuck-step handoff. Finish with an actual exported checklist or question sheet. A concrete next action is the product’s strongest closing image.
+
+The [current CA-50 challenge page](https://scottpeters.house.gov/app-challenge) and national rules are linked in the [submission guide](SUBMISSION.md). Use the verified dates and full AI disclosure in that guide; do not invent independent development history to fit the presentation.

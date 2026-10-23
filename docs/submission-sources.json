@@ -1,0 +1,49 @@
+{
+  "reviewedAt": "2026-10-23T16:13:23.912646+00:00",
+  "sources": [
+    {
+      "id": "district-entry",
+      "url": "https://scottpeters.house.gov/app-challenge",
+      "scope": "2026 district entry and eligibility; deadline wording noon EST"
+    },
+    {
+      "id": "national-rules",
+      "url": "https://www.congressionalappchallenge.us/wp-content/uploads/2026/05/2026-CAC-Rules.pdf",
+      "scope": "2026 full rules: originality/AI disclosure, 1\u20133 minute public video, noon EDT deadline"
+    },
+    {
+      "id": "national-registration",
+      "url": "https://www.congressionalappchallenge.us/students/student-registration/",
+      "scope": "Portal link; conflicting 9pm ET deadline wording"
+    },
+    {
+      "id": "housing-priority",
+      "url": "https://scottpeters.house.gov/issues/housing-and-homelessness",
+      "scope": "Supportive services and improving access; not housing program eligibility rules"
+    },
+    {
+      "id": "district-judging",
+      "url": "https://scottpeters.house.gov/press-releases/rep-peters-congratulates-2025-congressional-app-challenge-winners",
+      "scope": "Published 2025 local judging criteria; not a promise of 2026 scoring"
+    },
+    {
+      "id": "apple-upload",
+      "url": "https://developer.apple.com/news/upcoming-requirements/",
+      "scope": "Xcode 26+/iOS 26 SDK; minimum target iOS 13; age-rating updates"
+    },
+    {
+      "id": "apple-review",
+      "url": "https://developer.apple.com/app-store/review/guidelines/",
+      "scope": "2.1 completeness/device tests, 2.2 beta/TestFlight, 4.2 functionality, 5.1.1 privacy"
+    }
+  ],
+  "rulebookSha256": "d37c67261cb34abc05ff1af02586ec7e582526a212f6d54e70f8233f6a0523d4",
+  "deadlineConflict": {
+    "rulebook": "2026-10-26 noon EDT",
+    "rulebookPacific": "2026-10-26 08:00 America/Los_Angeles",
+    "districtPage": "2026-10-26 noon EST (wording as published)",
+    "registrationPage": "2026-10-26 9:00pm ET",
+    "guidance": "Prepare before the earliest published time and confirm with the organizer."
+  },
+  "aiAuthorshipStatus": "Substantial AI assistance is known. The entrant reports completely reviewing and understanding the code; this is self-reported. Specific personal implementation contributions are not identified in this record. Eligibility is not certified."
+}

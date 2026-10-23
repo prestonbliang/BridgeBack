@@ -25,6 +25,8 @@ function harness() {
   const network = async (input: string | Request) => {
     const url = key(input);
     if (url === origin + "/") return new Response(html);
+    if (url === origin + "/notices")
+      return new Response("Open-source acknowledgments");
     if (url === origin + "/privacy")
       return brokenPolicy
         ? new Response("Policy unavailable", { status: 503 })
@@ -165,6 +167,9 @@ describe("atomic offline shell lifecycle", () => {
     expect(
       await (await app.dispatch("fetch", "/privacy", "navigate"))?.text(),
     ).toContain("Privacy policy");
+    expect(
+      await (await app.dispatch("fetch", "/notices", "navigate"))?.text(),
+    ).toContain("Open-source acknowledgments");
     expect(
       await app.dispatch("fetch", "/_next/static/privacy.js", "cors"),
     ).toBeDefined();

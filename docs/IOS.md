@@ -1,10 +1,10 @@
 # iOS handoff: next stop is TestFlight
 
-BridgeBack now has a Capacitor 8 iPhone/iPad project, a bundled offline application, native file sharing, a public privacy page, privacy-manifest declarations, and a macOS build workflow. This is an engineering handoff for a beta candidate. It is not a signed IPA, a verified Apple-device build, or App Store approval.
+BridgeBack now has a Capacitor 8 iPhone/iPad project, a bundled offline application, native file sharing, a public privacy page, privacy-manifest declarations, and a macOS build workflow. This is an engineering handoff for a beta candidate. Unsigned simulator and device builds have passed on macOS CI. This is not a signed IPA, actual-device runtime verification, or App Store approval.
 
 ## Build and open on a Mac
 
-Use Node 22+ (24 tested), Python 3 for the handoff check, and **Xcode 26+**. The Xcode requirement was verified in the framework maintainer’s [Capacitor 8 upgrade guide](https://github.com/ionic-team/capacitor-docs/blob/main/docs/main/updating/8-0.md). Accept Xcode’s license and install an iOS simulator runtime. The app targets **iOS/iPadOS 16.0+**, including native HTML dialog support; this is the minimum device OS, not the required build SDK.
+Use Node 22+ (24 tested), Python 3 for the handoff check, and **Xcode 26+**. Apple’s [upload requirements](https://developer.apple.com/news/upcoming-requirements/), reviewed October 23, 2026, require Xcode 26+ and the iOS 26 SDK for uploads since April 28, 2026. This agrees with the framework maintainer’s [Capacitor 8 upgrade guide](https://github.com/ionic-team/capacitor-docs/blob/main/docs/main/updating/8-0.md). Accept Xcode’s license and install an iOS simulator runtime. The app targets **iOS/iPadOS 16.0+**, including native HTML dialog support; this is the minimum device OS, not the required build SDK.
 
 ```sh
 npm ci
@@ -21,7 +21,7 @@ The export uses Next.js’s `.next` working directory. After an iOS bundle, run 
 
 ## What is different on iOS
 
-- The shell, fonts, dated counselor directory, privacy page and graph engine ship inside the app. A first launch does not depend on a prior online visit or service-worker caching.
+- The shell, fonts, dated counselor directory, privacy/acknowledgments pages and graph engine ship inside the app. A first launch does not depend on a prior online visit or service-worker caching.
 - Native exports use the system share sheet and a temporary file in app cache. Dismissal does not record a successful export. Sharing/cleanup errors are surfaced; neither changes preparation progress. Cleanup runs after the sheet and at next startup for interrupted exports. Copies the person saves or shares belong to that destination.
 - The app’s cache export prefix is narrow; cleanup does not remove unrelated cache files. Native bridge logging is disabled so export contents are not written to debug logs by BridgeBack’s bridge configuration.
 - Websites and calls go through Capacitor’s default external-navigation handling. No `server.url`, `allowNavigation`, arbitrary-transport exemption or remotely downloaded application code is configured.
@@ -52,7 +52,7 @@ npm run test:e2e
 
 `ios:check` validates the actual generated bundle, referenced local assets/fonts/privacy page, absence of a browser worker/remote server, disabled bridge logs, the plist and privacy-manifest resource, permission scope, deployment target and opaque 1024px icon. `test:ios-web` serves only the bundled files through Playwright request fulfillment with networking disabled and an explicitly simulated native bridge. It verifies first-launch interactions, real local counselor data, persistence, the privacy page, and share success/cancellation/error cleanup at phone and tablet sizes. **It runs Chromium, not WKWebView, UIKit, an iOS simulator or the actual Share extension.**
 
-The [iOS preflight workflow](../.github/workflows/ios-preflight.yml) can be dispatched in GitHub Actions and runs automatically for relevant pushes to main and pull requests. It validates the bundle, checks the Xcode major version and compiles an unsigned simulator app. The resulting artifact is for a simulator; it cannot be installed as a signed device IPA or submitted to TestFlight. Cloud GitHub CLI authentication was unavailable, so this workflow was not dispatched or claimed passed here.
+The [iOS preflight workflow](../.github/workflows/ios-preflight.yml) can be dispatched in GitHub Actions and runs automatically for relevant pushes to main and pull requests. It validates the bundle, checks Xcode and the iOS SDK version, and compiles both unsigned simulator and device apps. Both builds have passed on macOS; [the evidence report](ios-build-evidence.json) records the exact tested source, successful run URL and artifact digests. The simulator binary runs only in a compatible simulator; the unsigned device binary still needs publisher signing. Neither artifact is a signed IPA or a TestFlight release.
 
 On a Mac, its core compile command is:
 
@@ -65,20 +65,20 @@ xcodebuild -project ios/App/App.xcodeproj -scheme App \
 
 ## Beta release gates
 
-| Gate | Evidence required before calling it passed |
-|---|---|
-| Native compilation | Successful Xcode build and resolved Swift dependencies; currently unexecuted in Linux |
-| Signing and identity | Publisher-owned identifier, team and provisioning; no credentials supplied here |
-| Actual first-launch offline | Fresh install, airplane mode before opening; complete a help plan and restart |
-| Durability and recovery | Force-quit/reopen after changes, verify save status; delete all data and verify after restart; compare clean reinstall behavior |
-| Sharing | Save text and JSON to Files, cancel, simulate unavailable destination, inspect cleanup; no false success or preparation change |
-| Layout and input | Small supported iPhone, current large iPhone and iPad; portrait/landscape, notch/home indicator, hardware/software keyboards and 200% text |
-| Accessibility | VoiceOver focus/order/labels, keyboard-only dialog flow, Reduce Motion and Increase Contrast; do not claim an accessibility label before testing it |
-| Privacy | Inspect archive privacy report, app-switcher cover, debug output and outgoing requests; verify hosted policy/support links |
-| Content | Current source dates, English-only UI clearly described, no fake eligibility/appointments; provider-language filters do not imply translated app screens |
-| Submission rules | Re-read Apple’s current SDK/upload requirements, review guidelines, metadata and age-rating questionnaire in App Store Connect |
+| Gate                        | Evidence required before calling it passed                                                                                                               |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Native compilation          | Passed for unsigned simulator and device builds in macOS CI; exact evidence linked above                                                                 |
+| Signing and identity        | Publisher-owned identifier, team and provisioning; no credentials supplied here                                                                          |
+| Actual first-launch offline | Fresh install, airplane mode before opening; complete a help plan and restart                                                                            |
+| Durability and recovery     | Force-quit/reopen after changes, verify save status; delete all data and verify after restart; compare clean reinstall behavior                          |
+| Sharing                     | Save text and JSON to Files, cancel, simulate unavailable destination, inspect cleanup; no false success or preparation change                           |
+| Layout and input            | Small supported iPhone, current large iPhone and iPad; portrait/landscape, notch/home indicator, hardware/software keyboards and 200% text               |
+| Accessibility               | VoiceOver focus/order/labels, keyboard-only dialog flow, Reduce Motion and Increase Contrast; do not claim an accessibility label before testing it      |
+| Privacy                     | Inspect archive privacy report, app-switcher cover, debug output and outgoing requests; verify hosted policy/support links                               |
+| Content                     | Current source dates, English-only UI clearly described, no fake eligibility/appointments; provider-language filters do not imply translated app screens |
+| Submission rules            | Re-read Apple’s current SDK/upload requirements, review guidelines, metadata and age-rating questionnaire in App Store Connect                           |
 
-Apple’s review, privacy-manifest and upcoming-requirements pages returned access-denied responses from this environment on October 23, 2026. They were not independently reviewed here. Consult [current upload requirements](https://developer.apple.com/news/upcoming-requirements/), [review guidelines](https://developer.apple.com/app-store/review/guidelines/) and [privacy documentation](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) before upload. A framework’s minimum Xcode version does not establish Apple’s current submission acceptance.
+Apple’s [current upload requirements](https://developer.apple.com/news/upcoming-requirements/) and [review guidelines](https://developer.apple.com/app-store/review/guidelines/) were reviewed on October 23, 2026. Requirements include Xcode 26+/iOS 26 SDK uploads, a minimum target of iOS 13 (this app targets 16), and the current age-rating questionnaire. Review §2.1 requires complete, device-tested functionality; §2.2 directs beta products to TestFlight; §4.2 requires useful functionality beyond a repackaged website; §5.1.1 requires accurate, accessible privacy disclosures and appropriate data handling. Bundled dependency calculations, local progress, offline learning and native sharing are implemented, but Apple makes its own review determination. Recheck live requirements and the final archive’s combined privacy report before upload.
 
 Once these gates pass, Archive a **Release** device build in Xcode, validate it in Organizer, upload to App Store Connect, complete privacy/export/age-rating answers and review contact details, then invite internal TestFlight testers. External testing may require Apple beta review. Public App Store submission is a separate publisher decision. No upload, invitation or publication has been performed.
 

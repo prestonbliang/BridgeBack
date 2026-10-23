@@ -49,7 +49,11 @@ import { download } from "../components/ui";
 import { Overview } from "../components/Overview";
 import { HelpGuide, PageHelp } from "../components/Help";
 import { Support } from "../components/Support";
-import { isNativeApp, clearInterruptedExports } from "../lib/platform";
+import {
+  isNativeApp,
+  clearInterruptedExports,
+  setNativeTheme,
+} from "../lib/platform";
 const navigation = [
   { label: "Dashboard", title: "Overview", icon: Home },
   { label: "Discover", title: "Find help", icon: Compass },
@@ -138,6 +142,11 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = state.theme;
     document.documentElement.dataset.largeText = String(state.largeText);
+    void setNativeTheme(state.theme).catch(() =>
+      setNotification(
+        "The device status bar could not update. Your chosen app theme is saved.",
+      ),
+    );
   }, [state.theme, state.largeText]);
   useEffect(() => {
     if (mobile)

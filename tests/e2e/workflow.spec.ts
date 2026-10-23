@@ -741,5 +741,14 @@ test("real contacts and follow-up are usable without adding a fictional program"
     policy.getByRole("heading", { name: "Get your housing paperwork ready." }),
   ).toBeVisible();
   await policy.close();
+  const noticesPopup = page.waitForEvent("popup");
+  await page
+    .getByRole("link", { name: "Open-source acknowledgments", exact: true })
+    .click();
+  const notices = await noticesPopup;
+  await expect(
+    notices.getByRole("heading", { name: "Built with open-source software." }),
+  ).toBeVisible();
+  await notices.close();
   await page.context().setOffline(false);
 });

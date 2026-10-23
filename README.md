@@ -55,7 +55,7 @@ npm run ios:check
 npm run ios:open
 ```
 
-The [iOS handoff](docs/IOS.md) explains signing, simulator/device checks and TestFlight gates. [Submission copy](docs/IOS-SUBMISSION.md) is prepared for publisher review. The macOS CI workflow is provided; native compilation, device testing, signing and Apple submission have not been executed in this Linux environment. The bundle identifier is provisional. This is not an App Store certification.
+The [iOS handoff](docs/IOS.md) explains signing, simulator/device checks and TestFlight gates. [Submission copy](docs/IOS-SUBMISSION.md) is prepared for publisher review. The macOS CI workflow has successfully compiled both unsigned simulator and device apps; see [recorded build evidence](docs/ios-build-evidence.json). Actual-device runtime testing, signing and Apple submission remain publisher steps. The bundle identifier is provisional. This is not an App Store certification.
 
 Overview now opens real San Diego counselor support directly, without a practice plan or income profile. The [Scott Peters/district presentation brief](docs/DISTRICT-BRIEF.md) emphasizes local usefulness, original programming, honest evidence and privacy. It makes no claim about an endorsement or his personal preferences.
 
@@ -119,3 +119,13 @@ Android: browser menu → Install app. iPhone: Safari → Share → Add to Home 
 - [iOS/TestFlight handoff](docs/IOS.md)
 - [App Store copy and reviewer notes](docs/IOS-SUBMISSION.md)
 - [District presentation brief](docs/DISTRICT-BRIEF.md)
+
+## Competition review packet
+
+[Watch the two-minute captioned review recording](docs/media/BridgeBack-review.mp4), with [captions](docs/media/BridgeBack-review.srt) and a [timed narration draft](docs/DEMO-NARRATION.md). It is silent review footage; add actual participant identification and your own narration before publishing.
+
+Start with the [2026 submission guide](docs/SUBMISSION.md), [code walkthrough](docs/CODE-WALKTHROUGH.md) and [development/AI-assistance record](docs/DEVELOPMENT-PROCESS.md). The entrant reports reviewing and understanding the code; the record distinguishes this from personal implementation claims. The guide documents conflicting official deadline wording: prepare before **October 26, 2026, 8 a.m. Pacific**, the earliest published time. Confirm with the organizer.
+
+`npm run notices:check` verifies the lockfile-matched open-source inventory; Settings opens full acknowledgments, including offline. After committing changes and recording a successful matching CI run with `npm run ci:evidence -- RUN_ID`, run `npm run submission:pack` for a source ZIP and SHA-256 review manifest. Packaging refuses uncommitted changes or application source that differs from the native-tested commit.
+
+With a production server running, system FFmpeg installed and the Playwright recording binary available (`npx playwright install ffmpeg`), `npm run demo:record` records two minutes of real browser interactions and creates a captioned review MP4/SRT in `artifacts/`. This silent review footage still needs participant identification, your own accurate narration and full assistance disclosure before the required public video submission. It does not upload or submit anything.
