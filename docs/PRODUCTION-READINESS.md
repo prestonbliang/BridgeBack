@@ -40,7 +40,7 @@ Web responses include anti-framing, MIME-sniffing, no-referrer and permission re
 
 ## Deploy the actual web application
 
-The [first-deployment walkthrough](PUBLIC-DEPLOYMENT.md) gives exact Vercel import settings and a public-origin verification procedure. `vercel.json` configures the web build; `/sw.js` has explicit revalidation and scope headers. The manual **Check a public deployment** workflow exercises the actual hosted origin. A hosting account must still authorize the GitHub import; the repository cannot manufacture that authorization or a public URL.
+The production target is **https://bridge-back-one.vercel.app/**, provided by the publisher after connecting Vercel. The [deployment walkthrough](PUBLIC-DEPLOYMENT.md) gives exact import settings and a public-origin verification procedure. `vercel.json` configures the web build; `/sw.js` has explicit revalidation and scope headers. **Check a public deployment** exercises the actual hosted origin; inspect its result independently of the hosting dashboard's Ready badge.
 
 Use a Next.js-compatible Node 24 host with HTTPS, such as Vercel, or the tested container route. Build with `npm ci && npm run build`; start with `npm start`. No application secrets or external database are required. Do not use a static-only host for the web source-check endpoint. Do not set `BRIDGEBACK_NATIVE=1` on the web deployment.
 
@@ -49,7 +49,7 @@ docker build --tag bridgeback-production .
 docker run --detach --name bridgeback --publish 3000:3000 bridgeback-production
 ```
 
-The multi-stage image installs only production dependencies into the final image, runs as the unprivileged `node` user, includes a health check, and compiles the typed Next configuration during the build so startup does not install a compiler. Keep `.next` writable for ISR. Put the container behind an HTTPS reverse proxy, configure the publisher's real hostname and hosting policy, and verify `/`, `/privacy`, `/notices`, `/manifest.webmanifest`, `/sw.js` and `/api/source-status` on that origin. No public domain has been invented or deployed by this work.
+The multi-stage image installs only production dependencies into the final image, runs as the unprivileged `node` user, includes a health check, and compiles the typed Next configuration during the build so startup does not install a compiler. Keep `.next` writable for ISR. For a container-hosted alternative, put it behind an HTTPS reverse proxy, configure the publisher's real hostname and hosting policy, and verify `/`, `/privacy`, `/notices`, `/manifest.webmanifest`, `/sw.js` and `/api/source-status` on that origin. The current production target uses Vercel rather than a claim that this local container is publicly reachable.
 
 For this cloud's trusted network proxy, Node checks use `NODE_USE_ENV_PROXY=1`. A local container build can pass the existing public environment CA as an ephemeral BuildKit secret and standard proxy build arguments. Do not disable TLS verification, commit a certificate/key, bake proxy credentials into the image or pass applicant information to a source checker. Ordinary hosts do not need the cloud-specific certificate mount.
 
@@ -65,7 +65,7 @@ The production audit on October 23 found advisories inherited through Sharp/Post
 | Web behavior              | Deterministic unit/browser/offline and accessibility checks; inspect the validation record for actual executed results                              |
 | Source availability       | Public-page checks with dated reports; no live unit/voucher/appointment API                                                                         |
 | iOS                       | Bundled real guidance and offline tracking; physical iPhone/iPad/VoiceOver, signing and TestFlight remain separate gates                            |
-| Deployment                | Container and web CI are provided; production HTTPS origin, hosting retention/privacy settings and actual rollout require a publisher               |
+| Deployment                | Public Vercel HTTPS checks passed; hosting log/retention settings, account access and ongoing rollout remain under publisher control                |
 | Applicant usability       | Representative, consent-based user/helper sessions still need to be performed; no measured outcomes are claimed                                     |
 | Operations                | Assign source-review and incident ownership; confirm changed guidance, broken contact links, export/recovery and a rollback before public promotion |
 
@@ -77,4 +77,6 @@ Keep a prior tested container/revision for rollback. Browser data stays on the p
 
 ## Executed release CI
 
-The final application source passed [web/container checks](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593), [the live source audit](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625) and [unsigned iOS simulator/device compilation](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500). The exact commit and limitations are recorded in [CI evidence](production-ci-evidence.json). No public deployment, agency review or physical-device test is inferred from these passes.
+The production-candidate application source passed [web/container checks](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593), [the live source audit](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625) and [unsigned iOS simulator/device compilation](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500). The exact commit and limitations are recorded in [CI evidence](production-ci-evidence.json). Those earlier passes do not establish a public deployment, agency review or physical-device test.
+
+The subsequent [public Vercel verification](https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015) completed successfully against **https://bridge-back-one.vercel.app/**. It ran the HTTP checker and desktop/mobile browser regression suite against the hosted origin. [Public-deployment evidence](public-deployment-evidence.json) retains the verification checkout, status and artifact digest. Detailed browser statistics and nonfatal source warnings are retained in the run's downloadable report; they are not inferred from the green status. Physical-device and representative-applicant testing remain separate.

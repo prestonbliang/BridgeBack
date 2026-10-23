@@ -2,6 +2,10 @@
 
 **Your Path to Housing, Made Clear.** A private housing-preparation PWA that makes application dependencies visible, explains the next useful action, and finds accepted alternatives when a document is out of reach.
 
+[Open BridgeBack](https://bridge-back-one.vercel.app/) · [Public deployment checks](https://github.com/prestonbliang/BridgeBack/actions/workflows/deployment-check.yml)
+
+The [first hosted verification](https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015) passed the HTTP and desktop/mobile/offline browser checks against this public address. [Recorded evidence](docs/public-deployment-evidence.json) identifies the run, report artifact and practical limits.
+
 BridgeBack combines a reviewed real-program guidance layer with a separate fictional demonstration of its dependency engine. Profiles stay local; a small read-only web endpoint checks public source pages. No account, document uploads or AI service is required.
 
 ## Real-program production candidate
@@ -112,7 +116,7 @@ Only document status is stored. Do not enter names, Social Security numbers or d
 
 ## Deploy
 
-For a first public launch, follow the [Vercel walkthrough](docs/PUBLIC-DEPLOYMENT.md). It explains GitHub access, exact import settings, public-access protection, installation, updates and rollback. The repository includes `vercel.json` and a **Check a public deployment** Actions workflow that runs HTTP checks and the desktop/mobile/offline regression suite against your actual HTTPS address. No hosting account or public address is invented by the source code.
+The production address is **https://bridge-back-one.vercel.app/**. The [Vercel walkthrough](docs/PUBLIC-DEPLOYMENT.md) explains GitHub access, exact import settings, public-access protection, installation, updates and rollback. The repository includes `vercel.json` and a **Check a public deployment** Actions workflow that runs HTTP checks and the desktop/mobile/offline regression suite against that HTTPS address. Review the actual workflow result before treating a release as verified.
 
 Deploy to an HTTPS Next.js-compatible host such as Vercel or any Node server. Build: `npm ci && npm run build`. Start: `npm start`. No secrets, database or API configuration are needed. The counselor directory and reviewed rules use checked-in snapshots. The web source-status route performs bounded public-page checks during prerender/revalidation; fetch failures return explicit unavailable results and do not fail the application build. The native export generates a bundled marker and makes no source-check requests. Maintainers can refresh it with `npm run sources:counselors` and then rebuild; failed imports retain the prior snapshot. Serve at the origin root. HTTPS is required for installation outside local development. Keep `/sw.js` revalidated by the host; its build ID changes automatically after every production build. Worker updates wait for older tabs to close so the HTML/assets remain paired.
 

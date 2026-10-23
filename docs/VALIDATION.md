@@ -59,7 +59,7 @@ The captioned [review clip](media/README.md) was produced from actual production
 - Screen-reader review (VoiceOver/TalkBack/NVDA), real-device keyboard/touch usability and representative applicant testing.
 - Actual iPhone/Android home-screen installation and storage-eviction behavior.
 - Reviewed program-specific eligibility/document rules before offering real program screening. Five guidance/contact pages were fetched and reviewed, and ten public counselor listings were imported from the CFPB finder. Two referral homepages remain unreviewed after access-denied responses. The fictional practice rules remain separate. Three real-program entries and eleven official sources now support partial comparisons, follow-up guidance and a specific working-preference evidence rule. Full agency eligibility is not modeled, and contradictory published criteria remain uncertain. No appointment, housing availability or agency deadline is represented as live.
-- HTTPS deployment and a new-task environment snapshot restoration. Saved reusable setup/start instructions are not publication or restoration validation.
+- A new-task environment snapshot restoration. Saved reusable setup/start instructions are not restoration validation. The public HTTPS deployment was subsequently checked as recorded below.
 
 No impact statistics, testimonials, endorsements or partnerships are asserted. The application supports multiple fictional preparation plans and never submits applications to agencies.
 
@@ -81,4 +81,10 @@ All three workflows passed for `3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda`: [web 
 
 The subsequent Vercel preparation adds explicit service-worker update headers, a hosting configuration, a public-origin HTTP checker, and a deployment Playwright configuration that reuses the existing regression suite without starting a local server. Its local rehearsal passed all 76 unit tests, lint, type checking, the production build, all six HTTP checks and all 24 desktop/mobile browser runs (55.7 seconds). All eleven sources matched in the HTTP rehearsal, with no review warnings. The URL validator also rejected plain external HTTP, embedded credentials, paths and query parameters before making requests.
 
-The deployment check explicitly records `transport: "local rehearsal"` for `http://127.0.0.1:3000`. This is not evidence of a public Vercel deployment. The new manual workflow must be run against the actual production HTTPS origin after the publisher connects their account. Earlier native/container CI reports above remain evidence for their recorded source revision; this preparation does not rewrite them as a pass for changed source.
+The deployment check explicitly records `transport: "local rehearsal"` for `http://127.0.0.1:3000`. This rehearsal was not evidence of a public Vercel deployment; the subsequent hosted run is recorded below. Earlier native/container CI reports above remain evidence for their recorded source revision; this preparation does not rewrite them as a pass for changed source.
+
+## Public HTTPS verification · October 23, 2026
+
+After the publisher provided **https://bridge-back-one.vercel.app/**, the [public verification workflow](https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015) completed successfully in 11 minutes 40 seconds against that origin. The HTTP checker and the existing desktop/mobile browser suite ran on GitHub's runner with no Vercel authentication supplied. The local workspace's network proxy denied this hostname; those local request failures were not treated as evidence that the app failed. GitHub's runner supplied the actual hosted checks.
+
+The [evidence record](public-deployment-evidence.json) retains the verification checkout, successful status and report artifact SHA-256. The public run summary establishes successful commands; detailed browser statistics and nonfatal source-review warnings remain in the artifact and require GitHub account access to inspect. A green run does not by itself establish zero source warnings, a served Git revision, live housing availability, physical-device installation or agency approval.

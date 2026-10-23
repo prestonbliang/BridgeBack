@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "origin": "https://bridge-back-one.vercel.app",
+  "verificationCheckout": "8474dd703c079c5e3acd6eb3986a807935c03098",
+  "observedAt": "2026-10-23T19:49:30.889298+00:00",
+  "status": "Success",
+  "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015",
+  "duration": "11m 40s",
+  "evidence": "Observed successful public GitHub workflow summary. The required HTTP checker and deployed-origin Playwright command completed successfully on GitHub, with no Vercel credentials supplied to either checker.",
+  "verifiedGroups": [
+    "Anonymous HTTPS application access and compiled assets",
+    "Security headers",
+    "Public privacy policy and open-source notices",
+    "Install manifest and icons",
+    "Versioned service worker and update headers",
+    "Online source endpoint schema and all catalog source identifiers",
+    "Desktop/mobile regression workflows, accessibility, local persistence, exports and offline reloads"
+  ],
+  "artifact": {
+    "name": "public-deployment-check",
+    "displaySize": "3.85 KB",
+    "sha256": "sha256:26c458f065fce584a9142b9f7faa9bdb1e3d881c2128425534fd55f12d0d20d4"
+  },
+  "limits": [
+    "Public run summary does not expose per-test logs or the artifact contents without account access. Detailed browser statistics and nonfatal source-review warnings are in the retained artifact.",
+    "A successful source schema check does not prove every source matched its reviewed content; changed, unavailable or stale sources are reported as nonfatal review warnings.",
+    "No served Git commit endpoint is present. verificationCheckout identifies the test code, not an independently attested Vercel build revision.",
+    "No claim of live vouchers, housing units, appointments, complete eligibility screening, agency endorsement, physical-device installation or App Store approval."
+  ]
+}

@@ -1,5 +1,9 @@
 # Publish BridgeBack on Vercel
 
+Production target: **https://bridge-back-one.vercel.app/**. The [public verification workflow](https://github.com/prestonbliang/BridgeBack/actions/workflows/deployment-check.yml) defaults to this address. Inspect its actual result and source-review warnings; a Vercel Ready badge is separate from these checks. This cloud workspace blocks the hostname at its network proxy, so the hosted regression suite runs on GitHub's runner instead.
+
+The [first public verification run](https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015) completed successfully on October 23, 2026, in 11 minutes 40 seconds. It exercised the actual Vercel origin, not a local server. The [evidence record](public-deployment-evidence.json) retains the tested checkout, observed status, artifact digest and limits. Detailed browser statistics and nonfatal source-review warnings are in the downloadable `public-deployment-check` artifact; GitHub account access may be required to read it. Do not infer zero source warnings from the green workflow result.
+
 This walkthrough uses the repository's Next.js web target, including the source-check endpoint and offline worker. You do not need a database, API key, account system or paid add-on. Vercel supplies an HTTPS `vercel.app` address; do not buy a domain to try the app. Check your account's plan terms and limits before public promotion.
 
 ## First deployment
@@ -28,6 +32,8 @@ BRIDGEBACK_PUBLIC_URL=https://your-project.vercel.app npx playwright test --conf
 
 Replace the example address with the one Vercel actually provides. The first command checks public access, security headers, compiled assets, privacy/notices, manifest/icons, service-worker update headers, source-report schema and current catalog coverage. It writes `artifacts/deployment-check.json`. Changed, unavailable or old sources are reported as review warnings; use `--require-matched-sources` to make those warnings fail the release check. Page matches do not mean that vouchers, units or appointments are available.
 
+For the current deployment, use `BRIDGEBACK_PUBLIC_URL=https://bridge-back-one.vercel.app`. A network-proxy denial in a development workspace is not an HTTP failure from the deployed site; use the GitHub runner when the local host cannot reach that origin.
+
 The second check runs the existing desktop/mobile regression suite on the actual deployed origin, including persistence, offline reload, corrections, alternative requirements, export, failure behavior and accessibility checks. It creates isolated fictional/local test workspaces. It does not send applications or contact a provider on an applicant's behalf. Some tests deliberately intercept source responses; the separate HTTP checker exercises the real source endpoint. Browser output goes in `artifacts/deployment-browser-results/`. These checks are distinct from physical iPhone/Android installation and human usability testing.
 
 Alternatively, open the repository's **Actions → Check a public deployment → Run workflow**, select the deployed revision, and enter the production HTTPS origin. The workflow uses no hosting secret. Its evidence is uploaded as an artifact. If Vercel authentication protection is still enabled, the check should fail; do not bypass protection with tokens in URLs.
@@ -46,4 +52,4 @@ Keep the prior successful deployment available in Vercel's deployment history. I
 
 The daily **Official program source audit** workflow detects changed/unavailable sources; the publisher must monitor its failures and review the actual sources before updating rules. That workflow is not a vacancy feed and does not automatically correct the catalog. Review the host's connection-log retention and access controls before inviting applicants. The in-app privacy policy explains local storage and ordinary hosting metadata; no claim is made that host logs are disabled. Use the public issue tracker for app defects without applicant details. Never put an agency login, identity document or Social Security number in a GitHub issue or hosting log.
 
-The hosting account's owner controls project access, billing, log settings and domain ownership. Repository configuration cannot create that account authorization. Until an actual reachable origin has been checked, this document describes deployment instructions rather than evidence of a completed public release.
+The hosting account's owner controls project access, billing, log settings and domain ownership. Repository configuration cannot create that account authorization. The successful public check above establishes the stated web behavior; it does not establish particular hosting-log retention settings or physical-device certification.
