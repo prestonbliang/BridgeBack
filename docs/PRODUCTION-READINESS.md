@@ -40,6 +40,8 @@ Web responses include anti-framing, MIME-sniffing, no-referrer and permission re
 
 ## Deploy the actual web application
 
+The [first-deployment walkthrough](PUBLIC-DEPLOYMENT.md) gives exact Vercel import settings and a public-origin verification procedure. `vercel.json` configures the web build; `/sw.js` has explicit revalidation and scope headers. The manual **Check a public deployment** workflow exercises the actual hosted origin. A hosting account must still authorize the GitHub import; the repository cannot manufacture that authorization or a public URL.
+
 Use a Next.js-compatible Node 24 host with HTTPS, such as Vercel, or the tested container route. Build with `npm ci && npm run build`; start with `npm start`. No application secrets or external database are required. Do not use a static-only host for the web source-check endpoint. Do not set `BRIDGEBACK_NATIVE=1` on the web deployment.
 
 ```sh

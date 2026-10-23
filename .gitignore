@@ -28,3 +28,9 @@ BridgeBack-simulator.zip
 ios-derived-device/
 BridgeBack-device-unsigned.zip
 artifacts/
+
+# Hosting links and local credentials never belong in source control.
+.vercel/
+.netlify/
+.env*
+!.env.example

@@ -14,6 +14,7 @@ on:
       - "tests/**"
       - "package*.json"
       - "*config*"
+      - "vercel.json"
       - "Dockerfile"
       - ".dockerignore"
       - ".github/workflows/web-quality.yml"

@@ -73,6 +73,12 @@ The production npm audit found inherited Sharp/PostCSS advisories. The lockfile 
 
 The production container was built locally and served the actual app under UID 1000, with a healthy status and all eleven public-source checks matched. Additional container-browser scans covered the real directory, phone checklist, dark document workspace and 320px document layout: no Axe violations, page errors or horizontal overflow were reported. The committed screenshots show illustrative local test state; no actual provider contact or document acceptance is claimed.
 
-## Exact pushed revision
+## Verified production-candidate CI
 
 All three workflows passed for `3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda`: [web production checks](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593) (including the container build/HTTP smoke and full browser/native-bundle suite), [official source audit](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625), and the native compilation linked above. [The CI evidence record](production-ci-evidence.json) preserves the same-source successful run URLs. The final packet formatting and optional-practice label are included in that revision; success is observed, not assumed from workflow configuration.
+
+## Public-deployment preparation rehearsal · October 23, 2026
+
+The subsequent Vercel preparation adds explicit service-worker update headers, a hosting configuration, a public-origin HTTP checker, and a deployment Playwright configuration that reuses the existing regression suite without starting a local server. Its local rehearsal passed all 76 unit tests, lint, type checking, the production build, all six HTTP checks and all 24 desktop/mobile browser runs (55.7 seconds). All eleven sources matched in the HTTP rehearsal, with no review warnings. The URL validator also rejected plain external HTTP, embedded credentials, paths and query parameters before making requests.
+
+The deployment check explicitly records `transport: "local rehearsal"` for `http://127.0.0.1:3000`. This is not evidence of a public Vercel deployment. The new manual workflow must be run against the actual production HTTPS origin after the publisher connects their account. Earlier native/container CI reports above remain evidence for their recorded source revision; this preparation does not rewrite them as a pass for changed source.
