@@ -1,0 +1,247 @@
+{
+  "fixtureKind": "fictional",
+  "cases": [
+    {
+      "id": "blocker-impact",
+      "measure": "The shared pay stub lies on eight currently blocked downstream requirement paths",
+      "expected": 8,
+      "actual": 8,
+      "passed": true
+    },
+    {
+      "id": "next-action",
+      "measure": "A shared pay stub ranks first under the fixture's balanced priorities",
+      "expected": "doc:paystub",
+      "actual": "doc:paystub",
+      "passed": true
+    },
+    {
+      "id": "income-prerequisites",
+      "measure": "Both sample forms are blocked without an accepted income route",
+      "expected": [
+        "blocked",
+        "blocked"
+      ],
+      "actual": [
+        "blocked",
+        "blocked"
+      ],
+      "passed": true
+    },
+    {
+      "id": "starting-readiness",
+      "measure": "Three of ten explicit milestones are satisfied",
+      "expected": 30,
+      "actual": 30,
+      "passed": true
+    },
+    {
+      "id": "immediate-unlocks",
+      "measure": "A shared pay stub makes exactly the two forms actionable",
+      "expected": [
+        "fresh:form",
+        "harbor:form"
+      ],
+      "actual": [
+        "fresh:form",
+        "harbor:form"
+      ],
+      "passed": true
+    },
+    {
+      "id": "readiness-delta",
+      "measure": "The two income milestones add twenty percentage points",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "id": "actual-readiness",
+      "measure": "Actual document preparation satisfies five of ten milestones",
+      "expected": 50,
+      "actual": 50,
+      "passed": true
+    },
+    {
+      "id": "what-if-purity",
+      "measure": "Simulation leaves the caller's document inventory unchanged",
+      "expected": {
+        "identity": true
+      },
+      "actual": {
+        "identity": true
+      },
+      "passed": true
+    },
+    {
+      "id": "what-if-parity",
+      "measure": "Simulated statuses equal statuses after the actual same change",
+      "expected": {
+        "doc:identity": "complete",
+        "doc:paystub": "complete",
+        "doc:letter": "available",
+        "doc:residence": "available",
+        "doc:benefits": "available",
+        "fresh:identity": "complete",
+        "fresh:income": "complete",
+        "fresh:household": "complete",
+        "fresh:form": "available",
+        "fresh:review": "blocked",
+        "fresh:ready": "blocked",
+        "harbor:identity": "complete",
+        "harbor:income": "complete",
+        "harbor:residence": "blocked",
+        "harbor:form": "available",
+        "harbor:review": "blocked",
+        "harbor:ready": "blocked"
+      },
+      "actual": {
+        "doc:identity": "complete",
+        "doc:paystub": "complete",
+        "doc:letter": "available",
+        "doc:residence": "available",
+        "doc:benefits": "available",
+        "fresh:identity": "complete",
+        "fresh:income": "complete",
+        "fresh:household": "complete",
+        "fresh:form": "available",
+        "fresh:review": "blocked",
+        "fresh:ready": "blocked",
+        "harbor:identity": "complete",
+        "harbor:income": "complete",
+        "harbor:residence": "blocked",
+        "harbor:form": "available",
+        "harbor:review": "blocked",
+        "harbor:ready": "blocked"
+      },
+      "passed": true
+    },
+    {
+      "id": "accepted-or",
+      "measure": "Fresh Start accepts an employer letter without a pay stub",
+      "expected": "available",
+      "actual": "available",
+      "passed": true
+    },
+    {
+      "id": "rejected-reuse",
+      "measure": "Harbor does not accept Fresh Start's employer-letter route",
+      "expected": "blocked",
+      "actual": "blocked",
+      "passed": true
+    },
+    {
+      "id": "and-enforcement",
+      "measure": "Income alone cannot bypass identity prerequisites",
+      "expected": [
+        "blocked",
+        "blocked"
+      ],
+      "actual": [
+        "blocked",
+        "blocked"
+      ],
+      "passed": true
+    },
+    {
+      "id": "shared-document-types",
+      "measure": "Five document types have explicit acceptance in two sample programs",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "id": "paystub-coverage",
+      "measure": "Pay stubs contribute to Fresh Start and Harbor only",
+      "expected": [
+        "fresh",
+        "harbor"
+      ],
+      "actual": [
+        "fresh",
+        "harbor"
+      ],
+      "passed": true
+    },
+    {
+      "id": "letter-coverage",
+      "measure": "Employer letters contribute to Fresh Start and Keys only",
+      "expected": [
+        "fresh",
+        "keys"
+      ],
+      "actual": [
+        "fresh",
+        "keys"
+      ],
+      "passed": true
+    },
+    {
+      "id": "income-boundary",
+      "measure": "The fictional two-person limit includes exactly $56,000",
+      "expected": "Potentially eligible",
+      "actual": "Potentially eligible",
+      "passed": true
+    },
+    {
+      "id": "above-boundary",
+      "measure": "One dollar above that fictional limit fails the income criterion",
+      "expected": "Likely ineligible",
+      "actual": "Likely ineligible",
+      "passed": true
+    },
+    {
+      "id": "unknown-screening",
+      "measure": "Missing income stays uncertain",
+      "expected": "More information needed",
+      "actual": "More information needed",
+      "passed": true
+    },
+    {
+      "id": "rescue-alternatives",
+      "measure": "Without a pay stub, letter plus benefits cover all three income rules",
+      "expected": [
+        "benefits",
+        "letter"
+      ],
+      "actual": [
+        "benefits",
+        "letter"
+      ],
+      "passed": true
+    },
+    {
+      "id": "rescue-feasibility",
+      "measure": "The alternate route is feasible",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "id": "mandatory-document",
+      "measure": "Route Rescue never skips an unavailable mandatory identity requirement",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "id": "no-fabricated-deadlines",
+      "measure": "Fictional fixtures carry no verified deadline conflicts",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    }
+  ],
+  "passed": 22,
+  "total": 22,
+  "measurements": {
+    "sharedPaystubBlockedRequirements": 8,
+    "correctlyRecommendedFirstActions": 1,
+    "sharedDocumentTypes": 5,
+    "newlyAvailableTasks": 2,
+    "readinessBefore": 30,
+    "readinessAfter": 50,
+    "readinessDelta": 20,
+    "rescueDocumentCount": 2
+  }
+}
