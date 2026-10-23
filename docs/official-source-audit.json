@@ -2,81 +2,81 @@
   "schemaVersion": 1,
   "catalogVersion": "2026-10-23.2",
   "mode": "online",
-  "checkedAt": "2026-10-23T17:40:26.767Z",
+  "checkedAt": "2026-10-23T22:17:09.096Z",
   "checks": [
     {
       "sourceId": "county-applications",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "74c7f31318f706c727b252582d626db2eaf12c92c5f0eaa5a6d6210b8aa0a99b",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-hcv",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "b75ed0b67ecacb1be046703fed636ae802467931399b9dbbc8d231e01d6f12ee",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-areas",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "3d3c3b7d25397d50a706ce7fe3c70d1c7cccab0b146cbc73675b29269eb407a3",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-income",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
-      "sha256": "dc25ffe5f24cc5f07504e20efaeb1b2cf15c7f93d36fe1aa4974f8f52fd16d55",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
+      "sha256": "569685a4b166428c6c9d22a0c6fbff0ca9322878f621cc6c684714e9f13a595c",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-public",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "19cbe556d7df5fd581951df65c46f3aab97ee480bdeff65e3ec21a8cd4a035da",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-update",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "1d937d1a6c251f8a656c6334f04d2ed40f5ed1181227eec82cf0b5fd687c56a9",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-access",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "286a74b32288183b583d28cbe6cc752dc95028796bc4aa3c70116b630648b91e",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-vash",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "4362a77d768ed78ac02e3d48acb4a77eb53852d9f2878171020f925d5b5d0f94",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-urgent",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "56e3b3c0c8d84c55b4448bf9e22515c502af59b1ce20c1b4c0521504cbf5153b",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-registration",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "dbc66aae3ec03da8f6d4be3e18b17e1d727e3a1684edff6486053e3860563339",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."
     },
     {
       "sourceId": "county-public-policy",
-      "checkedAt": "2026-10-23T17:40:26.767Z",
+      "checkedAt": "2026-10-23T22:17:09.096Z",
       "sha256": "d6d16248dd409ed87632af457413eb578def77551a90c06601648343e52fd8b2",
       "state": "matches-reviewed-facts",
       "reason": "The reviewed excerpt is still present (or the reviewed PDF is identical). This does not verify all program rules or available assistance."

@@ -4,7 +4,7 @@
 
 [Open BridgeBack](https://bridge-back-one.vercel.app/) · [Public deployment checks](https://github.com/prestonbliang/BridgeBack/actions/workflows/deployment-check.yml)
 
-The [first hosted verification](https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015) passed the HTTP and desktop/mobile/offline browser checks against this public address. [Recorded evidence](docs/public-deployment-evidence.json) identifies the run, report artifact and practical limits.
+The [current hosted verification](https://github.com/prestonbliang/BridgeBack/actions/runs/40033238226) passed the HTTP checks and all 28 desktop/mobile/offline browser cases against this public address, with no skipped cases or source-review warnings. [Recorded evidence](docs/public-deployment-evidence.json) identifies the exact published revision, report artifact and practical limits.
 
 BridgeBack combines a reviewed real-program guidance layer with a separate fictional demonstration of its dependency engine. Profiles stay local; a small read-only web endpoint checks public source pages. No account, document uploads or AI service is required.
 
@@ -116,7 +116,7 @@ The checked-in [benchmark results](docs/evaluation-results.json) record 22 passi
 
 ## Accuracy and privacy
 
-**The three practice programs remain fictional and separate from the three real-program entries.** Real entries cite reviewed official sources, show closures/conflicts and provide limited criteria comparisons and personal follow-up plans. Counselor data is a dated public snapshot. Two generic referral homepages remain unreviewed after access-denied responses. No live appointments, housing availability, agency deadline or complete eligibility screening is asserted. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
+**The three practice programs remain fictional and separate from the three real-program entries.** Real entries cite reviewed official sources, show closures/conflicts and provide limited criteria comparisons and personal follow-up plans. Counselor data is a dated public snapshot. The contact workflow separately cites five reviewed contact excerpts, including SDHC's specific contact page and Legal Aid's published number. 211's homepage remains unreviewed; its phone-referral route was checked against County guidance. No live appointments, housing availability, verified agency deadline or complete eligibility screening is asserted. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
 
 Only document status is stored. Do not enter names, Social Security numbers or document contents. Browser storage is not encrypted secure storage. Export before clearing site data if you want a copy. See [privacy details](docs/PRIVACY.md).
 

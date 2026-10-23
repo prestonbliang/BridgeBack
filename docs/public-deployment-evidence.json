@@ -1,30 +1,40 @@
 {
   "schemaVersion": 1,
   "origin": "https://bridge-back-one.vercel.app",
-  "verificationCheckout": "8474dd703c079c5e3acd6eb3986a807935c03098",
-  "observedAt": "2026-10-23T19:49:30.889298+00:00",
+  "verificationCheckout": "2e2d2325e7aeea5abba497a9858450c3e78ef6f1",
+  "publishedRevision": "2e2d2325e7aeea5abba497a9858450c3e78ef6f1",
+  "observedAt": "2026-10-23T22:33:43.742342+00:00",
   "status": "Success",
-  "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40012645015",
-  "duration": "11m 40s",
-  "evidence": "Observed successful public GitHub workflow summary. The required HTTP checker and deployed-origin Playwright command completed successfully on GitHub, with no Vercel credentials supplied to either checker.",
+  "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40033238226",
+  "duration": "9m 42s",
+  "evidence": "Successful public workflow, published-revision annotation, actual browser statistics, zero-source-warning annotation and retained report artifact digest. Checkers supplied no Vercel authentication.",
+  "browser": {
+    "duration": 76741.06599999999,
+    "expected": 28,
+    "flaky": 0,
+    "skipped": 0,
+    "startTime": "2026-10-23T22:31:19.193Z",
+    "unexpected": 0
+  },
+  "sourceReviewWarnings": 0,
   "verifiedGroups": [
-    "Anonymous HTTPS application access and compiled assets",
-    "Security headers",
+    "Published revision and deployment-tagged assets",
+    "Anonymous HTTPS app access, compiled assets and security headers",
     "Public privacy policy and open-source notices",
     "Install manifest and icons",
     "Versioned service worker and update headers",
-    "Online source endpoint schema and all catalog source identifiers",
-    "Desktop/mobile regression workflows, accessibility, local persistence, exports and offline reloads"
+    "Online program source-report schema, catalog coverage and timestamps",
+    "28 desktop/mobile workflows including contact routing, reported paperwork, dates, corrections, export, accessibility and offline persistence"
   ],
   "artifact": {
     "name": "public-deployment-check",
-    "displaySize": "3.85 KB",
-    "sha256": "sha256:26c458f065fce584a9142b9f7faa9bdb1e3d881c2128425534fd55f12d0d20d4"
+    "displaySize": "4.3 KB",
+    "sha256": "sha256:4a707e26a76be3c7173f60fd3c0bcff0bf268b5409b91bb6f14d793b974d8eb1"
   },
   "limits": [
-    "Public run summary does not expose per-test logs or the artifact contents without account access. Detailed browser statistics and nonfatal source-review warnings are in the retained artifact.",
-    "A successful source schema check does not prove every source matched its reviewed content; changed, unavailable or stale sources are reported as nonfatal review warnings.",
-    "No served Git commit endpoint is present. verificationCheckout identifies the test code, not an independently attested Vercel build revision.",
-    "No claim of live vouchers, housing units, appointments, complete eligibility screening, agency endorsement, physical-device installation or App Store approval."
+    "Source matches concern reviewed excerpts/PDFs, not every rule or available assistance.",
+    "No actual calls, agency messages or benefit applications were sent by these checks. Contact outcomes in tests are fictional reports.",
+    "The City/Legal Aid contact records have a separate dated maintenance audit; the web source endpoint covers the County catalog.",
+    "Browser tests are not physical-device, screen-reader, representative-applicant, agency or App Store certification."
   ]
 }

@@ -34,5 +34,16 @@
     "browserDuration": "59.6s",
     "deploymentId": "dpl_bridgeback_local_rehearsal",
     "scope": "Local web build with version-tagged assets. Native/API release and published-origin CI are recorded separately."
+  },
+  "publishedRelease": {
+    "revision": "2e2d2325e7aeea5abba497a9858450c3e78ef6f1",
+    "observedAt": "2026-10-23T22:34:57.655902+00:00",
+    "publicRun": "https://github.com/prestonbliang/BridgeBack/actions/runs/40033238226",
+    "expectedBrowserCases": 28,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "sourceReviewWarnings": 0,
+    "productionDependencyAdvisories": 0
   }
 }

@@ -1,29 +1,35 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda",
-  "observedAt": "2026-10-23T18:01:35.365949+00:00",
-  "evidence": "Public GitHub workflow summaries, each successfully completed at the same exact source revision. Native artifact digests are recorded separately.",
+  "sourceCommit": "2e2d2325e7aeea5abba497a9858450c3e78ef6f1",
+  "observedAt": "2026-10-23T22:33:43.742342+00:00",
+  "evidence": "Observed successful web/container, native simulator/device and public-origin workflow summaries at the same source revision. Detailed native digests and public browser statistics are recorded separately.",
   "checks": [
     {
-      "name": "ios",
+      "name": "web-quality",
       "status": "Success",
-      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500"
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40033238234"
     },
     {
-      "name": "web",
+      "name": "ios-preflight",
       "status": "Success",
-      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593"
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40033238236"
     },
     {
-      "name": "sources",
+      "name": "public-deployment",
       "status": "Success",
-      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625"
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40033238226"
     }
   ],
+  "reviewedCatalogAudit": {
+    "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/40031010913",
+    "testedCommit": "dd48e3c40fc2d936de61061ee30e461ffd14576a",
+    "sameCatalogFiles": true,
+    "note": "The same catalog files passed daily CI; both live audits were also rerun locally after the Zod upgrade."
+  },
   "doesNotEstablish": [
-    "agency approval or complete eligibility verification",
-    "live unit, voucher or appointment availability",
-    "physical-device or applicant usability testing",
-    "signing, TestFlight or public deployment"
+    "Source matches concern reviewed excerpts/PDFs, not every rule or available assistance.",
+    "No actual calls, agency messages or benefit applications were sent by these checks. Contact outcomes in tests are fictional reports.",
+    "The City/Legal Aid contact records have a separate dated maintenance audit; the web source endpoint covers the County catalog.",
+    "Browser tests are not physical-device, screen-reader, representative-applicant, agency or App Store certification."
   ]
 }
