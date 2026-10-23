@@ -25,3 +25,5 @@ ios/App/build/
 *.xcarchive
 ios-derived/
 BridgeBack-simulator.zip
+ios-derived-device/
+BridgeBack-device-unsigned.zip
