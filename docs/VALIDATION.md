@@ -20,6 +20,10 @@ Validation was performed in the cloud Linux environment with Node 24, the locked
 
 The final browser regression run completed in 39.9 seconds; the four native-bundle checks completed in 4.9 seconds. Production first-load JavaScript was reported as 260 kB by Next.js. This is build output, not a device performance or user-time study.
 
+## Native compilation evidence
+
+The final application source `8e08fbe6aeb225a904771c3aee8d67e9d71ab1d0` passed [macOS iOS preflight](https://github.com/prestonbliang/BridgeBack/actions/runs/39987422049): both unsigned simulator and unsigned device builds were compiled and uploaded. [Machine-readable evidence](ios-build-evidence.json) records the successful status and both artifact SHA-256 digests. The workflow keeps binaries for seven days; the tested source and digest record remain in Git. This is compilation evidence, not an actual-device, signing or App Store result.
+
 ## What the checks establish
 
 - **iOS handoff:** native share success/cancellation/errors, temporary-file cleanup, interrupted-export cleanup and slow-startup cleanup ordering are unit tested. Bundled browser tests use only shipped files with networking disabled; they cover first-launch counselor access, persistence, privacy-page accessibility and native export outcomes through an explicitly simulated bridge. The Xcode project was parsed with the installed OpenStep project parser; native XML and shared scheme were parsed successfully. These Chromium/shim checks do not execute UIKit or WKWebView. Separately, actual macOS CI compiled both unsigned simulator and device apps; the exact tested source, successful run and artifact digests are recorded in [native build evidence](ios-build-evidence.json).
