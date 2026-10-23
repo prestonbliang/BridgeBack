@@ -1,0 +1,40 @@
+name: Inspect public release evidence
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/inspect-release-evidence.yml"]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Deployment-check run whose retained HTTP report should be inspected"
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v6
+        with:
+          name: public-deployment-check
+          run-id: ${{ inputs.run_id || '40031010945' }}
+          github-token: ${{ github.token }}
+          path: evidence
+      - name: Show only public HTTP verification fields
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('evidence/deployment-check.json').read_text())
+          def annotate(title, message):
+              safe = str(message).replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+              print('::notice title=' + title + '::' + safe)
+          for item in report['results']:
+              annotate(item['name'], ('PASS' if item['passed'] else 'FAIL') + ': ' + item.get('detail', ''))
+          annotate('Public build metadata', json.dumps(report.get('release')))
+          for warning in report['warnings']:
+              annotate('Source-review warning', warning)
+          PY
