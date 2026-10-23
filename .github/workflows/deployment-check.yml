@@ -1,11 +1,15 @@
 name: Check a public deployment
 on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/deployment-check.yml"]
   workflow_dispatch:
     inputs:
       public_url:
         description: "Your BridgeBack HTTPS origin, e.g. https://your-project.vercel.app"
         required: true
         type: string
+        default: "https://bridge-back-one.vercel.app"
 permissions:
   contents: read
 jobs:
@@ -13,7 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BRIDGEBACK_PUBLIC_URL: ${{ inputs.public_url }}
+      BRIDGEBACK_PUBLIC_URL: ${{ inputs.public_url || 'https://bridge-back-one.vercel.app' }}
+      PLAYWRIGHT_JSON_OUTPUT_NAME: artifacts/deployment-browser-report.json
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -25,13 +30,41 @@ jobs:
         run: node scripts/check-deployment.mjs
       - run: npx playwright install --with-deps chromium
       - name: Exercise real desktop, mobile and offline workflows
-        run: npx playwright test --config playwright.deployment.config.ts
+        run: npx playwright test --config playwright.deployment.config.ts --reporter=list,json
+      - name: Publish readable verification evidence
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          lines = ["# BridgeBack public deployment verification", "", "Target: " + os.environ["BRIDGEBACK_PUBLIC_URL"], ""]
+          report = Path("artifacts/deployment-check.json")
+          if report.exists():
+              data = json.loads(report.read_text())
+              lines += ["Checked: " + data["checkedAt"], "", "Transport: " + data["transport"], ""]
+              for item in data["results"]:
+                  lines.append(("PASS: " if item["passed"] else "FAIL: ") + item["name"] + (" — " + item["detail"] if "detail" in item else ""))
+              lines += ["", "Source review warnings: " + str(len(data["warnings"]))]
+              lines += data["warnings"]
+          else:
+              lines += ["HTTP evidence was not produced. Do not infer a pass."]
+          browser = Path("artifacts/deployment-browser-report.json")
+          if browser.exists():
+              stats = json.loads(browser.read_text())["stats"]
+              lines += ["", "Browser results: " + json.dumps(stats, sort_keys=True)]
+          else:
+              lines += ["", "Browser evidence was not produced. Do not infer a pass."]
+          lines += ["", "These checks do not establish agency approval, live housing availability or physical-device installation."]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as output:
+              output.write("\n".join(lines) + "\n")
+          PY
       - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: public-deployment-check
           path: |
             artifacts/deployment-check.json
+            artifacts/deployment-browser-report.json
             artifacts/deployment-browser-results/
           if-no-files-found: ignore
           retention-days: 7
