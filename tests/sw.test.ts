@@ -20,10 +20,17 @@ type WorkerEvent = {
 function harness() {
   let html = '<html><script src="/_next/static/app-a.js"></script></html>';
   let brokenAsset = false;
+  let brokenPolicy = false;
   let claimed = false;
   const network = async (input: string | Request) => {
     const url = key(input);
     if (url === origin + "/") return new Response(html);
+    if (url === origin + "/privacy")
+      return brokenPolicy
+        ? new Response("Policy unavailable", { status: 503 })
+        : new Response(
+            '<html>Privacy policy<script src="/_next/static/privacy.js"></script></html>',
+          );
     if (brokenAsset && url.endsWith(".js"))
       return new Response("failure", { status: 503 });
     return new Response("asset");
@@ -105,6 +112,9 @@ function harness() {
     failAssets: () => {
       brokenAsset = true;
     },
+    failPolicy: () => {
+      brokenPolicy = true;
+    },
     claimed: () => claimed,
   };
 }
@@ -146,5 +156,30 @@ describe("atomic offline shell lifecycle", () => {
       await app.dispatch("fetch", "https://provider.example/", "navigate"),
     ).toBeUndefined();
     expect(await app.dispatch("fetch", "/private-api", "cors")).toBeUndefined();
+  });
+  it("ships the privacy page and its matching script for offline reading", async () => {
+    const app = harness();
+    await app.dispatch("install");
+    await app.dispatch("activate");
+    app.failPolicy();
+    expect(
+      await (await app.dispatch("fetch", "/privacy", "navigate"))?.text(),
+    ).toContain("Privacy policy");
+    expect(
+      await app.dispatch("fetch", "/_next/static/privacy.js", "cors"),
+    ).toBeDefined();
+  });
+  it("keeps the active shell when its replacement cannot include the privacy page", async () => {
+    const app = harness();
+    await app.dispatch("install");
+    await app.dispatch("activate");
+    const original = [...app.stores.keys()].sort();
+    app.setHtml('<html><script src="/_next/static/app-b.js"></script></html>');
+    app.failPolicy();
+    await expect(app.dispatch("install")).rejects.toThrow(
+      "Privacy policy unavailable",
+    );
+    expect([...app.stores.keys()].sort()).toEqual(original);
+    expect(await (await app.dispatch("fetch"))?.text()).toContain("app-a.js");
   });
 });

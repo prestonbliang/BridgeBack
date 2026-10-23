@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useNativeApp } from "../hooks/useNativeApp";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -224,6 +225,9 @@ export function SettingsView({
 }) {
   const [confirm, setConfirm] = useState(false),
     [error, setError] = useState("");
+  const [exportMessage, setExportMessage] = useState("");
+  const [exporting, setExporting] = useState(false);
+  const native = useNativeApp();
   return (
     <>
       <PageHeading
@@ -436,17 +440,38 @@ export function SettingsView({
             <div className="inline-actions">
               <button
                 className="button secondary"
-                onClick={() => {
-                  download(
-                    "bridgeback-progress.json",
-                    JSON.stringify(state, null, 2),
-                    "application/json",
-                  );
-                  onAction({
-                    type: "record",
-                    eventType: "export",
-                    label: "Exported workspace data",
-                  });
+                disabled={exporting}
+                onClick={async () => {
+                  setExporting(true);
+                  try {
+                    const result = await download(
+                      "bridgeback-progress.json",
+                      JSON.stringify(state, null, 2),
+                      "application/json",
+                    );
+                    if (result === "cancelled") {
+                      setExportMessage(
+                        "Sharing cancelled. Your saved progress is unchanged.",
+                      );
+                      return;
+                    }
+                    onAction({
+                      type: "record",
+                      eventType: "export",
+                      label: "Exported workspace data",
+                    });
+                    setExportMessage(
+                      result === "shared"
+                        ? "You shared your progress using the system share sheet. Copies you save or share are under your control."
+                        : "Your progress was downloaded. Keep this copy somewhere private.",
+                    );
+                  } catch {
+                    setExportMessage(
+                      "We could not confirm the export finished. Check your chosen destination before trying again. Your saved progress is unchanged.",
+                    );
+                  } finally {
+                    setExporting(false);
+                  }
                 }}
               >
                 <Download size={16} />
@@ -460,11 +485,22 @@ export function SettingsView({
                 {isDemo ? "Reset this demo" : "Delete all saved data"}
               </button>
             </div>
+            <p className="helper-text" role="status">
+              {exportMessage}
+            </p>
             <p className="fine-print">
               No accounts, analytics, advertising or automatic applications.
-              First load online, then install through your browser menu; on
-              iPhone use Safari → Share → Add to Home Screen.
+              {native
+                ? " This iOS app includes its checklists and dated resource information for offline use from first launch. Browser and app storage are separate; progress does not sync between them."
+                : " First load online, then install through your browser menu; on iPhone use Safari → Share → Add to Home Screen."}
             </p>
+            <a
+              href={native ? "/privacy.html" : "/privacy"}
+              target={native ? undefined : "_blank"}
+              rel="noreferrer noopener"
+            >
+              Read the privacy policy
+            </a>
           </section>
         </div>
       </div>

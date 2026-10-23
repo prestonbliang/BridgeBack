@@ -42,6 +42,23 @@ Open **Get support**, or choose the help button beside a checklist item. General
 
 See [support behavior, external sources and maintenance](docs/SUPPORT.md). Counselor listings are real public data; preparation plans remain fictional. A listing is not an available appointment or housing offer.
 
+## iOS beta handoff
+
+The repository includes a Capacitor 8 iPhone/iPad project targeting iOS 16+. It bundles the interface, fonts, dated resources, privacy page and calculations for first-launch offline use. Native exports use the system share sheet, clean up temporary files, and distinguish cancellation from success. Safe-area layouts and a native app-switcher privacy cover are included.
+
+On a Mac with Node 22+, Python 3 and Xcode 26+:
+
+```sh
+npm ci
+npm run ios:bundle
+npm run ios:check
+npm run ios:open
+```
+
+The [iOS handoff](docs/IOS.md) explains signing, simulator/device checks and TestFlight gates. [Submission copy](docs/IOS-SUBMISSION.md) is prepared for publisher review. The macOS CI workflow is provided; native compilation, device testing, signing and Apple submission have not been executed in this Linux environment. The bundle identifier is provisional. This is not an App Store certification.
+
+Overview now opens real San Diego counselor support directly, without a practice plan or income profile. The [Scott Peters/district presentation brief](docs/DISTRICT-BRIEF.md) emphasizes local usefulness, original programming, honest evidence and privacy. It makes no claim about an endorsement or his personal preferences.
+
 ## Run locally
 
 Use Node 22 or 24 and npm (validated here with Node 24).
@@ -73,6 +90,8 @@ npm run test:e2e
 
 E2E requires a completed production build and free port 3000; the runner owns its server. It uses `/usr/bin/chromium` if installed, otherwise Playwright Chromium. Elsewhere run `npx playwright install chromium` and install required system libraries, or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to your Chromium binary.
 
+For the bundled iOS web interface, run `npm run ios:bundle`, `npm run ios:check`, then `npm run test:ios-web`. These browser checks disable networking and simulate the native bridge; they do not run UIKit or WKWebView. Rebuild the regular web target with `npm run build` before using `npm start` or the normal E2E suite after a native export.
+
 The fictional evaluation fixtures assert expected blocker counts, recommendations, exact AND/OR behavior, reuse acceptance/rejection, screening boundaries, readiness changes, simulation parity and alternative-route feasibility. These are correctness measurements, not real-world impact statistics. See [validation evidence](docs/VALIDATION.md).
 
 The checked-in [benchmark results](docs/evaluation-results.json) record 22 passing independently specified cases. In its two-program missing-income fixture, a shared pay stub affects eight blocked downstream requirements, makes exactly two forms actionable and advances readiness by 20 percentage points. These values describe that fixture, not promised outcomes for real applicants.
@@ -97,3 +116,6 @@ Android: browser menu → Install app. iPhone: Safari → Share → Add to Home 
 - [Two-minute competition script](docs/DEMO.md)
 - [Privacy and data lifecycle](docs/PRIVACY.md)
 - [Validation and release limits](docs/VALIDATION.md)
+- [iOS/TestFlight handoff](docs/IOS.md)
+- [App Store copy and reviewer notes](docs/IOS-SUBMISSION.md)
+- [District presentation brief](docs/DISTRICT-BRIEF.md)

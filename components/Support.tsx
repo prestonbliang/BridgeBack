@@ -22,6 +22,7 @@ export type SupportProps = {
   state: Workspace;
   analysis: PlanAnalysis;
   initialTarget: string | null;
+  initialSection?: "step" | "person";
   onAction: (action: WorkspaceAction) => void;
   onNavigate: (
     tab: "PathFinder" | "Documents" | "Settings" | "Discover",
@@ -32,11 +33,14 @@ export function Support({
   state,
   analysis,
   initialTarget,
+  initialSection = "step",
   onAction,
   onNavigate,
   onReopen,
 }: SupportProps) {
-  const [section, setSection] = useState<"step" | "learn" | "person">("step");
+  const [section, setSection] = useState<"step" | "learn" | "person">(
+    initialSection,
+  );
   const [targetId, setTargetId] = useState(
     initialTarget ??
       state.supportRecords[0]?.targetId ??
@@ -48,11 +52,11 @@ export function Support({
   useEffect(() => {
     if (initialTarget) {
       setTargetId(initialTarget);
-      setSection("step");
+      setSection(initialSection);
       setAnswer("");
       setConfirmed(false);
     }
-  }, [initialTarget]);
+  }, [initialTarget, initialSection]);
   const record = state.supportRecords.find(
     (record) => record.targetId === targetId,
   );

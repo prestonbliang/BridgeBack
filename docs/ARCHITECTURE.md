@@ -1,5 +1,13 @@
 # BridgeBack architecture — Phase 2
 
+## iOS target
+
+The web app and native candidate use the same deterministic engine, validated workspace and Dexie store. `next.config.ts` enables static export only for `BRIDGEBACK_NATIVE=1`. `ios:bundle` writes the bundled app to `out`, excludes the browser service worker, then synchronizes the Capacitor 8 Swift Package Manager project. Native and normal builds share Next.js’s `.next` working directory; rebuild the web target before serving it after an export.
+
+`lib/platform.ts` isolates native detection, native export/cache cleanup and browser downloads. Native plugins are loaded on demand. Startup cleanup is awaited before a new private export is written, and the share-sheet result determines success/cancellation. The native app does not register a browser worker. Normal PWA builds atomically cache the shell, the privacy page and both pages’ required assets. `app/mobile.css` adds device-derived safe-area layout without disabling zoom.
+
+The native scene cover, app icon, launch screen, Info.plist and privacy manifest are under `ios`. A shared Xcode scheme and macOS workflow provide the next native compile gate. Browser tests exercise a simulated JS bridge against the actual bundled assets; they do not establish UIKit, SDK, signing or App Store correctness. See [iOS handoff](IOS.md).
+
 ## Existing foundation, clearer boundaries
 
 Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow remain the stack. No backend, account, external database or language model is required. The interface uses a navy navigation rail and a readable help-desk layout, with locally hosted Atkinson Hyperlegible type, dark mode and large-text preferences. See `DESIGN.md` for the design sources and rationale.

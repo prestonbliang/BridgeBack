@@ -10,6 +10,7 @@ import {
 } from "../lib/support-resources";
 import { counselorSnapshot } from "../lib/counselors";
 import { download } from "./ui";
+import { useNativeApp } from "../hooks/useNativeApp";
 export function ResourceCard({ resource }: { resource: SupportResource }) {
   return (
     <article className="support-resource">
@@ -60,6 +61,8 @@ export function ContactPlan({
   onAction: (action: WorkspaceAction) => void;
 }) {
   const [message, setMessage] = useState("");
+  const [exporting, setExporting] = useState(false);
+  const native = useNativeApp();
   const sheet = providerQuestionSheet(title, record.reason, record);
   return (
     <details
@@ -101,21 +104,40 @@ export function ContactPlan({
         </button>
         <button
           className="button secondary"
-          onClick={() => {
-            download("bridgeback-provider-questions.txt", sheet);
-            onAction({
-              type: "record",
-              eventType: "export",
-              label:
-                "Downloaded a provider question sheet; nothing was submitted.",
-            });
-            setMessage(
-              "Your question sheet was downloaded. You choose whether to share it.",
-            );
+          disabled={exporting}
+          onClick={async () => {
+            setExporting(true);
+            try {
+              const result = await download(
+                "bridgeback-provider-questions.txt",
+                sheet,
+              );
+              if (result === "cancelled") {
+                setMessage("Sharing cancelled. Your help plan is unchanged.");
+                return;
+              }
+              onAction({
+                type: "record",
+                eventType: "export",
+                label:
+                  "Exported a provider question sheet; no application was submitted.",
+              });
+              setMessage(
+                result === "shared"
+                  ? "You shared your questions using the system share sheet. BridgeBack did not submit an application."
+                  : "Your question sheet was downloaded. You choose whether to share it.",
+              );
+            } catch {
+              setMessage(
+                "We could not confirm the export finished. Check your chosen destination before trying again. Your help plan is unchanged.",
+              );
+            } finally {
+              setExporting(false);
+            }
           }}
         >
           <Download size={16} aria-hidden="true" />
-          Download questions
+          {native ? "Share or save questions" : "Download questions"}
         </button>
       </div>
       <p role="status" className="helper-text">

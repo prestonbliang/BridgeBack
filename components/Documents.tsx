@@ -17,6 +17,7 @@ import {
   type PlanAnalysis,
 } from "../lib/planner";
 import { Explain } from "./Explain";
+import { useNativeApp } from "../hooks/useNativeApp";
 
 export type DocumentsProps = {
   input: PlannerInput;
@@ -35,6 +36,7 @@ export function Documents({
   onExport,
   onSupport,
 }: DocumentsProps) {
+  const native = useNativeApp();
   const [view, setView] = useState<"inventory" | "programs">("inventory");
   const rescue = useMemo(() => findRescueRoute(input), [input]);
   const shared = analysis.documents.filter(
@@ -62,12 +64,21 @@ export function Documents({
             <FileCheck2 size={16} />
             Export preparation packet
           </button>
-          <button className="button secondary" onClick={() => window.print()}>
-            <Printer size={16} />
-            Print
-          </button>
+          {!native && (
+            <button className="button secondary" onClick={() => window.print()}>
+              <Printer size={16} />
+              Print
+            </button>
+          )}
         </div>
       </section>
+      {native && (
+        <p className="helper-text">
+          Export opens the iPhone or iPad share sheet. Choose Save to Files,
+          Print where offered, or another destination. You control what leaves
+          this app.
+        </p>
+      )}
       <div className="document-privacy">
         <ShieldCheck size={20} />
         <p>

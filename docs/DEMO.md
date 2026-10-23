@@ -42,3 +42,7 @@ Open Learn the paperwork, identify gross pay in the fictional exercise, then com
 Open Talk to someone. Show the source date and the 92101 search boundary on the real CFPB counselor data. Filter by a listed language, select a public contact and review the question sheet. Its questions omit the made-up program names. Set “waiting” and a personal follow-up date, then return to Overview: an open question is visible but application readiness has not increased.
 
 The person controls website visits, phone calls and exports. The app does not claim a call was made, an appointment is available or an application was submitted.
+
+## District-review opening
+
+For a presentation to Scott Peters or district reviewers, start with Overview → Find a real person to help, then move into the fictional dependency example. The real-contact path requires no sample program or income profile. Use the [district brief](DISTRICT-BRIEF.md) for defensible claims and [iOS handoff](IOS.md) for the next platform phase. Do not present the native candidate as signed, Apple approved or device tested.

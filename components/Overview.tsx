@@ -30,6 +30,7 @@ export function Overview({
   onDocuments,
   helpNotes = [],
   onSupport,
+  onLocalHelp,
 }: {
   analysis: PlanAnalysis;
   example: Simulation;
@@ -41,6 +42,7 @@ export function Overview({
   onDocuments: () => void;
   helpNotes?: SupportRecord[];
   onSupport?: () => void;
+  onLocalHelp?: () => void;
 }) {
   const [preview, setPreview] = useState(false);
   const hasPlan = analysis.programs.length > 0;
@@ -71,6 +73,28 @@ export function Overview({
           No account needed
         </span>
       </header>
+      {onLocalHelp && (
+        <section
+          className="local-help-entry"
+          aria-labelledby="local-help-heading"
+        >
+          <MapPin size={25} aria-hidden="true" />
+          <div>
+            <span className="section-label">Real help in San Diego</span>
+            <h2 id="local-help-heading">
+              Need a person to help you work this out?
+            </h2>
+            <p>
+              Find listed housing counselors, prepare your questions, and keep
+              track of the reply. No practice plan or income details needed.
+            </p>
+          </div>
+          <button className="button secondary" onClick={onLocalHelp}>
+            Find a real person to help{" "}
+            <ArrowRight size={17} aria-hidden="true" />
+          </button>
+        </section>
+      )}
       <div className="desk-layout">
         <section className={`desk-main ${hasPlan ? "with-next-action" : ""}`}>
           <div className="folder-tab">

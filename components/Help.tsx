@@ -56,7 +56,7 @@ const guides: Record<
       "If you cannot get a document, tick that option. The alternative finder checks which other papers your selected example plans accept.",
       "A shared document can help with more than one plan, but only where that plan's rules accept it. Check the acceptance list before relying on it.",
     ],
-    note: "Export downloads a text checklist; Print opens your browser's print menu. Neither sends documents or applications anywhere.",
+    note: "Export downloads a text checklist or opens the iOS share sheet. In a browser, Print opens its print menu. On iOS, choose Print in the share sheet if offered. You choose what to save or share; BridgeBack does not submit an application.",
   },
   Timeline: {
     title: "See what you changed, and fix a mistaken tick.",

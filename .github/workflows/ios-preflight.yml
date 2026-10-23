@@ -1,0 +1,65 @@
+name: iOS preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "components/**"
+      - "hooks/**"
+      - "lib/**"
+      - "ios/**"
+      - "scripts/**"
+      - "package*.json"
+      - "*config*"
+      - ".github/workflows/ios-preflight.yml"
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/**"
+      - "hooks/**"
+      - "lib/**"
+      - "ios/**"
+      - "scripts/**"
+      - "package*.json"
+      - "*config*"
+      - ".github/workflows/ios-preflight.yml"
+permissions:
+  contents: read
+concurrency:
+  group: ios-preflight-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  simulator-build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test
+      - run: npm run ios:bundle
+      - run: npm run ios:check
+      - name: Report Apple toolchain
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          python3 -c 'import re, subprocess; v = subprocess.check_output(["xcodebuild", "-version"], text=True); assert int(re.search(r"Xcode (\d+)", v).group(1)) >= 26, "Capacitor 8 requires Xcode 26+"'
+      - name: Compile unsigned simulator app
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Release -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath ios-derived
+          CODE_SIGNING_ALLOWED=NO build
+      - name: Preserve app bundle permissions
+        run: ditto -c -k --sequesterRsrc --keepParent ios-derived/Build/Products/Release-iphonesimulator/App.app BridgeBack-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BridgeBack-unsigned-simulator
+          path: BridgeBack-simulator.zip
+          if-no-files-found: error
+          retention-days: 7

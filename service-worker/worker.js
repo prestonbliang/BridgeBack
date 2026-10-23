@@ -11,6 +11,7 @@ const LOCAL_ASSETS = [
   "/fonts.css",
   "/fonts/AtkinsonHyperlegible-Regular.ttf",
   "/fonts/AtkinsonHyperlegible-Bold.ttf",
+  "/privacy",
 ];
 
 async function shellCache() {
@@ -37,7 +38,10 @@ self.addEventListener("install", (event) => {
       const existed = (await caches.keys()).includes(name);
       const cache = await caches.open(name);
       try {
-        const assets = [...html.matchAll(/(?:src|href)="([^" ]+)"/g)]
+        const policy = await fetch("/privacy", { cache: "no-store" });
+        if (!policy.ok) throw Error("Privacy policy unavailable");
+        const policyHtml = await policy.clone().text();
+        const assets = [...`${html}${policyHtml}`.matchAll(/(?:src|href)="([^" ]+)"/g)]
           .map((match) => match[1].replace(/&amp;/g, "&"))
           .filter((path) => path.startsWith("/_next/static/"));
         if (!assets.length)
@@ -45,6 +49,7 @@ self.addEventListener("install", (event) => {
         // The candidate becomes discoverable only after every required asset is cached.
         await cache.addAll([...new Set([...assets, ...LOCAL_ASSETS])]);
         await cache.put("/", response);
+        await cache.put("/privacy", policy);
         const index = await caches.open(INDEX);
         await index.put(CANDIDATE, new Response(name));
       } catch (error) {

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23501" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="launch-controller">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies><deployment identifier="iOS"/><plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23501"/></dependencies>
+    <scenes><scene sceneID="launch-scene"><objects>
+        <viewController id="launch-controller" sceneMemberID="viewController">
+            <view key="view" contentMode="scaleToFill" id="launch-view">
+                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="BridgeMark" translatesAutoresizingMaskIntoConstraints="NO" id="launch-mark">
+                        <rect key="frame" x="148.5" y="354" width="96" height="96"/>
+                        <constraints><constraint firstAttribute="width" constant="96" id="mark-width"/><constraint firstAttribute="height" constant="96" id="mark-height"/></constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="BridgeBack" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="launch-title">
+                        <rect key="frame" x="118" y="474" width="157" height="36"/>
+                        <fontDescription key="fontDescription" type="system" weight="bold" pointSize="30"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="0.090196" green="0.184314" blue="0.262745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <viewLayoutGuide key="safeArea" id="launch-safe"/>
+                <constraints>
+                    <constraint firstItem="launch-mark" firstAttribute="centerX" secondItem="launch-view" secondAttribute="centerX" id="mark-center-x"/>
+                    <constraint firstItem="launch-mark" firstAttribute="centerY" secondItem="launch-view" secondAttribute="centerY" constant="-24" id="mark-center-y"/>
+                    <constraint firstItem="launch-title" firstAttribute="top" secondItem="launch-mark" secondAttribute="bottom" constant="24" id="title-top"/>
+                    <constraint firstItem="launch-title" firstAttribute="centerX" secondItem="launch-view" secondAttribute="centerX" id="title-center-x"/>
+                </constraints>
+            </view>
+        </viewController>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="launch-first" sceneMemberID="firstResponder"/>
+    </objects></scene></scenes>
+    <resources><image name="BridgeMark" width="32" height="32"/></resources>
+</document>

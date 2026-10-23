@@ -673,9 +673,8 @@ test("real contacts and follow-up are usable without adding a fictional program"
   page,
 }) => {
   await page.goto("/");
-  await nav(page, "Support");
   await page
-    .getByRole("button", { name: "Talk to someone", exact: true })
+    .getByRole("button", { name: "Find a real person to help", exact: true })
     .click();
   await page
     .getByRole("button", {
@@ -725,4 +724,22 @@ test("real contacts and follow-up are usable without adding a fictional program"
   await expect(
     page.getByRole("heading", { name: "Keep your help questions moving" }),
   ).toBeVisible();
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.waitForFunction(() => !!navigator.serviceWorker.controller);
+  await nav(page, "Settings");
+  await page.context().setOffline(true);
+  const popup = page.waitForEvent("popup");
+  await page.getByRole("link", { name: "Read the privacy policy" }).click();
+  const policy = await popup;
+  await expect(
+    policy.getByRole("heading", { name: "Your paperwork stays with you." }),
+  ).toBeVisible();
+  await policy.getByRole("link", { name: "← Return to BridgeBack" }).click();
+  await expect(
+    policy.getByRole("heading", { name: "Get your housing paperwork ready." }),
+  ).toBeVisible();
+  await policy.close();
+  await page.context().setOffline(false);
 });

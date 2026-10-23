@@ -49,6 +49,7 @@ import { download } from "../components/ui";
 import { Overview } from "../components/Overview";
 import { HelpGuide, PageHelp } from "../components/Help";
 import { Support } from "../components/Support";
+import { isNativeApp, clearInterruptedExports } from "../lib/platform";
 const navigation = [
   { label: "Dashboard", title: "Overview", icon: Home },
   { label: "Discover", title: "Find help", icon: Compass },
@@ -98,12 +99,27 @@ export default function App() {
   );
   const [helpOpen, setHelpOpen] = useState(false);
   const [supportTarget, setSupportTarget] = useState<string | null>(null);
+  const [supportSection, setSupportSection] = useState<"step" | "person">(
+    "step",
+  );
+  const exporting = useRef(false);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
     update();
     window.addEventListener("online", update);
     window.addEventListener("offline", update);
-    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    if (isNativeApp()) {
+      document.documentElement.dataset.platform = "native";
+      setOfflineReady(true);
+      void clearInterruptedExports().catch(() =>
+        setNotification(
+          "An earlier shared export could not be cleared from temporary app storage. You can retry by restarting the app.",
+        ),
+      );
+    } else if (
+      process.env.NODE_ENV === "production" &&
+      "serviceWorker" in navigator
+    ) {
       navigator.serviceWorker
         .register("/sw.js")
         .then(() => navigator.serviceWorker.ready)
@@ -203,11 +219,18 @@ export default function App() {
     act({ type: "task", id, complete: !state.completed.includes(id) });
   }
   function getSupport(id: string) {
+    setSupportSection("step");
     setSupportTarget(id);
+    navigate("Support");
+  }
+  function localHelp() {
+    setSupportTarget("general");
+    setSupportSection("person");
     navigate("Support");
   }
   function startDemo(index = 0) {
     setSupportTarget(null);
+    setSupportSection("step");
     setDemo(demoWorkspace(index));
     setScene(index === 2 ? 2 : 0);
     setTransition(null);
@@ -216,6 +239,7 @@ export default function App() {
   }
   function exitDemo() {
     setSupportTarget(null);
+    setSupportSection("step");
     setDemo(null);
     setTransition(null);
     navigate("Dashboard");
@@ -224,19 +248,35 @@ export default function App() {
     setScene(index);
     navigate(demoScenes[index].tab);
   }
-  function exportPacket() {
-    download(
-      "bridgeback-preparation-packet.txt",
-      preparationPacket(state, analysis),
-    );
-    act({
-      type: "record",
-      eventType: "export",
-      label: `Exported preparation packet for ${analysis.programs.length} plans`,
-    });
-    setNotification(
-      "Your checklist was downloaded. It includes what you have, what is still missing, and the next steps. Nothing was sent to an agency.",
-    );
+  async function exportPacket() {
+    if (exporting.current) return;
+    exporting.current = true;
+    try {
+      const result = await download(
+        "bridgeback-preparation-packet.txt",
+        preparationPacket(state, analysis),
+      );
+      if (result === "cancelled") {
+        setNotification("Sharing cancelled. Your checklist is unchanged.");
+        return;
+      }
+      act({
+        type: "record",
+        eventType: "export",
+        label: `Exported preparation packet for ${analysis.programs.length} plans`,
+      });
+      setNotification(
+        result === "shared"
+          ? "You shared your preparation checklist using the system share sheet. BridgeBack did not submit an application."
+          : "Your checklist was downloaded. It includes what you have, what is still missing, and the next steps. Nothing was sent to an agency.",
+      );
+    } catch {
+      setNotification(
+        "We could not confirm the export finished. Check your chosen destination before trying again. Your saved checklist is unchanged.",
+      );
+    } finally {
+      exporting.current = false;
+    }
   }
   if (!local.ready)
     return (
@@ -457,7 +497,12 @@ export default function App() {
               onPath={() => navigate("PathFinder")}
               onDocuments={() => navigate("Documents")}
               helpNotes={state.supportRecords}
-              onSupport={() => navigate("Support")}
+              onSupport={() => {
+                setSupportTarget(null);
+                setSupportSection("step");
+                navigate("Support");
+              }}
+              onLocalHelp={localHelp}
             />
           )}
           {tab === "Discover" && (
@@ -536,6 +581,7 @@ export default function App() {
               state={state}
               analysis={analysis}
               initialTarget={supportTarget}
+              initialSection={supportSection}
               onAction={act}
               onNavigate={navigate}
               onReopen={complete}

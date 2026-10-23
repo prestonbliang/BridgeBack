@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, type ReactNode } from "react";
 import { X, ArrowRight, Compass } from "lucide-react";
+import { exportText } from "../lib/platform";
 export function Dialog({
   open,
   onClose,
@@ -101,11 +102,4 @@ export function Progress({ value, label }: { value: number; label: string }) {
     </div>
   );
 }
-export function download(name: string, value: string, type = "text/plain") {
-  const url = URL.createObjectURL(new Blob([value], { type }));
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+export const download = exportText;

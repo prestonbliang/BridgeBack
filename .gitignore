@@ -9,3 +9,19 @@ public/sw.js
 
 # Atomic source-import candidate
 lib/counselor-snapshot.json.tmp
+
+# Native web bundle and Xcode user/build outputs
+out/
+.next-native/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/CapApp-SPM/.build/
+ios/App/Pods/
+ios/App/build/
+**/xcuserdata/
+**/*.xcuserstate
+*.ipa
+*.xcarchive
+ios-derived/
+BridgeBack-simulator.zip
