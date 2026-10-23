@@ -33,6 +33,8 @@ export function Overview({
   onLocalHelp,
   officialContent,
   hasOfficialPlans = false,
+  assistanceContent,
+  hasContactPlan = false,
 }: {
   analysis: PlanAnalysis;
   example: Simulation;
@@ -47,6 +49,8 @@ export function Overview({
   onLocalHelp?: () => void;
   officialContent?: ReactNode;
   hasOfficialPlans?: boolean;
+  assistanceContent?: ReactNode;
+  hasContactPlan?: boolean;
 }) {
   const [preview, setPreview] = useState(false);
   const hasPlan = analysis.programs.length > 0;
@@ -64,12 +68,12 @@ export function Overview({
           <h1>
             {hasPlan
               ? "Here’s what you can do next."
-              : "Get your housing paperwork ready."}
+              : "Housing help, with a clear next step."}
           </h1>
           <p>
             {hasPlan
               ? "Your checklist uses the documents you have and the steps you’ve finished. You can change either at any time."
-              : "Work out what to gather, what’s missing, and which step to take first. You don’t need to fill everything in today."}
+              : "Reach the right organization, know what to ask, and work through the paperwork one step at a time. Your progress stays here."}
           </p>
         </div>
         <span className="private-label">
@@ -77,7 +81,8 @@ export function Overview({
           No account needed
         </span>
       </header>
-      {onLocalHelp && (
+      {assistanceContent}
+      {onLocalHelp && !assistanceContent && (
         <section
           className="local-help-entry"
           aria-labelledby="local-help-heading"
@@ -100,7 +105,7 @@ export function Overview({
         </section>
       )}
       {officialContent}
-      {(!hasOfficialPlans || hasPlan) && (
+      {((!hasOfficialPlans && !hasContactPlan) || hasPlan) && (
         <div className="desk-layout">
           <section className={`desk-main ${hasPlan ? "with-next-action" : ""}`}>
             <div className="folder-tab">
@@ -361,10 +366,10 @@ export function Overview({
         <section className="real-help-strip">
           <Search size={26} aria-hidden="true" />
           <div>
-            <h2>Looking for an actual housing service?</h2>
+            <h2>Want to compare other resources?</h2>
             <p>
-              Find links to San Diego housing organizations. Check their
-              websites for current programs and application instructions.
+              Browse San Diego housing organizations and dated counselor
+              listings. Confirm current services and instructions directly.
             </p>
           </div>
           <button className="button secondary" onClick={onDiscover}>
@@ -408,8 +413,9 @@ export function Overview({
       <div className="accuracy-note">
         <ShieldCheck size={18} aria-hidden="true" />
         <p>
-          Current checklists use fictional programs. Official service links are
-          separate and have not been checked for current openings. BridgeBack
+          Real contact routes and program guidance cite their sources. Optional
+          practice programs are fictional. Your check marks track your own work;
+          they do not show agency acceptance or available housing. BridgeBack
           does not submit applications or promise housing.
         </p>
       </div>

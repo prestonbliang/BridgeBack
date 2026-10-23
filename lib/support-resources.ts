@@ -29,18 +29,20 @@ export const supportResources: SupportResource[] = [
   },
   {
     id: "sdhc",
+    phone: "619-231-9400",
     name: "Check City of San Diego housing information",
     organization: "San Diego Housing Commission",
     purpose:
       "Use the agency website to ask about its current programs, service area and application instructions.",
-    url: "https://www.sdhc.org/",
+    url: "https://sdhc.org/about-us/contact-us/",
     kind: "official-agency",
     topics: ["referral", "documents"],
     ask: "Which program serves my situation, and where can I get its current document checklist?",
-    reviewedAt: null,
+    reviewedAt: "2026-10-23",
   },
   {
     id: "county",
+    phone: "858-694-4801",
     name: "Check County housing information",
     organization: "County of San Diego",
     purpose:

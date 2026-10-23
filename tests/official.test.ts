@@ -186,7 +186,7 @@ describe("real follow-up dependency plans", () => {
     delete (old as { officialPlans?: unknown }).officialPlans;
     delete (old as { sourceReport?: unknown }).sourceReport;
     const migrated = migrateWorkspace(old);
-    expect(migrated.schemaVersion).toBe(3);
+    expect(migrated.schemaVersion).toBe(4);
     expect(migrated.officialPlans).toEqual([]);
     let s = updateWorkspace(
       migrated,

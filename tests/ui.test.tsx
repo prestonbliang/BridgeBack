@@ -45,7 +45,7 @@ it("opens an isolated demo with computed multi-program readiness and preserves p
     expect((await loadWorkspace())?.profile.household).toBe(3),
   );
   expect(
-    screen.getByRole("heading", { name: "Get your housing paperwork ready." }),
+    screen.getByRole("heading", { name: "Housing help, with a clear next step." }),
   ).toBeTruthy();
 });
 

@@ -28,6 +28,34 @@ if (
 
 const results = [],
   warnings = [];
+let release = null;
+const expectedRevision = process.env.BRIDGEBACK_EXPECT_REVISION;
+if (expectedRevision && !/^[a-f0-9]{40}$/.test(expectedRevision))
+  throw Error("Expected revision must be a full Git commit hash.");
+if (expectedRevision) {
+  const expires = Date.now() + 6 * 60 * 1000;
+  console.log(
+    "Waiting up to six minutes for the expected Vercel production revision.",
+  );
+  while (Date.now() < expires) {
+    try {
+      const response = await fetch(new URL("/api/release", url), {
+        redirect: "manual",
+        cache: "no-store",
+        signal: AbortSignal.timeout(15000),
+      });
+      const candidate =
+        response.ok &&
+        response.headers.get("content-type")?.includes("application/json")
+          ? await response.json()
+          : null;
+      if (candidate?.revision === expectedRevision) break;
+    } catch {
+      /* A rolling deployment can be briefly unavailable. */
+    }
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+  }
+}
 async function check(name, run) {
   try {
     await run();
@@ -65,6 +93,32 @@ async function get(path, type) {
   return response;
 }
 let html = "";
+await check("Published web revision and guided-contact feature", async () => {
+  release = z
+    .object({
+      schemaVersion: z.literal(1),
+      revision: z
+        .string()
+        .regex(/^[a-f0-9]{40}$/)
+        .nullable(),
+      workspaceVersion: z.literal(4),
+      catalogVersion: z.literal(catalog.version),
+      target: z.literal("web"),
+      features: z.array(z.string()),
+    })
+    .strict()
+    .parse(await (await get("/api/release", "application/json")).json());
+  assert.ok(
+    release.features.includes("guided-contact-workflows"),
+    "The deployed app is missing the guided contact workflow",
+  );
+  if (expectedRevision)
+    assert.equal(
+      release.revision,
+      expectedRevision,
+      "Vercel has not published the expected revision; review its build status",
+    );
+});
 await check("Public app, security headers and compiled assets", async () => {
   const response = await get("/", "text/html");
   for (const [key, value] of Object.entries({
@@ -210,6 +264,7 @@ const report = {
   origin: url.origin,
   checkedAt: new Date().toISOString(),
   catalogVersion: catalog.version,
+  release,
   transport: local ? "local rehearsal" : "public HTTPS",
   passed: results.every((result) => result.passed),
   results,

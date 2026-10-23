@@ -8,6 +8,12 @@ The [first hosted verification](https://github.com/prestonbliang/BridgeBack/acti
 
 BridgeBack combines a reviewed real-program guidance layer with a separate fictional demonstration of its dependency engine. Profiles stay local; a small read-only web endpoint checks public source pages. No account, document uploads or AI service is required.
 
+## Start with the situation, leave with a next step
+
+The first screen now gets someone to a real contact for housing help, an existing application, missing paperwork, a notice or a veteran referral. City and County cases get different contacts. Each plan includes a call script, questions to ask, help with calling/portal barriers, reported contact outcomes, confirmed next instructions and personal follow-up dates.
+
+An unanswered message stays unanswered. A referral needs a usable handoff. Paperwork categories are added only after the person confirms the provider's instructions; preparation never means acceptance. Saved plans and contact sheets work offline. **Help me with this step** connects real-program checklists to the right contact workflow. See [the contact-to-follow-up design and a 90-second demo](docs/CONTACT-WORKFLOW.md).
+
 ## Real-program production candidate
 
 Find help now includes **County Section 8, County Public Housing and HUD-VASH referral guidance**, reviewed against eleven official sources on October 23, 2026. Save a real follow-up plan and choose new-inquiry or existing-waiting-list guidance. Track actual personal steps, use online **or** assisted access, correct mistakes and export the plan. The Public Housing working-preference inventory uses the actual policy's recent-pay-stubs **OR** employer-statement rule; it is separate from fictional document acceptance.
@@ -22,9 +28,9 @@ BridgeBack now uses plain page names: **Find help**, **My checklist**, **Documen
 
 The design uses a navy navigation rail, a document-folder layout for the main task, and locally hosted Atkinson Hyperlegible fonts. The checklist comes before optional planning tools. Document descriptions explain what the paper is, what counts in each example plan and what checking a box means. See the [design rationale and public skills consulted](docs/DESIGN.md).
 
-![BridgeBack overview: a practical getting-started checklist and an interactive pay-stub example](docs/screenshots/overview-desktop.png)
+![BridgeBack help desk: choose a situation and get a sourced contact and next steps](docs/screenshots/help-desk-desktop.png)
 
-[Phone layout](docs/screenshots/overview-mobile.png) · [Dark theme](docs/screenshots/overview-dark.png)
+[Phone contact plan](docs/screenshots/help-desk-phone.png) · [Dark theme](docs/screenshots/help-desk-dark.png)
 
 ## Try the signature experience
 
@@ -144,4 +150,4 @@ Start with the [2026 submission guide](docs/SUBMISSION.md), [code walkthrough](d
 
 With a production server running, system FFmpeg installed and the Playwright recording binary available (`npx playwright install ffmpeg`), `npm run demo:record` records two minutes of real browser interactions and creates a captioned review MP4/SRT in `artifacts/`. This silent review footage still needs participant identification, your own accurate narration and full assistance disclosure before the required public video submission. It does not upload or submit anything.
 
-The [production readiness record](docs/PRODUCTION-READINESS.md) explains Docker deployment, the web source-check endpoint, source-change review and schema-3 migration. `npm run programs:audit` is a separate live diagnostic; ordinary unit/E2E tests remain deterministic.
+The [production readiness record](docs/PRODUCTION-READINESS.md) explains Docker deployment, source-change review and schema-4 migration. `npm run programs:audit` checks program sources and published contact excerpts; ordinary unit/E2E tests remain deterministic.

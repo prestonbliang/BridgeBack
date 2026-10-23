@@ -35,6 +35,12 @@ import {
   type Transition,
 } from "../lib/planner";
 import { preparationPacket } from "../lib/packet";
+import { HelpDesk } from "../components/HelpDesk";
+import {
+  assistanceKey,
+  type AssistanceGoal,
+  type AssistanceAgency,
+} from "../lib/assistance";
 import { PathFinder } from "../components/PathFinder";
 import { Documents } from "../components/Documents";
 import { Onboarding } from "../components/Onboarding";
@@ -98,6 +104,7 @@ export default function App() {
   const [transition, setTransition] = useState<Transition | null>(null);
   const [notification, setNotification] = useState("");
   const [offlineReady, setOfflineReady] = useState(false);
+  const [assistanceFocus, setAssistanceFocus] = useState<string | null>(null);
   const main = useRef<HTMLElement>(null);
   const menu = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -241,6 +248,16 @@ export default function App() {
     setSupportTarget("general");
     setSupportSection("person");
     navigate("Support");
+  }
+  function administrativeHelp(goal: AssistanceGoal, agency: AssistanceAgency) {
+    act({ type: "assistance-open", goal, agency });
+    setAssistanceFocus(assistanceKey(goal, agency));
+    navigate("Dashboard");
+    requestAnimationFrame(() =>
+      document
+        .getElementById("help-desk-title")
+        ?.scrollIntoView({ block: "start", behavior: "instant" }),
+    );
   }
   function startDemo(index = 0) {
     setSupportTarget(null);
@@ -517,7 +534,18 @@ export default function App() {
                 navigate("Support");
               }}
               onLocalHelp={localHelp}
+              assistanceContent={
+                !demo ? (
+                  <HelpDesk
+                    state={state}
+                    onAction={act}
+                    onLocalHelp={localHelp}
+                    focusKey={assistanceFocus}
+                  />
+                ) : undefined
+              }
               hasOfficialPlans={state.officialPlans.length > 0}
+              hasContactPlan={state.assistanceCases.length > 0}
               officialContent={
                 !demo ? (
                   <OfficialOverview
@@ -543,6 +571,19 @@ export default function App() {
               state={state}
               onAction={act}
               onLocalHelp={localHelp}
+              onHelp={(programId) => {
+                const plan = state.officialPlans.find(
+                  (p) => p.programId === programId,
+                );
+                administrativeHelp(
+                  programId === "county-vash"
+                    ? "veteran"
+                    : plan?.role === "existing"
+                      ? "application"
+                      : "paperwork",
+                  plan?.role === "existing" ? "county" : "unknown",
+                );
+              }}
             />
           )}
           {tab === "PathFinder" &&

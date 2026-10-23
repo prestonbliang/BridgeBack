@@ -1,0 +1,24 @@
+{
+  "observedAt": "2026-10-23T22:01:43.066203+00:00",
+  "scope": "Local production build; native tests use a browser bridge shim, not an Apple runtime. CI/public-origin verification is recorded separately.",
+  "results": {
+    "unit": {
+      "passed": 93
+    },
+    "browser": {
+      "passed": 28,
+      "duration": "53.9s"
+    },
+    "bundledBrowser": {
+      "passed": 8,
+      "duration": "7.7s"
+    },
+    "checks": [
+      "lint",
+      "typecheck",
+      "production web build",
+      "native bundle and configuration",
+      "live 11-source and 5-contact audits"
+    ]
+  }
+}

@@ -15,7 +15,8 @@ Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow 
 - `lib/engine.ts`: compatible original deterministic engine, graph validation and topological sorting. Mixed-consumer OR handling is corrected; recorded deadlines are not mislabeled as verified.
 - `lib/programs.ts`: explicit program entities, canonical document types, per-program acceptance gates, screening criteria and source provenance. This module contains the fictional practice rules; the real catalog is isolated in `lib/official-catalog.json`.
 - `lib/planner.ts`: compiles a selected-program DAG, computes statuses/readiness, actual action impact, barrier consequences, structured explanations, simulations, deadline collisions and Route Rescue.
-- `lib/workspace.ts`: validated schema-3 workspace, migration, typed mutations, timestamped events and guarded corrections.
+- `lib/workspace.ts`: validated schema-4 workspace, migration, typed mutations, timestamped events and guarded corrections.
+- `lib/assistance.ts`: real-contact routing, reported outcomes, instruction confirmation, requested/prepared paper categories, calendar dates and explainable next actions. `HelpDesk.tsx` exposes it without a profile or practice plan.
 - `lib/store.ts`: the existing IndexedDB database with ordered saves, transactional cross-tab revision checks and read-only migration until successful loading.
 - `hooks/useWorkspace.ts`: hydration, persistence status, cross-tab refresh and a guard that prevents autosaving over unreadable data.
 - `components/PathFinder.tsx`, `Documents.tsx`, `Explain.tsx`: shared engine results rendered as interactive decision tools.
@@ -56,7 +57,7 @@ The exact bounded subset search finds the fewest additional accepted document ty
 
 ## Local state and correction
 
-Version 1/2 records migrate to schema 3 without losing document availability, task flags, theme, effort, dates or prior undated history. Migration creates one honest import event, not fabricated historic timestamps. Invalid or future records reject on load and remain untouched; the UI offers session-only work and explicit reset recovery.
+Version 1/2/3 records migrate to schema 4 without losing document availability, task flags, theme, effort, dates, real-program plans or prior undated history. Migration creates one honest import event, not fabricated historic timestamps. Invalid or future records reject on load and remain untouched; the UI offers session-only work and explicit reset recovery.
 
 Writes are validated, copied and queued. IndexedDB database version 2 adds a metadata table with a non-personal revision counter. Each UI session carries the revision it loaded; an atomic read/write transaction compares it before saving and increments it after a successful change. Deletion drains prior writes and advances that revision while removing the personal record. A stale tab cannot restore a pre-deletion snapshot. BroadcastChannel messages contain only a change signal; clean tabs reload the latest data, and visibility changes also refresh clean tabs. Even without notifications, a conflicting save is rejected, the latest state is loaded and the user is told to review/repeat their change. Concurrent edits are not silently merged.
 
@@ -84,4 +85,6 @@ Source review and reachability are distinct. `lib/support-resources.ts` records 
 
 `official-source-check.ts` is server/maintenance code: registered HTTPS URLs only, redirect rejection, timeout/size/type bounds, reviewed-text comparisons and full PDF hashes. `/api/source-status` uses 15-minute Next ISR. Native static export produces a bundled marker with no check timestamp or online requests. `official-status.ts` validates persisted/API reports and rejects fresh labels for offline, old, future or mismatched data. A daily audit requires manual review on changes instead of rewriting criteria.
 
-Record schema 3 adds real plans, optional municipality and source-check reports. V2 migrates with empty/default real state; no destructive IndexedDB reset is required. The database index schema remains version 2. See [production design and release gates](PRODUCTION-READINESS.md).
+Record schema 3 introduced real plans, optional municipality and source-check reports; schema 4 adds validated contact/follow-up plans. No destructive IndexedDB reset is required. The database index schema remains version 2. See [production design and release gates](PRODUCTION-READINESS.md) and [contact workflow](CONTACT-WORKFLOW.md).
+
+`/api/release` exposes only a validated public build revision (or null), the record/catalog versions, target and feature marker. No environment dump or user state is returned. Production checks wait for the pushed revision before exercising the public site, so an earlier passing deployment cannot stand in for a new release.

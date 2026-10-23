@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-23T21:51:55.883Z",
+  "results": [
+    {
+      "id": "211",
+      "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/ending-homelessness/overview.html",
+      "checkedAt": "2026-10-23T21:51:55.883Z",
+      "status": "matches-reviewed-contact",
+      "sha256": "56e3b3c0c8d84c55b4448bf9e22515c502af59b1ce20c1b4c0521504cbf5153b"
+    },
+    {
+      "id": "county",
+      "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/application-directions.html",
+      "checkedAt": "2026-10-23T21:51:55.883Z",
+      "status": "matches-reviewed-contact",
+      "sha256": "74c7f31318f706c727b252582d626db2eaf12c92c5f0eaa5a6d6210b8aa0a99b"
+    },
+    {
+      "id": "city",
+      "sourceUrl": "https://sdhc.org/about-us/contact-us/",
+      "checkedAt": "2026-10-23T21:51:55.883Z",
+      "status": "matches-reviewed-contact",
+      "sha256": "9daa2d7ab81406bbe9061ec6c8b39d51f3a8de8dfdca8a6ea397556910e55375"
+    },
+    {
+      "id": "legal",
+      "sourceUrl": "https://www.lassd.org/",
+      "checkedAt": "2026-10-23T21:51:55.883Z",
+      "status": "matches-reviewed-contact",
+      "sha256": "1de6f057fc7b6746d73937a7bfa0895aa9febabde7e7ab4931cc5b97b373e925"
+    },
+    {
+      "id": "va",
+      "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/veterans-services/vash.html",
+      "checkedAt": "2026-10-23T21:51:55.883Z",
+      "status": "matches-reviewed-contact",
+      "sha256": "4362a77d768ed78ac02e3d48acb4a77eb53852d9f2878171020f925d5b5d0f94"
+    }
+  ],
+  "limits": "Reviewed contact excerpts only. Not live services, a promised response, availability or an agency partnership."
+}

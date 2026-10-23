@@ -1,0 +1,365 @@
+.help-desk {
+  margin: 24px 0;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--teal);
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.help-desk-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 28px 22px;
+}
+.help-desk-heading > svg {
+  color: var(--teal);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.help-desk-heading h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(25px, 3vw, 33px);
+  margin: 5px 0 9px;
+}
+.help-desk p,
+.help-desk li,
+.help-desk select {
+  font-size: 15px;
+}
+.help-desk p {
+  line-height: 1.65;
+  max-width: 74ch;
+}
+.help-desk .fine-print,
+.help-desk small {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.help-desk-choose {
+  padding: 0 28px 24px;
+}
+.help-desk-goals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.help-desk-goal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  text-align: left;
+  padding: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-height: 108px;
+}
+.help-desk-goal > span {
+  display: grid;
+  gap: 5px;
+}
+.help-desk-goal strong {
+  font-size: 16px;
+}
+.help-desk-goal span span {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.help-desk-goal > svg {
+  flex-shrink: 0;
+  color: var(--teal);
+}
+.help-desk-goal:hover {
+  border-color: var(--teal);
+}
+.help-desk-goal:last-child {
+  grid-column: 1 / -1;
+}
+.help-desk label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 14px;
+  min-width: 0;
+}
+.help-desk input:not([type="checkbox"]),
+.help-desk select {
+  border: 1px solid var(--border);
+  padding: 11px 12px;
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+  min-height: 46px;
+  min-width: 0;
+}
+.help-desk-saved {
+  padding: 0 28px 22px;
+}
+.help-desk-date-alerts {
+  margin: 0 28px 20px;
+  padding: 16px;
+  border-left: 3px solid var(--amber);
+  background: var(--soft);
+  border-radius: 8px;
+}
+.help-desk-date-alerts h3 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+.help-desk-date-alerts ul {
+  padding: 0;
+  margin: 6px 0 0;
+  list-style: none;
+}
+.help-desk-date-alerts .text-button {
+  min-height: 44px;
+  text-align: left;
+  white-space: normal;
+}
+.help-desk-agency {
+  display: grid;
+  gap: 16px;
+}
+.help-desk-current {
+  padding: 0 28px 24px;
+}
+.help-desk-next {
+  background: var(--soft);
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 3px solid var(--teal);
+  display: grid;
+  gap: 8px;
+}
+.help-desk-next h3 {
+  font-size: 22px;
+  line-height: 1.35;
+}
+.help-desk-next.attention {
+  border-left-color: var(--amber);
+}
+.help-desk-contact {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 24px 0;
+}
+.help-desk-contact h3 {
+  font-size: 20px;
+  margin: 4px 0 8px;
+}
+.help-desk-contact-actions {
+  display: grid;
+  gap: 10px;
+  min-width: 220px;
+  flex-shrink: 0;
+}
+.help-desk .button {
+  white-space: normal;
+  text-align: center;
+  justify-content: center;
+}
+.help-desk-conversation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  padding: 22px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.help-desk-conversation h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+.help-desk-conversation blockquote {
+  margin: 0 0 12px;
+  font-size: 17px;
+  line-height: 1.75;
+  font-family: Georgia, serif;
+}
+.help-desk ol {
+  padding-left: 21px;
+  margin: 0;
+}
+.help-desk li {
+  padding: 0 0 10px 3px;
+}
+.help-desk-barrier {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0;
+}
+.help-desk-note {
+  padding: 14px 16px;
+  background: var(--soft);
+  border-radius: 8px;
+  font-size: 14px;
+}
+.help-desk-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  text-underline-offset: 3px;
+}
+.help-desk-log {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 0;
+}
+.help-desk summary {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  min-height: 30px;
+}
+.help-desk-log[open] > :not(summary) {
+  margin-top: 17px;
+}
+.help-desk-papers {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  margin: 18px 0;
+  padding: 16px;
+  min-width: 0;
+}
+.help-desk-papers legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+.help-desk-paper-row {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.help-desk-paper-row > label + label {
+  margin-left: 30px;
+}
+.help-desk-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.help-desk .help-desk-check {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 400;
+  gap: 10px;
+}
+.help-desk-check input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin: 2px 0 0;
+  accent-color: var(--teal);
+}
+.help-desk .help-desk-last {
+  display: block;
+  font-size: 14px;
+}
+.help-desk-last svg {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.help-desk-last time {
+  color: var(--muted);
+}
+.help-desk-export {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 20px 0 14px;
+}
+.help-desk-export a {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 13px;
+  text-underline-offset: 3px;
+}
+.help-desk-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 18px;
+  border-top: 1px solid var(--border);
+  padding: 12px 28px;
+}
+.help-desk-footer .text-button {
+  min-height: 44px;
+}
+.official-step .step-contact-help {
+  margin: 10px 0 0;
+  min-height: 44px;
+}
+@media (max-width: 1100px) {
+  .help-desk-contact {
+    display: grid;
+    gap: 16px;
+  }
+  .help-desk-contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 620px) {
+  .help-desk-heading {
+    padding: 22px 18px 18px;
+  }
+  .help-desk-heading > svg {
+    display: none;
+  }
+  .help-desk-choose,
+  .help-desk-current {
+    padding: 0 18px 20px;
+  }
+  .help-desk-saved {
+    padding: 0 18px 18px;
+  }
+  .help-desk-goals,
+  .help-desk-conversation,
+  .help-desk-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .help-desk-goal {
+    min-height: 100px;
+    padding: 16px;
+  }
+  .help-desk-contact-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+  .help-desk-next {
+    padding: 17px;
+  }
+  .help-desk-contact h3 {
+    overflow-wrap: anywhere;
+  }
+  .help-desk-footer {
+    padding: 12px 18px;
+  }
+  .help-desk-footer .text-button {
+    text-align: left;
+  }
+}
+@media print {
+  .help-desk {
+    break-inside: avoid;
+  }
+  .help-desk button,
+  .help-desk-footer {
+    display: none;
+  }
+  .help-desk-log {
+    display: block;
+  }
+}

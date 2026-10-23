@@ -27,6 +27,17 @@ import {
   type OfficialStepId,
 } from "./official-plans";
 import { sourceReportSchema, type SourceReport } from "./official-status";
+import {
+  assistanceCaseSchema,
+  assistanceGoalSchema,
+  assistanceAgencySchema,
+  newAssistanceCase,
+  updateAssistanceCase,
+  assistanceGoals,
+  type AssistanceGoal,
+  type AssistanceAgency,
+  type AssistanceChange,
+} from "./assistance";
 
 const programIds = new Set(programs.map((program) => program.id));
 const documentIds = new Set(documentTypes.map((document) => document.id));
@@ -123,8 +134,16 @@ export type ProgressEvent = z.infer<typeof progressEventSchema>;
 
 export const workspaceSchema = z
   .object({
-    schemaVersion: z.literal(3),
+    schemaVersion: z.literal(4),
     id: z.literal("current"),
+    assistanceCases: z
+      .array(assistanceCaseSchema)
+      .max(9)
+      .refine(
+        (cases) => new Set(cases.map((c) => c.key)).size === cases.length,
+        "Duplicate help plan",
+      )
+      .default([]),
     profile: profileSchema,
     officialPlans: z
       .array(officialPlanSchema)
@@ -215,8 +234,9 @@ export type WorkspacePlannerInput = Workspace extends PlannerInput
 
 export function initialWorkspace(): Workspace {
   return {
-    schemaVersion: 3,
+    schemaVersion: 4,
     id: "current",
+    assistanceCases: [],
     officialPlans: [],
     sourceReport: null,
     profile: {
@@ -260,8 +280,8 @@ export function migrateWorkspace(
   now = new Date().toISOString(),
 ): Workspace {
   if (typeof value === "object" && value !== null && "schemaVersion" in value) {
-    if (value.schemaVersion === 2)
-      return workspaceSchema.parse({ ...value, schemaVersion: 3 });
+    if (value.schemaVersion === 2 || value.schemaVersion === 3)
+      return workspaceSchema.parse({ ...value, schemaVersion: 4 });
     return workspaceSchema.parse(value);
   }
   const old = legacyWorkspaceSchema.parse(value);
@@ -302,6 +322,9 @@ export function migrateWorkspace(
 }
 
 export type WorkspaceAction =
+  | { type: "assistance-open"; goal: AssistanceGoal; agency: AssistanceAgency }
+  | { type: "assistance-change"; key: string; change: AssistanceChange }
+  | { type: "assistance-remove"; key: string }
   | {
       type: "official-document";
       id: string;
@@ -418,6 +441,56 @@ export function updateWorkspace(
   let details:
     Omit<ProgressEvent, "id" | "at" | "undone" | "canUndo"> | undefined;
   switch (action.type) {
+    case "assistance-open": {
+      const item = newAssistanceCase(
+        assistanceGoalSchema.parse(action.goal),
+        assistanceAgencySchema.parse(action.agency),
+        now,
+      );
+      if (state.assistanceCases.some((c) => c.key === item.key)) return state;
+      state = { ...state, assistanceCases: [item, ...state.assistanceCases] };
+      details = {
+        type: "support",
+        label: `Started a real contact plan: ${assistanceGoals.find((g) => g.id === item.goal)!.label}`,
+      };
+      break;
+    }
+    case "assistance-change": {
+      const current = state.assistanceCases.find((c) => c.key === action.key);
+      if (!current) throw Error("Open this help plan before changing it.");
+      const updated = updateAssistanceCase(current, action.change, now);
+      state = {
+        ...state,
+        assistanceCases: [
+          updated,
+          ...state.assistanceCases.filter((c) => c.key !== action.key),
+        ],
+      };
+      details = {
+        type: "support",
+        label:
+          action.change.type === "contact"
+            ? "Recorded my own contact outcome; BridgeBack did not make or verify the contact."
+            : action.change.type === "date"
+              ? "Updated a personal help-plan date; this is not a deadline verified by BridgeBack."
+              : "Updated my contact and follow-up plan.",
+      };
+      break;
+    }
+    case "assistance-remove":
+      if (!state.assistanceCases.some((c) => c.key === action.key))
+        return state;
+      state = {
+        ...state,
+        assistanceCases: state.assistanceCases.filter(
+          (c) => c.key !== action.key,
+        ),
+      };
+      details = {
+        type: "support",
+        label: "Removed a contact and follow-up plan from this workspace.",
+      };
+      break;
     case "official-document": {
       const id = officialProgramIdSchema.parse(action.id);
       const documentId = officialDocumentIdSchema.parse(action.documentId);

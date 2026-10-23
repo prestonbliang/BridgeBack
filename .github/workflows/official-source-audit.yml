@@ -8,6 +8,8 @@ on:
     paths:
       - "lib/official-catalog.json"
       - "lib/official-source-check.ts"
+      - "lib/assistance-contacts.json"
+      - "tests/live/assistance-contacts.spec.ts"
       - "tests/live/official-sources.spec.ts"
       - "vitest.sources.config.ts"
       - ".github/workflows/official-source-audit.yml"
@@ -32,6 +34,8 @@ jobs:
         if: always()
         with:
           name: official-source-audit
-          path: artifacts/official-source-audit.json
+          path: |
+            artifacts/official-source-audit.json
+            artifacts/assistance-contact-audit.json
           if-no-files-found: error
           retention-days: 30

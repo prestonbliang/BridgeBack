@@ -1,0 +1,23 @@
+{
+  "scope": "Local production browser with illustrative test state; no provider was contacted.",
+  "results": [
+    {
+      "width": 1440,
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "width": 320,
+      "theme": "dark",
+      "overflow": false,
+      "violations": []
+    }
+  ]
+}

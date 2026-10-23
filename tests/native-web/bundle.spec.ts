@@ -83,6 +83,26 @@ async function nav(page: Page, name: string) {
     .getByRole("button", { name, exact: true })
     .click();
 }
+test("bundled contact scripts, legal-help details, personal reminders and contact-sheet sharing work offline", async ({ page }) => {
+  await page.goto("/");
+  const desk = page.getByTestId("help-desk");
+  await desk.getByRole("button", { name: /I received a housing notice/ }).click();
+  await expect(desk.getByRole("link", { name: "Call 1-877-534-2524", exact: true })).toHaveAttribute("href", "tel:18775342524");
+  await expect(desk.getByRole("link", { name: "TTY: 1-800-735-2929", exact: true })).toHaveAttribute("href", "tel:18007352929");
+  await desk.getByText("After you try: record what happened", { exact: true }).click();
+  await desk.getByRole("combobox", { name: "What actually happened?", exact: true }).selectOption("message");
+  await desk.getByRole("button", { name: "Save my contact outcome", exact: true }).click();
+  await desk.getByLabel("My follow-up reminder", { exact: true }).fill("2099-10-24");
+  await expect(page.locator(".sidebar-foot")).toContainText("Saved on this device");
+  await page.reload();
+  await expect(desk.getByRole("heading", { name: "You still need a reply", exact: true })).toBeVisible();
+  await expect(desk.getByLabel("My follow-up reminder", { exact: true })).toHaveValue("2099-10-24");
+  await desk.getByRole("button", { name: "Save my contact sheet", exact: true }).click();
+  await expect(desk.getByRole("status").filter({ hasText: "You shared the contact sheet" })).toBeVisible();
+  const calls = await page.evaluate(() => (window as unknown as { __nativeCalls: string[] }).__nativeCalls);
+  expect(calls).toContain("Share.share");
+  expect(calls).toContain("Filesystem.deleteFile");
+});
 test("first launch needs only the bundled files; local help and privacy work without a connection", async ({
   page,
 }) => {
@@ -153,7 +173,7 @@ test("first launch needs only the bundled files; local help and privacy work wit
   ).toEqual([]);
   await page.getByRole("link", { name: "← Return to BridgeBack" }).click();
   await expect(
-    page.getByRole("heading", { name: "Get your housing paperwork ready." }),
+    page.getByRole("heading", { name: "Housing help, with a clear next step." }),
   ).toBeVisible();
   await nav(page, "Settings");
   await expect(page.getByLabel("Household size", { exact: true })).toHaveValue(

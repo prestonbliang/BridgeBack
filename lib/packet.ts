@@ -12,10 +12,16 @@ import { officialSource } from "./official-catalog";
 import { programs, documentTypes } from "./programs";
 import { type SupportRecord } from "./support-model";
 import { providerQuestionSheet, supportTargetName } from "./support";
+import {
+  assistanceSheet,
+  localCalendarDate,
+  type AssistanceCase,
+} from "./assistance";
 export function preparationPacket(
   input: PlannerInput & {
     supportRecords?: SupportRecord[];
     officialPlans?: OfficialPlan[];
+    assistanceCases?: AssistanceCase[];
   },
   analysis: PlanAnalysis,
   now = new Date(),
@@ -23,21 +29,23 @@ export function preparationPacket(
   const lines = [
     "BRIDGEBACK — PREPARATION PACKET",
     `Created: ${now.toISOString()}`,
-    input.officialPlans?.length
+    input.officialPlans?.length || input.assistanceCases?.length
       ? "REAL-PROGRAM FOLLOW-UP AND SEPARATELY LABELED FICTIONAL PRACTICE. Not an application, eligibility decision or housing offer."
       : "FICTIONAL PRACTICE PLANS. Not an application, eligibility determination or housing offer.",
-    "No current availability or deadlines are asserted. Confirm real requirements with an official provider.",
+    "No current housing availability or verified agency deadlines are asserted. Any personal dates are entered by the user. Confirm real requirements with an official provider.",
     "",
     ...(analysis.total
       ? [
           `Practice preparation: ${analysis.complete}/${analysis.total} milestones (${analysis.readiness}%)`,
         ]
-      : input.officialPlans?.length
+      : input.officialPlans?.length || input.assistanceCases?.length
         ? [
-            `Real-program follow-up plans: ${input.officialPlans.length}. Each plan's milestones are shown separately below.`,
+            `Real-program follow-up plans: ${input.officialPlans?.length ?? 0}. Contact plans: ${input.assistanceCases?.length ?? 0}. Each plan is shown separately below.`,
           ]
         : ["No preparation plans selected."]),
   ];
+  for (const contactPlan of input.assistanceCases ?? [])
+    lines.push("", assistanceSheet(contactPlan, localCalendarDate(now)));
   for (const plan of input.officialPlans ?? []) {
     const real = analyzeOfficialPlan(plan);
     lines.push(

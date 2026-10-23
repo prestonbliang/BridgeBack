@@ -1,0 +1,64 @@
+[
+  {
+    "id": "211",
+    "name": "211 San Diego",
+    "phone": "211",
+    "url": "https://211sandiego.org/",
+    "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/ending-homelessness/overview.html",
+    "sourceTitle": "County: Ending Homelessness Overview",
+    "excerpt": "If you need a place to stay tonight or in the near future, please call 211",
+    "reviewedAt": "2026-10-23",
+    "reviewAfterDays": 30,
+    "description": "Ask about local services and which organization can help. A referral is not a reserved bed or an available home."
+  },
+  {
+    "id": "county",
+    "name": "County housing assistance (HACSD)",
+    "phone": "858-694-4801",
+    "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/update-application.html",
+    "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/application-directions.html",
+    "sourceTitle": "County: Application Directions",
+    "excerpt": "858-694-4801",
+    "reviewedAt": "2026-10-23",
+    "reviewAfterDays": 30,
+    "description": "For a County case, ask about your current instructions or an assisted contact method. New County HCV and Public Housing waiting-list applications are closed in the reviewed directions."
+  },
+  {
+    "id": "city",
+    "tty": "711",
+    "name": "San Diego Housing Commission (SDHC)",
+    "phone": "619-231-9400",
+    "url": "https://sdhc.org/about-us/contact-us/",
+    "sourceUrl": "https://sdhc.org/about-us/contact-us/",
+    "sourceTitle": "SDHC: Contact Us",
+    "excerpt": "Call SDHC Main Number: (619) 231-9400",
+    "reviewedAt": "2026-10-23",
+    "reviewAfterDays": 30,
+    "description": "This is SDHC’s main number and staff directory. Ask to be connected to the team handling your application. The contact page also links an assistance request form. No response time or opening is promised."
+  },
+  {
+    "id": "legal",
+    "tty": "1-800-735-2929",
+    "name": "Legal Aid Society of San Diego",
+    "phone": "1-877-534-2524",
+    "url": "https://www.lassd.org/",
+    "sourceUrl": "https://www.lassd.org/",
+    "sourceTitle": "Legal Aid Society of San Diego: published legal-help number",
+    "excerpt": "For legal help: 1-877-534-2524",
+    "reviewedAt": "2026-10-23",
+    "reviewAfterDays": 30,
+    "description": "Ask about help with a housing notice or deadline. The organization determines services, eligibility and representation. BridgeBack does not interpret a notice or calculate a legal response date."
+  },
+  {
+    "id": "va",
+    "name": "VA information route for homeless veterans",
+    "phone": "877-424-3838",
+    "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/veterans-services/vash.html",
+    "sourceUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/veterans-services/vash.html",
+    "sourceTitle": "County: Veterans Affairs Supportive Housing",
+    "excerpt": "Please call the Veterans Affairs (VA) office (877) 424-3838",
+    "reviewedAt": "2026-10-23",
+    "reviewAfterDays": 30,
+    "description": "The County directs veterans to this VA number for information. Ask about assessment and referrals; a voucher or appointment is not confirmed."
+  }
+]

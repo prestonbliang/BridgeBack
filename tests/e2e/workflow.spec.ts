@@ -719,7 +719,7 @@ test("real contacts and follow-up are usable without adding a fictional program"
   expect(body).not.toMatch(/Fresh Start|Harbor|Keys/);
   await nav(page, "Dashboard");
   await expect(
-    page.getByRole("heading", { name: "Get your housing paperwork ready." }),
+    page.getByRole("heading", { name: "Housing help, with a clear next step." }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Keep your help questions moving" }),
@@ -738,7 +738,7 @@ test("real contacts and follow-up are usable without adding a fictional program"
   ).toBeVisible();
   await policy.getByRole("link", { name: "← Return to BridgeBack" }).click();
   await expect(
-    policy.getByRole("heading", { name: "Get your housing paperwork ready." }),
+    policy.getByRole("heading", { name: "Housing help, with a clear next step." }),
   ).toBeVisible();
   await policy.close();
   const noticesPopup = page.waitForEvent("popup");

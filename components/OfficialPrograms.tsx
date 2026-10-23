@@ -481,10 +481,12 @@ export function OfficialPlans({
   state,
   onAction,
   onLocalHelp,
+  onHelp,
 }: {
   state: Workspace;
   onAction: (a: WorkspaceAction) => void;
   onLocalHelp: () => void;
+  onHelp?: (programId: string, stepId: string) => void;
 }) {
   return (
     <section
@@ -508,6 +510,7 @@ export function OfficialPlans({
           state={state}
           onAction={onAction}
           onLocalHelp={onLocalHelp}
+          onHelp={onHelp}
         />
       ))}
     </section>
@@ -518,11 +521,13 @@ function OfficialPlanCard({
   state,
   onAction,
   onLocalHelp,
+  onHelp,
 }: {
   plan: OfficialPlan;
   state: Workspace;
   onAction: (a: WorkspaceAction) => void;
   onLocalHelp: () => void;
+  onHelp?: (programId: string, stepId: string) => void;
 }) {
   const analysis = analyzeOfficialPlan(plan);
   const { program } = analysis;
@@ -628,6 +633,16 @@ function OfficialPlanCard({
               >
                 Read the source for this guidance <ArrowUpRight size={13} />
               </a>
+              {onHelp && (
+                <button
+                  className="text-button step-contact-help"
+                  onClick={() => onHelp(program.id, node.id)}
+                  aria-label={`Get real help with ${node.name}`}
+                >
+                  <CircleHelp size={15} aria-hidden="true" />
+                  Help me with this step
+                </button>
+              )}
             </li>
           );
         })}

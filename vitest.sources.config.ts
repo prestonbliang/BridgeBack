@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
-    include: ["tests/live/official-sources.spec.ts"],
+    include: ["tests/live/*.spec.ts"],
     testTimeout: 30000,
     hookTimeout: 30000,
   },

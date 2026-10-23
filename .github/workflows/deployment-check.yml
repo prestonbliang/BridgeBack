@@ -2,7 +2,21 @@ name: Check a public deployment
 on:
   push:
     branches: [main]
-    paths: [".github/workflows/deployment-check.yml"]
+    paths:
+      - ".github/workflows/deployment-check.yml"
+      - "app/**"
+      - "components/**"
+      - "hooks/**"
+      - "lib/**"
+      - "public/**"
+      - "service-worker/**"
+      - "tests/e2e/**"
+      - "playwright*.ts"
+      - "scripts/check-deployment.mjs"
+      - "vercel.json"
+      - "package*.json"
+      - "next.config.ts"
+      - "scripts/stamp-worker.mjs"
   workflow_dispatch:
     inputs:
       public_url:
@@ -15,10 +29,11 @@ permissions:
 jobs:
   public-site:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       BRIDGEBACK_PUBLIC_URL: ${{ inputs.public_url || 'https://bridge-back-one.vercel.app' }}
       PLAYWRIGHT_JSON_OUTPUT_NAME: artifacts/deployment-browser-report.json
+      BRIDGEBACK_EXPECT_REVISION: ${{ github.event_name == 'push' && github.sha || '' }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -46,12 +61,18 @@ jobs:
                   lines.append(("PASS: " if item["passed"] else "FAIL: ") + item["name"] + (" — " + item["detail"] if "detail" in item else ""))
               lines += ["", "Source review warnings: " + str(len(data["warnings"]))]
               lines += data["warnings"]
+              print("::notice title=Source-review report::" + str(len(data["warnings"])) + " source-review warnings. Page checks do not establish live assistance.")
+              for warning in data["warnings"]:
+                  print("::warning title=Source review::" + warning.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"))
+              if data.get("release"):
+                  print("::notice title=Published revision::" + str(data["release"]["revision"]))
           else:
               lines += ["HTTP evidence was not produced. Do not infer a pass."]
           browser = Path("artifacts/deployment-browser-report.json")
           if browser.exists():
               stats = json.loads(browser.read_text())["stats"]
               lines += ["", "Browser results: " + json.dumps(stats, sort_keys=True)]
+              print("::notice title=Browser results::" + json.dumps(stats, sort_keys=True))
           else:
               lines += ["", "Browser evidence was not produced. Do not infer a pass."]
           lines += ["", "These checks do not establish agency approval, live housing availability or physical-device installation."]

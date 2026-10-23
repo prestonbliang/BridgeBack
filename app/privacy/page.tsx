@@ -23,6 +23,15 @@ export default function PrivacyPolicy() {
         dates, and recent activity. Do not enter Social Security numbers,
         document contents, or private case notes. There are no document uploads.
       </p>
+      <p>
+        A contact plan can also save your selected situation and organization, a
+        difficulty category, up to twelve contact attempts with broad outcomes,
+        the next action you report, broad categories of requested/prepared
+        paperwork, and dates you enter from a provider or for your own
+        follow-up. These are your reports, not verified agency records.
+        BridgeBack does not record calls, send messages, read letters, calculate
+        legal deadlines or send background reminder notifications.
+      </p>
       <h2>Where it lives</h2>
       <p>
         Progress stays in IndexedDB in this browser or in the iOS app’s web

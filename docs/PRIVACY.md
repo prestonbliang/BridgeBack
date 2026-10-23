@@ -6,6 +6,8 @@ BridgeBack has no account requirement, backend database, analytics, advertising,
 
 The browser’s IndexedDB stores optional household size, approximate annual income, coarse location, housing need, selected fictional plans, task completion, document availability/unavailability, optional reminder dates, user-selected effort/priorities, theme/reading preference, onboarding position, the latest 100 activity events, and optional help plans. A help plan stores a known step, a difficulty category, reviewed help steps, a broad contact outcome, a personal reminder date and optionally selected public provider contact details. No Social Security numbers, names, street addresses, document uploads or financial records are requested. Profile events do not repeat income or household values in their descriptions.
 
+The real contact workflow additionally saves a selected situation/agency, a barrier category, up to twelve explicitly reported contact attempts per plan, a reported next instruction and confirmation, broad requested/prepared paperwork categories, a resolution flag and entered response/follow-up dates. It does not record calls, collect letter contents or verify the dates. Contact sheets include these reported outcomes/dates and public contact details, but not household income or private case identifiers. These plans share export, deletion, schema migration and cross-tab protections with the workspace.
+
 Browser storage is **not encrypted secure storage**. Someone with access to the browser profile may see it. Browser cleanup, private browsing, storage eviction and device loss can remove progress. There is no cloud backup or cross-device synchronization.
 
 ## Demos and simulations
@@ -22,7 +24,7 @@ Delete all saved data explicitly clears the personal record after earlier queued
 
 ## Accuracy boundary
 
-The three practice programs and thresholds are fictional. Three real-program entries cite reviewed official sources; they offer partial comparisons and follow-up guidance, with conflicts explicitly shown. Guidance sources and public contacts show individual review or retrieval dates; two referral homepages remain unreviewed. Sources are not endorsements or partnerships. No availability, deadline, housing placement or acceptance is promised. No agency application is created or submitted. Real eligibility and document acceptance must be confirmed by the provider.
+The three practice programs and thresholds are fictional. Three real-program entries cite reviewed official sources; they offer partial comparisons and follow-up guidance, with conflicts explicitly shown. Guidance sources and public contacts show individual review or retrieval dates. The new SDHC contact page and Legal Aid contact number were reviewed October 23; 211's referral phone route is supported by the reviewed County page, while its own homepage remains unreviewed. Sources are not endorsements or partnerships. No availability, verified deadline, placement or acceptance is promised. No agency application is created or submitted by BridgeBack. Real eligibility and document acceptance must be confirmed by the provider.
 
 ## Help plans and outside resources
 

@@ -32,7 +32,7 @@ Review `artifacts/official-source-audit.json`. Read the affected official source
 
 ## Data and security boundaries
 
-Workspace schema 3 migrates versions 1/2 while preserving saved progress. New real plans, optional municipality, real-document status and dated source reports share IndexedDB validation, revision conflict handling, export and deletion. Existing tabs from the older schema reject newer records instead of interpreting them as version 2. The IndexedDB index layout remains database version 2; record schema and database-index versions are distinct.
+Workspace schema 4 migrates versions 1/2/3 while preserving saved progress. Real plans, optional municipality, real-document status, dated source reports and the new contact/follow-up plans share IndexedDB validation, revision conflict handling, export and deletion. Earlier tabs reject newer record versions rather than silently stripping contact plans. The IndexedDB index layout remains database version 2; record schema and database-index versions are distinct. See [the contact workflow](CONTACT-WORKFLOW.md) for reported paperwork categories, source verification and personal-date limits.
 
 Real follow-up progress counts explicit milestones. OR access options count once. Correcting an access step removes dependent contact/follow-up check marks while preserving an independent letter review. Switching routes resets route-specific steps. None of this modifies fictional preparation readiness. Source checks never receive household answers. Hosting providers still process ordinary connection metadata; review their logging/retention settings and the deployed privacy policy.
 
