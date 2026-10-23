@@ -19,6 +19,7 @@ import {
   X,
   CircleHelp,
   History,
+  LifeBuoy,
 } from "lucide-react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import {
@@ -47,11 +48,13 @@ import {
 import { download } from "../components/ui";
 import { Overview } from "../components/Overview";
 import { HelpGuide, PageHelp } from "../components/Help";
+import { Support } from "../components/Support";
 const navigation = [
   { label: "Dashboard", title: "Overview", icon: Home },
   { label: "Discover", title: "Find help", icon: Compass },
   { label: "PathFinder", title: "My checklist", icon: GitBranch },
   { label: "Documents", title: "Documents", icon: FileCheck2 },
+  { label: "Support", title: "Get support", icon: LifeBuoy },
   { label: "Timeline", title: "Activity", icon: History },
   { label: "Settings", title: "Settings", icon: Settings },
 ] as const;
@@ -94,6 +97,7 @@ export default function App() {
     [],
   );
   const [helpOpen, setHelpOpen] = useState(false);
+  const [supportTarget, setSupportTarget] = useState<string | null>(null);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
     update();
@@ -174,6 +178,7 @@ export default function App() {
           "effort",
           "priority",
           "preferred",
+          "support-finish",
         ].includes(action.type)
       )
         setTransition(delta);
@@ -197,7 +202,12 @@ export default function App() {
       return;
     act({ type: "task", id, complete: !state.completed.includes(id) });
   }
+  function getSupport(id: string) {
+    setSupportTarget(id);
+    navigate("Support");
+  }
   function startDemo(index = 0) {
+    setSupportTarget(null);
     setDemo(demoWorkspace(index));
     setScene(index === 2 ? 2 : 0);
     setTransition(null);
@@ -205,6 +215,7 @@ export default function App() {
     navigate(index === 2 ? "Settings" : "Dashboard");
   }
   function exitDemo() {
+    setSupportTarget(null);
     setDemo(null);
     setTransition(null);
     navigate("Dashboard");
@@ -445,6 +456,8 @@ export default function App() {
               onDiscover={() => navigate("Discover")}
               onPath={() => navigate("PathFinder")}
               onDocuments={() => navigate("Documents")}
+              helpNotes={state.supportRecords}
+              onSupport={() => navigate("Support")}
             />
           )}
           {tab === "Discover" && (
@@ -462,6 +475,7 @@ export default function App() {
               onComplete={complete}
               onEffort={(id, value) => act({ type: "effort", id, value })}
               highlightedIds={transition?.newlyAvailable}
+              onSupport={getSupport}
             />
           )}
           {tab === "Documents" && (
@@ -476,6 +490,7 @@ export default function App() {
                   act({ type: "unavailable", id, value })
                 }
                 onExport={exportPacket}
+                onSupport={getSupport}
               />
               {analysis.documents.length > 0 && (
                 <details className="card expiration-panel">
@@ -516,6 +531,16 @@ export default function App() {
             </>
           )}
           {tab === "Timeline" && <Timeline state={state} onAction={act} />}
+          {tab === "Support" && (
+            <Support
+              state={state}
+              analysis={analysis}
+              initialTarget={supportTarget}
+              onAction={act}
+              onNavigate={navigate}
+              onReopen={complete}
+            />
+          )}
           {tab === "Settings" && (
             <SettingsView
               state={state}

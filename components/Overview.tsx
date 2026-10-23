@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import type { PlanAnalysis, Simulation } from "../lib/planner";
 import { programs } from "../lib/programs";
+import { type SupportRecord } from "../lib/support-model";
+import { supportTargetName } from "../lib/support";
 import { Explain } from "./Explain";
 import { Progress } from "./ui";
 export function Overview({
@@ -26,6 +28,8 @@ export function Overview({
   onDiscover,
   onPath,
   onDocuments,
+  helpNotes = [],
+  onSupport,
 }: {
   analysis: PlanAnalysis;
   example: Simulation;
@@ -35,6 +39,8 @@ export function Overview({
   onDiscover: () => void;
   onPath: () => void;
   onDocuments: () => void;
+  helpNotes?: SupportRecord[];
+  onSupport?: () => void;
 }) {
   const [preview, setPreview] = useState(false);
   const hasPlan = analysis.programs.length > 0;
@@ -325,6 +331,38 @@ export function Overview({
           <button className="button secondary" onClick={onDiscover}>
             Find housing help
             <ArrowRight size={17} aria-hidden="true" />
+          </button>
+        </section>
+      )}
+      {helpNotes.some((note) => note.status !== "resolved") && onSupport && (
+        <section className="overview-open-help">
+          <h2>Keep your help questions moving</h2>
+          <p>
+            {helpNotes.filter((note) => note.status !== "resolved").length}{" "}
+            saved help{" "}
+            {helpNotes.filter((note) => note.status !== "resolved").length === 1
+              ? "question is"
+              : "questions are"}{" "}
+            still open. Asking for help is separate from having the paperwork
+            ready.
+          </p>
+          <ul>
+            {helpNotes
+              .filter((note) => note.status !== "resolved" && note.followUpDate)
+              .map((note) => (
+                <li key={note.targetId}>
+                  <strong>{supportTargetName(note.targetId)}</strong>: my
+                  follow-up reminder is{" "}
+                  {new Intl.DateTimeFormat(undefined, {
+                    dateStyle: "medium",
+                  }).format(new Date(`${note.followUpDate}T12:00:00`))}
+                  . This is not an agency deadline.
+                </li>
+              ))}
+          </ul>
+          <button className="button secondary" onClick={onSupport}>
+            Return to my saved help plans
+            <ArrowRight size={16} aria-hidden="true" />
           </button>
         </section>
       )}

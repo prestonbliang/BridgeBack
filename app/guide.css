@@ -1149,3 +1149,566 @@ html[data-large-text="true"] .human-ui p {
   margin-top: 7px;
   font-size: 15px;
 }
+
+/* Guided support uses the same type and spacing as the working checklist. */
+.support-section-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 0 23px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.support-section-switch button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  min-height: 46px;
+  padding: 10px 15px;
+}
+.support-section-switch button[aria-pressed="true"] {
+  border-color: var(--teal);
+  background: var(--soft);
+  color: var(--teal);
+  font-weight: 700;
+}
+.support-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(210px, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+.support-main {
+  min-width: 0;
+}
+.support-target {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+  margin-bottom: 26px;
+}
+.support-target select {
+  width: 100%;
+}
+.support-reasons h2,
+.support-small-steps h2,
+.support-intro h2,
+.support-connections h2,
+.learning-lesson h2 {
+  font-size: 25px;
+}
+.support-reasons > p {
+  margin: 10px 0 16px;
+}
+.support-reasons > div {
+  display: grid;
+  gap: 8px;
+}
+.support-reasons button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 13px 16px;
+  min-height: 48px;
+  border-radius: 5px;
+}
+.support-reasons button[aria-pressed="true"] {
+  background: var(--soft);
+  border-color: var(--teal);
+  color: var(--teal);
+  font-weight: 700;
+}
+.support-reasons button svg {
+  flex-shrink: 0;
+}
+.support-small-steps,
+.support-options,
+.support-ready-check,
+.contact-plan,
+.support-close,
+.learning-lesson {
+  padding: 25px;
+  margin-top: 27px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+}
+.support-small-steps .section-heading {
+  align-items: flex-start;
+}
+.support-small-steps .section-heading > span {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.support-small-steps ol {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0 0;
+}
+.support-small-steps li {
+  border-bottom: 1px solid var(--border);
+  padding: 17px 0;
+}
+.support-small-steps li:last-child {
+  border-bottom: 0;
+}
+.support-small-steps label {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  cursor: pointer;
+}
+.support-small-steps input {
+  margin-top: 5px;
+}
+.support-small-steps strong {
+  display: block;
+  font-size: 17px;
+}
+.support-small-steps label > span > span {
+  display: block;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+  margin-top: 6px;
+}
+.support-intro {
+  margin: 20px 0;
+}
+.support-intro p,
+.support-options > p,
+.support-ready-check > p,
+.support-close > p,
+.contact-plan > p,
+.learning-lesson > p {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.support-intro h3,
+.support-ready-check h3,
+.support-options h3,
+.contact-plan h3,
+.support-close h3 {
+  font-size: 22px;
+}
+.support-options > div {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+}
+.support-options > div p {
+  color: var(--teal);
+  margin-top: 5px;
+}
+.support-options > div small {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.support-options > .button {
+  margin-top: 20px;
+}
+.support-practical-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 24px 0 10px;
+}
+.support-ready-check fieldset,
+.learning-lesson fieldset {
+  padding: 18px 0 5px;
+  margin-top: 16px;
+  border: 0;
+}
+.support-ready-check legend,
+.learning-lesson legend {
+  font-weight: 700;
+  padding: 0;
+}
+.support-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 0;
+  cursor: pointer;
+  font-size: 15px;
+}
+.support-choice input {
+  margin-top: 3px;
+}
+.support-choice > input[type="radio"] {
+  flex-shrink: 0;
+}
+.support-ready-check > .button {
+  margin-top: 15px;
+}
+.human-ui .button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: none;
+}
+.support-feedback {
+  padding: 16px;
+  border-left: 3px solid var(--teal);
+  background: var(--soft);
+  color: var(--text);
+  margin: 15px 0;
+  font-size: 15px;
+}
+.support-feedback > p {
+  margin-top: 8px;
+}
+.support-connections {
+  margin-top: 32px;
+}
+.support-connections > p {
+  margin: 12px 0 20px;
+  font-size: 15px;
+}
+.support-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.support-main .support-resource-grid {
+  grid-template-columns: 1fr;
+}
+.support-resource {
+  padding: 22px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 6px;
+  min-width: 0;
+}
+.support-resource h3 {
+  font-size: 20px;
+  margin: 8px 0;
+}
+.support-resource > strong {
+  font-size: 13px;
+}
+.support-resource > p {
+  margin: 13px 0;
+  font-size: 15px;
+}
+.support-resource details {
+  font-size: 14px;
+  margin: 12px 0;
+}
+.support-resource summary {
+  cursor: pointer;
+}
+.support-resource details p {
+  margin-top: 8px;
+}
+.support-resource .inline-actions {
+  margin-top: 17px;
+}
+.support-resource > small {
+  display: block;
+  color: var(--muted);
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.contact-plan textarea {
+  width: 100%;
+  resize: vertical;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 14px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 19px 0 16px;
+  min-height: 200px;
+}
+.contact-plan textarea:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+}
+.support-contact-fields {
+  display: grid;
+  gap: 16px;
+  margin-top: 25px;
+}
+.support-contact-fields label {
+  display: grid;
+  gap: 7px;
+  font-size: 15px;
+}
+.support-contact-fields input,
+.support-contact-fields select {
+  width: 100%;
+}
+.support-callout {
+  padding: 16px;
+  border-left: 3px solid var(--amber);
+  background: var(--surface);
+  margin: 20px 0;
+  font-size: 15px;
+}
+.support-close > .button {
+  margin-top: 17px;
+}
+.support-saved {
+  position: sticky;
+  top: 90px;
+  border-top: 3px solid var(--teal);
+  padding-top: 21px;
+}
+.support-saved h2 {
+  font-size: 21px;
+}
+.support-saved > p {
+  font-size: 14px;
+  margin: 10px 0 20px;
+}
+.support-saved > button {
+  width: 100%;
+  display: block;
+  text-align: left;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 5px;
+}
+.support-saved > button[aria-pressed="true"] {
+  border-color: var(--teal);
+  box-shadow: inset 3px 0 var(--teal);
+}
+.support-saved > button strong,
+.support-saved > button span,
+.support-saved > button small {
+  display: block;
+}
+.support-saved > button strong {
+  font-size: 15px;
+}
+.support-saved > button span {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 5px;
+}
+.support-saved > button small {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.learning-tools {
+  max-width: 1000px;
+}
+.learning-lesson {
+  margin: 0 0 25px;
+}
+.example-paystub {
+  padding: 12px 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  margin: 22px 0;
+  max-width: 460px;
+}
+.example-paystub > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.example-paystub > div:last-child {
+  border-bottom: 0;
+}
+.example-paystub dt {
+  color: var(--muted);
+}
+.example-paystub dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.income-converter {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 22px 0;
+}
+.income-converter label {
+  display: grid;
+  gap: 8px;
+  font-size: 15px;
+}
+.income-converter input,
+.income-converter select {
+  width: 100%;
+  min-width: 0;
+}
+@media (max-width: 1100px) {
+  .support-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .support-saved {
+    position: static;
+  }
+}
+@media (max-width: 650px) {
+  .support-section-switch {
+    display: grid;
+  }
+  .support-section-switch button {
+    width: 100%;
+  }
+  .support-resource-grid,
+  .income-converter {
+    grid-template-columns: 1fr;
+  }
+  .support-small-steps,
+  .support-options,
+  .support-ready-check,
+  .contact-plan,
+  .support-close,
+  .learning-lesson {
+    padding: 21px 18px;
+  }
+  .support-resource {
+    padding: 20px 17px;
+  }
+  .support-small-steps .section-heading {
+    gap: 10px;
+  }
+  .support-small-steps h2 {
+    font-size: 23px;
+  }
+}
+.counselor-directory {
+  margin: 28px 0 34px;
+}
+.counselor-directory > p {
+  margin: 14px 0;
+}
+.counselor-directory > .button {
+  margin-top: 23px;
+}
+.counselor-source {
+  font-size: 14px;
+  color: var(--muted);
+  padding-left: 15px;
+  border-left: 3px solid var(--teal);
+}
+.counselor-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+.counselor-filters label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  align-content: end;
+}
+.counselor-filters select {
+  width: 100%;
+}
+.counselor-card {
+  padding: 23px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  min-width: 0;
+}
+.counselor-card h3 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+.counselor-card p,
+.counselor-card dd {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.counselor-card dt {
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 13px;
+}
+.counselor-card dd {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.counselor-card details {
+  font-size: 14px;
+  margin: 19px 0;
+}
+.counselor-card summary {
+  cursor: pointer;
+}
+.other-support-heading {
+  margin: 28px 0 20px;
+}
+@media (max-width: 650px) {
+  .counselor-filters {
+    grid-template-columns: 1fr;
+  }
+  .counselor-card {
+    padding: 20px 18px;
+  }
+}
+.contact-plan > summary {
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.contact-plan[open] > h3 {
+  margin-top: 22px;
+}
+.overview-open-help {
+  padding: 25px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 27px 0;
+}
+.overview-open-help h2 {
+  font-size: 23px;
+}
+.overview-open-help p,
+.overview-open-help li {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.overview-open-help > .button {
+  margin-top: 15px;
+}
+/* Give the help action its own row on small screens. Three unwrapped actions
+   expanded the layout viewport and made lower-page touch targets inaccurate. */
+@media (max-width: 750px) {
+  .human-ui .pf-next-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+  .human-ui .pf-next-actions > .text-button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  .human-ui .pf-next-actions .button {
+    width: 100%;
+    min-width: 0;
+    white-space: normal;
+  }
+}

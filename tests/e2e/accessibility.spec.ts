@@ -18,6 +18,7 @@ async function nav(page: Page, label: string) {
             Discover: "Find help",
             PathFinder: "My checklist",
             Timeline: "Activity",
+            Support: "Get support",
           } as Record<string, string>
         )[label] ?? label,
       exact: true,
@@ -94,6 +95,22 @@ test("accessibility, keyboard focus, themes, graph, and console errors across pr
   await nav(page, "Discover");
   await check();
   await nav(page, "Timeline");
+  await check();
+  await nav(page, "PathFinder");
+  await page
+    .getByRole("button", { name: "Get help with Pay stub", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "I’m not sure what this means", exact: true })
+    .click();
+  await check();
+  await page
+    .getByRole("button", { name: "Learn the paperwork", exact: true })
+    .click();
+  await check();
+  await page
+    .getByRole("button", { name: "Talk to someone", exact: true })
+    .click();
   await check();
   expect(
     await page.evaluate(

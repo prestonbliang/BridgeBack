@@ -4,8 +4,10 @@ import {
   findRescueRoute,
 } from "./planner";
 import { programs, documentTypes } from "./programs";
+import { type SupportRecord } from "./support-model";
+import { providerQuestionSheet, supportTargetName } from "./support";
 export function preparationPacket(
-  input: PlannerInput,
+  input: PlannerInput & { supportRecords?: SupportRecord[] },
   analysis: PlanAnalysis,
   now = new Date(),
 ): string {
@@ -60,5 +62,20 @@ export function preparationPacket(
     "",
     "This packet contains availability and preparation steps only. Keep actual documents secure.",
   );
+  if (input.supportRecords?.length) {
+    lines.push("", "SAVED HELP AND FOLLOW-UP (SEPARATE FROM READINESS)");
+    for (const record of input.supportRecords)
+      lines.push(
+        "",
+        `Help with: ${supportTargetName(record.targetId)}`,
+        `Help status: ${record.status}. Contact outcome: ${record.outcome}.`,
+        `Small help steps reviewed: ${record.checked.length}/4; this is not document completion.`,
+        providerQuestionSheet(
+          supportTargetName(record.targetId),
+          record.reason,
+          record,
+        ),
+      );
+  }
   return lines.join("\n");
 }

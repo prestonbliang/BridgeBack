@@ -2,6 +2,18 @@ import { z } from "zod";
 import { profileSchema, type Profile } from "./engine";
 import { programs, documentTypes } from "./programs";
 import type { PlannerInput } from "./planner";
+import {
+  supportRecordSchema,
+  supportTargetSchema,
+  supportReasonSchema,
+  supportOutcomeSchema,
+  followUpDateSchema,
+  type SupportReason,
+  type SupportMicrostep,
+} from "./support-model";
+import { buildSupportPlan } from "./support";
+import { supportResources } from "./support-resources";
+import { counselorSnapshot } from "./counselors";
 
 const programIds = new Set(programs.map((program) => program.id));
 const documentIds = new Set(documentTypes.map((document) => document.id));
@@ -84,6 +96,7 @@ export const progressEventSchema = z.object({
     "correction",
     "migration",
     "unavailable",
+    "support",
   ]),
   label: z.string().min(1).max(500),
   targetId: z.string().max(100).optional(),
@@ -131,6 +144,14 @@ export const workspaceSchema = z
     eventSequence: z.number().int().min(0).default(0),
     expires: z.record(documentIdSchema, dateSchema),
     legacyHistory: z.array(z.string().max(500)).max(30).default([]),
+    supportRecords: z
+      .array(supportRecordSchema)
+      .max(100)
+      .refine(
+        (records) => unique(records.map((record) => record.targetId)),
+        "Duplicate support target",
+      )
+      .default([]),
   })
   .superRefine((state, context) => {
     if (
@@ -193,6 +214,7 @@ export function initialWorkspace(): Workspace {
     eventSequence: 0,
     expires: {},
     legacyHistory: [],
+    supportRecords: [],
   };
 }
 
@@ -269,7 +291,38 @@ export type WorkspaceAction =
       label: string;
     }
   | { type: "undo"; eventId: string }
-  | { type: "expiration"; id: string; value: string };
+  | { type: "expiration"; id: string; value: string }
+  | { type: "support-open"; targetId: string; reason: SupportReason }
+  | {
+      type: "support-check";
+      targetId: string;
+      stepId: SupportMicrostep;
+      checked: boolean;
+    }
+  | {
+      type: "support-contact";
+      targetId: string;
+      outcome:
+        | "not-contacted"
+        | "waiting"
+        | "no-response"
+        | "different-proof"
+        | "answered";
+    }
+  | { type: "support-reminder"; targetId: string; date: string }
+  | {
+      type: "support-status";
+      targetId: string;
+      status: "working" | "waiting" | "resolved";
+    }
+  | { type: "support-remove"; targetId: string }
+  | {
+      type: "support-finish";
+      targetId: string;
+      confirmed: boolean;
+      answer: string;
+    }
+  | { type: "support-provider"; targetId: string; providerId: string };
 
 const documentName = (id: string) =>
   documentTypes.find((document) => document.id === id)?.name ?? id;
@@ -322,6 +375,180 @@ export function updateWorkspace(
   let details:
     Omit<ProgressEvent, "id" | "at" | "undone" | "canUndo"> | undefined;
   switch (action.type) {
+    case "support-finish": {
+      const record = state.supportRecords.find(
+        (record) => record.targetId === action.targetId,
+      );
+      if (!record) throw Error("Start the guided help first.");
+      const plan = buildSupportPlan(state, action.targetId, record.reason);
+      if (
+        !action.confirmed ||
+        action.answer !== plan.question.correct ||
+        !plan.smallSteps.every((step) => record.checked.includes(step.id))
+      )
+        throw Error(
+          "Review the small steps, answer the check question and confirm the item is actually ready.",
+        );
+      if (!plan.actionable)
+        throw Error(
+          "This step is not ready to complete. Check its missing items first.",
+        );
+      state = updateWorkspace(
+        state,
+        action.targetId.startsWith("doc:")
+          ? { type: "document", id: action.targetId.slice(4), available: true }
+          : { type: "task", id: action.targetId, complete: true },
+        now,
+      );
+      state = {
+        ...state,
+        supportRecords: state.supportRecords.map((value) =>
+          value.targetId === action.targetId
+            ? { ...value, status: "resolved", updatedAt: now }
+            : value,
+        ),
+      };
+      details = {
+        type: "support",
+        label:
+          "Finished a guided readiness check and marked the actual checklist item ready. This is not agency verification.",
+      };
+      break;
+    }
+    case "support-open": {
+      supportTargetSchema.parse(action.targetId);
+      supportReasonSchema.parse(action.reason);
+      const old = state.supportRecords.find(
+        (record) => record.targetId === action.targetId,
+      );
+      const record = supportRecordSchema.parse({
+        targetId: action.targetId,
+        reason: action.reason,
+        checked: old?.reason === action.reason ? old.checked : [],
+        outcome: old?.outcome ?? "not-contacted",
+        followUpDate: old?.followUpDate ?? "",
+        contact: old?.contact ?? null,
+        status: old?.status === "waiting" ? "waiting" : "working",
+        updatedAt: now,
+      });
+      state = {
+        ...state,
+        supportRecords: [
+          record,
+          ...state.supportRecords.filter(
+            (record) => record.targetId !== action.targetId,
+          ),
+        ],
+      };
+      details = {
+        type: "support",
+        label:
+          "Opened a step-by-step help plan. Checklist completion has not changed.",
+      };
+      break;
+    }
+    case "support-check":
+    case "support-provider":
+    case "support-contact":
+    case "support-reminder":
+    case "support-status": {
+      supportTargetSchema.parse(action.targetId);
+      const old = state.supportRecords.find(
+        (record) => record.targetId === action.targetId,
+      );
+      if (!old) throw Error("Choose a help topic before saving its progress.");
+      const counselor =
+        action.type === "support-provider"
+          ? counselorSnapshot.counselors.find(
+              (provider) => provider.id === action.providerId,
+            )
+          : undefined;
+      const resource =
+        action.type === "support-provider"
+          ? supportResources.find(
+              (provider) => provider.id === action.providerId,
+            )
+          : undefined;
+      if (
+        action.type === "support-provider" &&
+        action.providerId &&
+        !counselor &&
+        !resource
+      )
+        throw Error("Choose a contact from the provided source list.");
+      const record = supportRecordSchema.parse({
+        ...old,
+        ...(action.type === "support-check"
+          ? {
+              checked: action.checked
+                ? [...new Set([...old.checked, action.stepId])]
+                : old.checked.filter((id) => id !== action.stepId),
+            }
+          : {}),
+        ...(action.type === "support-contact"
+          ? {
+              outcome: supportOutcomeSchema.parse(action.outcome),
+              status: ["waiting", "no-response"].includes(action.outcome)
+                ? "waiting"
+                : "working",
+            }
+          : {}),
+        ...(action.type === "support-reminder"
+          ? { followUpDate: followUpDateSchema.parse(action.date) }
+          : {}),
+        ...(action.type === "support-status" ? { status: action.status } : {}),
+        ...(action.type === "support-provider"
+          ? {
+              contact: counselor
+                ? {
+                    id: counselor.id,
+                    name: counselor.name,
+                    phone: counselor.phone,
+                    sourceUrl: counselorSnapshot.sourceUrl,
+                  }
+                : resource
+                  ? {
+                      id: resource.id,
+                      name: resource.organization,
+                      ...(resource.phone ? { phone: resource.phone } : {}),
+                      sourceUrl: resource.url,
+                    }
+                  : null,
+            }
+          : {}),
+        updatedAt: now,
+      });
+      state = {
+        ...state,
+        supportRecords: state.supportRecords.map((value) =>
+          value.targetId === action.targetId ? record : value,
+        ),
+      };
+      if (action.type !== "support-check")
+        details = {
+          type: "support",
+          label:
+            action.type === "support-contact"
+              ? "Updated a provider-contact outcome. No application or document was marked complete."
+              : action.type === "support-reminder"
+                ? "Changed a personal follow-up reminder; this is not an agency deadline."
+                : action.type === "support-provider"
+                  ? "Selected public provider contact details for a help question; nothing was sent."
+                  : action.status === "resolved"
+                    ? "Marked a help question resolved; checklist completion is separate."
+                    : "Reopened a saved help plan.",
+        };
+      break;
+    }
+    case "support-remove":
+      supportTargetSchema.parse(action.targetId);
+      state = {
+        ...state,
+        supportRecords: state.supportRecords.filter(
+          (record) => record.targetId !== action.targetId,
+        ),
+      };
+      break;
     case "task": {
       taskIdSchema.parse(action.id);
       const oldValue = state.completed.includes(action.id);

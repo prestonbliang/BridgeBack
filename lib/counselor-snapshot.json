@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "sourceUrl": "https://www.consumerfinance.gov/find-a-housing-counselor/?zipcode=92101",
+  "centerZip": "92101",
+  "retrievedAt": "2026-10-23T04:01:19.055Z",
+  "counselors": [
+    {
+      "id": "hud-84874",
+      "name": "Navicore Solutions- San Diego, Ca",
+      "phone": "866-472-4557",
+      "address": "1111 6th Ave, Suite 206, San Diego, CA 92101-5209",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Financial Management/Budget Counseling",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Pre-purchase Counseling",
+        "Rental Housing Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Phone Counseling"
+      ],
+      "distanceMiles": 0.3
+    },
+    {
+      "id": "hud-81854",
+      "name": "Urban League of San Diego County",
+      "phone": "619-266-6237",
+      "address": "4305 University Ave Ste 360, San Diego, CA 92105-1898",
+      "languages": [
+        "English",
+        "Other",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Services for Homeless Counseling",
+        "Non-Delinquency Post Purchase Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops",
+        "Rental Housing Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Group Counseling",
+        "Internet Counseling",
+        "Other Counseling",
+        "Phone Counseling",
+        "Video Conference"
+      ],
+      "distanceMiles": 4.3
+    },
+    {
+      "id": "hud-82636",
+      "name": "Money Management International - San Diego",
+      "phone": "866-232-9080",
+      "address": "3111 Camino Del Rio N Ste 400, San Diego, CA 92108-5724",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Non-Delinquency Post Purchase Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops",
+        "Rental Housing Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Group Counseling",
+        "Internet Counseling",
+        "Phone Counseling"
+      ],
+      "distanceMiles": 4.6
+    },
+    {
+      "id": "hud-90273",
+      "name": "Credit.Org - National City",
+      "phone": "800-431-8157",
+      "address": "2140 Hoover Ave, Suite 115, National City, CA 91950-6514",
+      "languages": [
+        "English",
+        "Other",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Financial Management/Budget Counseling",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops",
+        "Rental Housing Counseling",
+        "Reverse Mortgage Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Other Counseling",
+        "Phone Counseling"
+      ],
+      "distanceMiles": 5
+    },
+    {
+      "id": "hud-90317",
+      "name": "Affordable Housing Clearinghouse",
+      "phone": "949-859-9255",
+      "address": "23201 Lake Center Dr Ste 203, Lake Forest, CA 92630-6821",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Financial Management/Budget Counseling",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Group Counseling",
+        "Internet Counseling",
+        "Other Counseling",
+        "Phone Counseling"
+      ],
+      "distanceMiles": 70.5
+    },
+    {
+      "id": "hud-90351",
+      "name": "Greenpath Financial Wellness",
+      "phone": "866-217-0543",
+      "address": "5151 California Ave, Suite 100, Office 118, Irvine, CA 92617-3205",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Financial Management/Budget Counseling",
+        "Services for Homeless Counseling",
+        "Pre-purchase Counseling",
+        "Rental Housing Counseling"
+      ],
+      "methods": [
+        "Phone Counseling"
+      ],
+      "distanceMiles": 75.4
+    },
+    {
+      "id": "hud-80845",
+      "name": "Orange County Fair Housing Council, Inc",
+      "phone": "714-569-0823",
+      "address": "2021 E 4th St, Suite 122, Santa Ana, CA 92705-3912",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Resolving/Preventing Mortgage Delinquency Workshop",
+        "Fair Housing Pre-Purchase Education Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops",
+        "Rental Housing Counseling",
+        "Rental Housing Workshops"
+      ],
+      "methods": [
+        "Group Counseling",
+        "Internet Counseling",
+        "Other Counseling",
+        "Phone Counseling",
+        "Phone Counseling Only",
+        "Video Conference"
+      ],
+      "distanceMiles": 81.3
+    },
+    {
+      "id": "hud-90511",
+      "name": "Orange County Community Housing Corporation",
+      "phone": "714-558-8161",
+      "address": "501 N Golden Circle Dr Ste 200, Santa Ana, CA 92705-3913",
+      "languages": [
+        "English",
+        "Spanish"
+      ],
+      "services": [
+        "Resolving/Preventing Mortgage Delinquency Workshop",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Pre-purchase Counseling",
+        "Pre-purchase Homebuyer Education Workshops",
+        "Rental Housing Counseling",
+        "Rental Housing Workshops"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Group Counseling",
+        "Internet Counseling",
+        "Phone Counseling",
+        "Video Conference"
+      ],
+      "distanceMiles": 81.4
+    },
+    {
+      "id": "hud-90765",
+      "name": "Vital Access Care Foundation",
+      "phone": "888-497-1511",
+      "address": "17150 Newhope St, Suite 201, Fountain Valley, CA 92708-4250",
+      "languages": [
+        "English",
+        "Spanish",
+        "Vietnamese"
+      ],
+      "services": [
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Services for Homeless Counseling",
+        "Predatory Lending Education Workshops",
+        "Rental Housing Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Group Counseling",
+        "Internet Counseling",
+        "Phone Counseling",
+        "Video Conference"
+      ],
+      "distanceMiles": 82
+    },
+    {
+      "id": "hud-90691",
+      "name": "Epicenter Foundation",
+      "phone": "714-410-2414",
+      "address": "305 W 4th St, Santa Ana, CA 92701-4537",
+      "languages": [
+        "English"
+      ],
+      "services": [
+        "Mortgage Delinquency and Default Resolution Counse",
+        "Financial Management/Budget Counseling",
+        "Financial, Budgeting and Credit Repair Workshops",
+        "Fair Housing Pre-Purchase Education Workshops",
+        "Home Improvement and Rehabilitation Counseling",
+        "Pre-purchase Counseling"
+      ],
+      "methods": [
+        "Face to Face Counseling",
+        "Internet Counseling",
+        "Phone Counseling",
+        "Video Conference"
+      ],
+      "distanceMiles": 82.2
+    }
+  ]
+}

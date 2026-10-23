@@ -24,6 +24,7 @@ export type DocumentsProps = {
   onDocument: (id: string, available: boolean) => void;
   onUnavailable: (id: string, value: boolean) => void;
   onExport: () => void;
+  onSupport: (id: string) => void;
 };
 
 export function Documents({
@@ -32,6 +33,7 @@ export function Documents({
   onDocument,
   onUnavailable,
   onExport,
+  onSupport,
 }: DocumentsProps) {
   const [view, setView] = useState<"inventory" | "programs">("inventory");
   const rescue = useMemo(() => findRescueRoute(input), [input]);
@@ -163,6 +165,14 @@ export function Documents({
                       </div>
                       <h3>{document.name}</h3>
                       <p>{definition?.description}</p>
+                      <button
+                        className="text-button"
+                        aria-label={`Get help with ${document.name}`}
+                        onClick={() => onSupport(`doc:${document.id}`)}
+                      >
+                        Help getting this document{" "}
+                        <ArrowRight size={14} aria-hidden="true" />
+                      </button>
                       <p className="helper-text">
                         Listed by:{" "}
                         {document.programIds.length

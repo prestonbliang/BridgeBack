@@ -6,12 +6,22 @@ export type HelpPage =
   | "Discover"
   | "PathFinder"
   | "Documents"
+  | "Support"
   | "Timeline"
   | "Settings";
 const guides: Record<
   HelpPage,
   { title: string; steps: string[]; note: string }
 > = {
+  Support: {
+    title: "Get help without pretending a step is finished.",
+    steps: [
+      "Choose the checklist item and what is making it hard. Review one small step at a time; those checks save your place in the help plan only.",
+      "Use the exact options shown for each practice plan, or try the short learning tools. None of those activities automatically completes paperwork.",
+      "If you need a real person, take the question sheet to an official or provider website. Record whether you are waiting and choose a personal reminder.",
+    ],
+    note: "Source dates are shown on each card; confirm current services and appointments with the organization. Provider questions omit fictional program names. No profile or application is sent, and a personal reminder is not an agency deadline.",
+  },
   Dashboard: {
     title: "New here? Start with these three things.",
     steps: [

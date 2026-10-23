@@ -6,3 +6,6 @@ test-results/
 
 # Generated from service-worker/worker.js after each production build
 public/sw.js
+
+# Atomic source-import candidate
+lib/counselor-snapshot.json.tmp

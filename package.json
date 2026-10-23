@@ -11,7 +11,9 @@
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "postbuild": "node scripts/stamp-worker.mjs",
-    "evaluate": "vitest run tests/evaluation.test.ts"
+    "evaluate": "vitest run tests/evaluation.test.ts",
+    "sources:check": "node scripts/check-support-sources.mjs",
+    "sources:counselors": "node scripts/import-counselors.mjs"
   },
   "dependencies": {
     "@xyflow/react": "^12.8.0",

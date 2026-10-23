@@ -4,7 +4,7 @@ BridgeBack has no account requirement, backend database, analytics, advertising,
 
 ## What is stored
 
-The browser’s IndexedDB stores optional household size, approximate annual income, coarse location, housing need, selected fictional plans, task completion, document availability/unavailability, optional reminder dates, user-selected effort/priorities, theme/reading preference, onboarding position and the latest 100 activity events. No Social Security numbers, names, street addresses, document uploads or financial records are requested. Profile events do not repeat income or household values in their descriptions.
+The browser’s IndexedDB stores optional household size, approximate annual income, coarse location, housing need, selected fictional plans, task completion, document availability/unavailability, optional reminder dates, user-selected effort/priorities, theme/reading preference, onboarding position, the latest 100 activity events, and optional help plans. A help plan stores a known step, a difficulty category, reviewed help steps, a broad contact outcome, a personal reminder date and optionally selected public provider contact details. No Social Security numbers, names, street addresses, document uploads or financial records are requested. Profile events do not repeat income or household values in their descriptions.
 
 Browser storage is **not encrypted secure storage**. Someone with access to the browser profile may see it. Browser cleanup, private browsing, storage eviction and device loss can remove progress. There is no cloud backup or cross-device synchronization.
 
@@ -22,4 +22,12 @@ Delete all saved data explicitly clears the personal record after earlier queued
 
 ## Accuracy boundary
 
-Every shipped preparation program and threshold is fictional. Official links are unverified starting points, not endorsements or partnerships. No availability, deadline, housing placement or acceptance is promised. No agency application is created or submitted. Real eligibility and document acceptance must be confirmed by the provider.
+Every shipped preparation program and threshold is fictional. Guidance sources and public contacts show individual review or retrieval dates; two referral homepages remain unreviewed. Sources are not endorsements or partnerships. No availability, deadline, housing placement or acceptance is promised. No agency application is created or submitted. Real eligibility and document acceptance must be confirmed by the provider.
+
+## Help plans and outside resources
+
+Learning-exercise answers and payment-calculator inputs are temporary component state, not saved income updates. Help reviews, contact outcomes and reminders do not change application readiness. The guided completion action requires explicit confirmation and checks current prerequisites.
+
+Counselor data is a dated public snapshot from the CFPB finder for 92101. The app does not send a ZIP code, household profile, income or document contents when loading it; the data ships with the app. Maintainer refresh scripts contact public official sources independently of any user state. Website and phone links only open when the person selects them. External websites and phone services have their own policies.
+
+Question-sheet exports contain the chosen public contact, the paperwork topic, general questions and optional reminder/outcome. They omit fictional program names from provider questions and do not include personal income or document contents. Copy/download never sends the sheet to an organization. Contact outcomes are manually reported, not measured calls or agency responses. There are no background reminder notifications. Help plans are exported and deleted with the rest of the workspace.

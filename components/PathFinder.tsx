@@ -38,6 +38,7 @@ export type PathFinderProps = {
   onComplete: (id: string) => void;
   onEffort: (id: string, value: number) => void;
   highlightedIds?: string[];
+  onSupport: (id: string) => void;
 };
 
 function programIdsFor(id: string, analysis: PlanAnalysis): string[] {
@@ -61,6 +62,7 @@ export function PathFinder({
   onComplete,
   onEffort,
   highlightedIds = [],
+  onSupport,
 }: PathFinderProps) {
   const [view, setView] = useState<"checklist" | "map">("checklist");
   const [scope, setScope] = useState("all");
@@ -290,6 +292,13 @@ export function PathFinder({
             <Explain explanation={recommended.explanation} />
           </div>
           <div className="pf-next-actions">
+            <button
+              className="text-button"
+              onClick={() => onSupport(recommended.id)}
+            >
+              <CircleHelp size={17} aria-hidden="true" />
+              I’m stuck on this step
+            </button>
             <button
               className="button primary"
               onClick={() => onComplete(recommended.id)}
@@ -556,6 +565,14 @@ export function PathFinder({
                     </p>
                   )}
                   <div className="pf-task-footer">
+                    <button
+                      className="text-button"
+                      aria-label={`Get help with ${node.name}`}
+                      onClick={() => onSupport(node.id)}
+                    >
+                      <CircleHelp size={16} aria-hidden="true" />
+                      I’m having trouble
+                    </button>
                     {status !== "complete" && (
                       <label className="pf-effort">
                         How hard is this for you?

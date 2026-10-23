@@ -16,6 +16,7 @@ async function nav(page: Page, label: string) {
             Discover: "Find help",
             PathFinder: "My checklist",
             Timeline: "Activity",
+            Support: "Get support",
           } as Record<string, string>
         )[label] ?? label,
       exact: true,
@@ -60,7 +61,9 @@ test("what-if parity, real progress, corrections and offline persistence across 
   await expect(page.locator(".pathfinder-total")).toContainText(
     "4 of 10 steps",
   );
-  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
+  await page
+    .getByRole("combobox", { name: "Choose a step to preview", exact: true })
+    .selectOption("doc:paystub");
   const preview = page.locator(".what-if-panel");
   await expect(
     preview.getByText("Preview only — not marked done"),
@@ -74,7 +77,9 @@ test("what-if parity, real progress, corrections and offline persistence across 
     "4 of 10 steps",
   );
   await expect(page.getByText("Preview only — not marked done")).toHaveCount(0);
-  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
+  await page
+    .getByRole("combobox", { name: "Choose a step to preview", exact: true })
+    .selectOption("doc:paystub");
   await page
     .getByRole("button", { name: "Update my checklist", exact: true })
     .click();
@@ -169,7 +174,9 @@ test("demo scenes and eligibility changes preserve the personal workspace", asyn
   await expect(
     page.getByRole("heading", { name: "See what would change" }),
   ).toBeVisible();
-  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
+  await page
+    .getByRole("combobox", { name: "Choose a step to preview", exact: true })
+    .selectOption("doc:paystub");
   await page
     .getByRole("button", { name: "Update my checklist", exact: true })
     .click();
@@ -461,5 +468,261 @@ test("plain-language help explains the worked example and keeps it separate from
   await page.getByText("How to use this page", { exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "How to work through your checklist" }),
+  ).toBeVisible();
+});
+
+test("a stuck applicant saves a real contact and follow-up without inventing checklist completion", async ({
+  page,
+  context,
+}) => {
+  await page.goto("/");
+  await addPlan(page, "Fresh Start Housing Preparation");
+  await addPlan(page, "Harbor Rental Preparation");
+  await nav(page, "Documents");
+  await page
+    .getByRole("checkbox", { name: "I have Identity document", exact: true })
+    .check();
+  await page
+    .getByRole("button", { name: "Get help with Pay stub", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Get help with a difficult step" }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "I can’t get the document", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Try one small step at a time" }),
+  ).toBeFocused();
+  await expect(page.locator(".support-options")).toContainText(
+    "Pay stub OR Employer letter",
+  );
+  await expect(page.locator(".support-options")).toContainText(
+    "Pay stub OR Benefits statement",
+  );
+  await expect(
+    page.getByRole("button", { name: "Mark the actual step ready" }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Talk to someone", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Housing counselors listed near downtown San Diego",
+    }),
+  ).toBeVisible();
+  await expect(page.locator(".counselor-card")).toHaveCount(4);
+  await expect(page.locator(".counselor-directory")).toContainText(
+    "not your address",
+  );
+  await page
+    .getByRole("combobox", { name: "Listed language", exact: true })
+    .selectOption("Vietnamese");
+  await expect(page.locator(".counselor-card")).toHaveCount(0);
+  await expect(
+    page.getByText("This result does not mean there is no help available.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("combobox", { name: "Listed language", exact: true })
+    .selectOption("Spanish");
+  await page
+    .locator(".counselor-card")
+    .first()
+    .getByRole("button", { name: "Use this contact in my question sheet" })
+    .click();
+  const questions = page.getByLabel("Questions to ask a real provider", {
+    exact: true,
+  });
+  await expect.poll(() => questions.inputValue()).toContain("Navicore");
+  expect(await questions.inputValue()).not.toMatch(/Fresh Start|Harbor|Keys/);
+  await page
+    .getByRole("combobox", {
+      name: "Where does the conversation stand?",
+      exact: true,
+    })
+    .selectOption("waiting");
+  await page
+    .getByLabel("My follow-up reminder (optional)", { exact: true })
+    .fill("2026-11-05");
+  await saved(page);
+  await nav(page, "PathFinder");
+  await expect(page.locator(".pathfinder-total")).toContainText(
+    "2 of 10 steps",
+  );
+  await nav(page, "Dashboard");
+  await expect(
+    page.getByRole("heading", { name: "Keep your help questions moving" }),
+  ).toBeVisible();
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  await page.waitForFunction(() => !!navigator.serviceWorker.controller);
+  await context.setOffline(true);
+  await page.reload();
+  await nav(page, "Support");
+  await expect(page.locator(".support-saved")).toContainText(
+    "Waiting for a reply",
+  );
+  await page
+    .getByRole("button", { name: "Talk to someone", exact: true })
+    .click();
+  await expect(page.locator(".counselor-card")).toHaveCount(4);
+  await expect(
+    page.getByLabel("My follow-up reminder (optional)", { exact: true }),
+  ).toHaveValue("2026-11-05");
+  await context.setOffline(false);
+});
+
+test("guided readiness checks prevent accidental completion and teach income periods", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Try a guided example", exact: true })
+    .click();
+  await nav(page, "PathFinder");
+  await page
+    .getByRole("button", { name: "Get help with Pay stub", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "I’m not sure what this means", exact: true })
+    .click();
+  for (const checkbox of await page
+    .getByRole("checkbox", { name: /^Reviewed:/ })
+    .all())
+    await checkbox.check();
+  await page
+    .getByRole("radio", { name: "Yes, both are required", exact: true })
+    .check();
+  await page
+    .getByRole("checkbox", {
+      name: "I can actually access this document, or I have finished what this task asks.",
+      exact: true,
+    })
+    .check();
+  await expect(
+    page.getByRole("button", { name: "Mark the actual step ready" }),
+  ).toBeDisabled();
+  await expect(page.getByText("Not quite.", { exact: false })).toBeVisible();
+  await page
+    .getByRole("radio", {
+      name: "No, one accepted option is enough",
+      exact: true,
+    })
+    .check();
+  await page
+    .getByRole("button", { name: "Mark the actual step ready" })
+    .click();
+  await nav(page, "PathFinder");
+  await expect(page.locator(".pathfinder-total")).toContainText(
+    "6 of 10 steps",
+  );
+  await page
+    .getByRole("button", { name: "Get help with Pay stub", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "I checked this off by mistake", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Reopen this checklist item", exact: true })
+    .click();
+  await nav(page, "PathFinder");
+  await expect(page.locator(".pathfinder-total")).toContainText(
+    "4 of 10 steps",
+  );
+  await nav(page, "Support");
+  await page
+    .getByRole("button", { name: "Learn the paperwork", exact: true })
+    .click();
+  await page
+    .getByRole("radio", { name: "$820 — net pay", exact: true })
+    .check();
+  await expect(
+    page.getByText("Look at gross pay:", { exact: false }),
+  ).toBeVisible();
+  await page
+    .getByRole("radio", { name: "$1,000 — gross pay", exact: true })
+    .check();
+  await expect(
+    page.getByText("Yes. Gross pay is $1,000", { exact: false }),
+  ).toBeVisible();
+  await page
+    .getByLabel("Amount for one payment ($)", { exact: true })
+    .fill("2000");
+  await page
+    .getByRole("combobox", { name: "How often is that payment?", exact: true })
+    .selectOption("biweekly");
+  await expect(
+    page.getByText("$52,000.00 per year, approximately", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("combobox", { name: "How often is that payment?", exact: true })
+    .selectOption("semimonthly");
+  await expect(
+    page.getByText("$48,000.00 per year, approximately", { exact: true }),
+  ).toBeVisible();
+  await nav(page, "Settings");
+  await expect(
+    page.getByLabel("Approximate annual household income ($)", { exact: true }),
+  ).toHaveValue("32000");
+});
+
+test("real contacts and follow-up are usable without adding a fictional program", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await nav(page, "Support");
+  await page
+    .getByRole("button", { name: "Talk to someone", exact: true })
+    .click();
+  await page
+    .getByRole("button", {
+      name: "Make a follow-up plan for my question",
+      exact: true,
+    })
+    .click();
+  await page
+    .locator(".counselor-card")
+    .first()
+    .getByRole("button", { name: "Use this contact in my question sheet" })
+    .click();
+  await page
+    .getByRole("combobox", {
+      name: "Where does the conversation stand?",
+      exact: true,
+    })
+    .selectOption("waiting");
+  await saved(page);
+  await page.reload();
+  await nav(page, "Support");
+  await expect(
+    page.getByRole("combobox", {
+      name: "Which step do you need help with?",
+      exact: true,
+    }),
+  ).toHaveValue("general");
+  await expect(page.locator(".support-saved")).toContainText(
+    "Waiting for a reply",
+  );
+  await page
+    .getByRole("button", { name: "Talk to someone", exact: true })
+    .click();
+  const pending = page.waitForEvent("download");
+  await page
+    .getByRole("button", { name: "Download questions", exact: true })
+    .click();
+  const file = await pending;
+  const body = await readFile((await file.path())!, "utf8");
+  expect(body).toContain("Navicore");
+  expect(body).toContain("consumerfinance.gov");
+  expect(body).not.toMatch(/Fresh Start|Harbor|Keys/);
+  await nav(page, "Dashboard");
+  await expect(
+    page.getByRole("heading", { name: "Get your housing paperwork ready." }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Keep your help questions moving" }),
   ).toBeVisible();
 });

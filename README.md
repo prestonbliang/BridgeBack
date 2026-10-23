@@ -28,6 +28,20 @@ Start the app and choose **Explore Demo** or **Try a guided example**. A seven-s
 - **Timeline:** timestamped real events with guarded corrections, including completion, program selection, newly available work and exports.
 - **Local-first PWA:** validated IndexedDB storage, versioned migration, cross-tab conflict/deletion protection, safe storage failure handling, offline shell and computations, export/deletion, light/dark themes and larger text.
 
+## If someone gets stuck
+
+Open **Get support**, or choose the help button beside a checklist item. General housing questions, real contacts and follow-up plans work without adding a fictional program. The app can break a confusing step into smaller ones, explain the exact alternatives, teach common paperwork concepts, and help prepare questions for a real organization.
+
+- Help-plan progress, calls and waiting for replies stay separate from application readiness.
+- Guided completion requires a correct understanding check, reviewed help steps, explicit readiness confirmation and a fresh dependency check.
+- **Talk to someone** includes dated public counselor data from the CFPB’s HUD-powered finder, with rental-service, language and distance filters. The current snapshot has ten listings for a 92101 search; four list rental counseling within 25 miles of that search point.
+- Choose a public contact, download questions, record a broad outcome and set a personal follow-up reminder. Open questions appear on Overview.
+- **Learn the paperwork** offers a fictional pay-stub exercise and an income-period helper. Neither changes the profile automatically.
+
+[Guided support](docs/screenshots/support-desktop.png) · [Phone view](docs/screenshots/support-mobile.png) · [Official-source counselor directory](docs/screenshots/counselor-directory.png)
+
+See [support behavior, external sources and maintenance](docs/SUPPORT.md). Counselor listings are real public data; preparation plans remain fictional. A listing is not an available appointment or housing offer.
+
 ## Run locally
 
 Use Node 22 or 24 and npm (validated here with Node 24).
@@ -65,13 +79,13 @@ The checked-in [benchmark results](docs/evaluation-results.json) record 22 passi
 
 ## Accuracy and privacy
 
-**All three preparation programs and their criteria are explicitly fictional.** Official resource links are provided separately and remain unverified; no real availability or deadline is asserted. Network policy blocked official-site verification in the initial environment. A researched, reviewed dataset is needed before offering real provider screening. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
+**All three preparation programs and their criteria are explicitly fictional.** Real counselor/contact data and reviewed guidance sources are separated from fictional preparation rules. Each source shows its own review or retrieval date; two referral homepages remain unreviewed after access-denied responses. No live appointments, housing availability or agency deadline is asserted. Real program screening still requires reviewed program-specific rules. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
 
 Only document status is stored. Do not enter names, Social Security numbers or document contents. Browser storage is not encrypted secure storage. Export before clearing site data if you want a copy. See [privacy details](docs/PRIVACY.md).
 
 ## Deploy
 
-Deploy to an HTTPS Next.js-compatible host such as Vercel or any Node server. Build: `npm ci && npm run build`. Start: `npm start`. No secrets, database or API configuration are needed. Serve at the origin root. HTTPS is required for installation outside local development. Keep `/sw.js` revalidated by the host; its build ID changes automatically after every production build. Worker updates wait for older tabs to close so the HTML/assets remain paired.
+Deploy to an HTTPS Next.js-compatible host such as Vercel or any Node server. Build: `npm ci && npm run build`. Start: `npm start`. No secrets, database or API configuration are needed. Builds use the checked-in counselor snapshot without an external request. Maintainers can refresh it with `npm run sources:counselors` and then rebuild; failed imports retain the prior snapshot. Serve at the origin root. HTTPS is required for installation outside local development. Keep `/sw.js` revalidated by the host; its build ID changes automatically after every production build. Worker updates wait for older tabs to close so the HTML/assets remain paired.
 
 Android: browser menu → Install app. iPhone: Safari → Share → Add to Home Screen. Visit online and wait for **Offline ready** before relying on offline operation. External provider links require a connection. Actual iPhone/Android installation and screen-reader review remain distinct manual checks; Chromium emulation is not a device certification.
 

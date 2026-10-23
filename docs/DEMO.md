@@ -32,3 +32,13 @@ Export the preparation packet. It contains program-specific checklists, accepted
 Never claim measured housing outcomes, time savings, partnerships, endorsements or verified real program requirements. The deterministic benchmark measures correctness of fictional fixtures only.
 
 The overview also offers a smaller worked example: choose “See what a pay stub changes.” It calculates the same two form unlocks without creating or editing a saved checklist. Use Help for plain-language definitions of waiting steps, alternatives and checklist progress.
+
+## Support-focused demonstration
+
+From My checklist, choose “Get help with Pay stub,” then “I can’t get the document.” Show the four small help steps and the two programs’ different accepted alternatives. Explain that reviewing help does not mark a paper available.
+
+Open Learn the paperwork, identify gross pay in the fictional exercise, then compare $2,000 every two weeks with $2,000 twice monthly. The annual estimates differ, and the profile is not changed.
+
+Open Talk to someone. Show the source date and the 92101 search boundary on the real CFPB counselor data. Filter by a listed language, select a public contact and review the question sheet. Its questions omit the made-up program names. Set “waiting” and a personal follow-up date, then return to Overview: an open question is visible but application readiness has not increased.
+
+The person controls website visits, phone calls and exports. The app does not claim a call was made, an appointment is available or an application was submitted.

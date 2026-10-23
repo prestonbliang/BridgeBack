@@ -1,0 +1,44 @@
+[
+  {
+    "url": "https://211sandiego.org/",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 403,
+    "status": "access-denied"
+  },
+  {
+    "url": "https://www.sdhc.org/",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 403,
+    "status": "access-denied"
+  },
+  {
+    "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd.html",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 200,
+    "status": "reachable"
+  },
+  {
+    "url": "https://www.consumerfinance.gov/find-a-housing-counselor/",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 200,
+    "status": "reachable"
+  },
+  {
+    "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/toolkit/",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 200,
+    "status": "reachable"
+  },
+  {
+    "url": "https://www.usa.gov/replace-vital-documents",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 200,
+    "status": "reachable"
+  },
+  {
+    "url": "https://www.lassd.org/",
+    "checkedAt": "2026-10-23T03:49:29.310Z",
+    "httpStatus": 200,
+    "status": "reachable"
+  }
+]
