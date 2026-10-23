@@ -72,3 +72,7 @@ Keep a prior tested container/revision for rollback. Browser data stays on the p
 ## Visual review
 
 [Real-program directory](screenshots/official-programs-desktop.png) · [Phone checklist](screenshots/official-plan-mobile.png) · [Dark document workspace](screenshots/official-documents-dark.png). These are screenshots of the running production container with illustrative local state. The source check used actual official responses; document marks and checklist steps are test state, not evidence of a real applicant, provider contact, accepted document or housing outcome.
+
+## Executed release CI
+
+The final application source passed [web/container checks](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593), [the live source audit](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625) and [unsigned iOS simulator/device compilation](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500). The exact commit and limitations are recorded in [CI evidence](production-ci-evidence.json). No public deployment, agency review or physical-device test is inferred from these passes.

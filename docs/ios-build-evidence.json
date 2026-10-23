@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "sourceCommit": "8e08fbe6aeb225a904771c3aee8d67e9d71ab1d0",
-  "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39987422049",
+  "sourceCommit": "3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda",
+  "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500",
   "status": "Success",
-  "observedAt": "2026-10-23T16:39:33.079849+00:00",
+  "observedAt": "2026-10-23T18:00:20.318612+00:00",
   "evidence": "Public GitHub workflow summary and artifact digests; native runtime and signing were not exercised.",
   "artifacts": [
     {
       "name": "BridgeBack-unsigned-simulator",
-      "displaySize": "1.99 MB",
-      "digest": "sha256:4c5f9b8b7a8abe7d1d2a1d2f7f2d275f09797b1510fe09773c562274c0de56f0"
+      "displaySize": "2 MB",
+      "digest": "sha256:4918da5a38d53f4dd71d9ba2465a47f3ba95e088b231a0838e3a2715d8dcd022"
     },
     {
       "name": "BridgeBack-unsigned-device",
-      "displaySize": "1.01 MB",
-      "digest": "sha256:d83af2aea69be070311d64910206a14f66e832f581f5fac10fb474dda4c9ac15"
+      "displaySize": "1.02 MB",
+      "digest": "sha256:5a2195c9273374bc60c352c936a54266d1a660bd35efd76c85d130343a3f0b30"
     }
   ],
   "doesNotEstablish": [

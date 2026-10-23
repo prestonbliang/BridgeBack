@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda",
+  "observedAt": "2026-10-23T18:01:35.365949+00:00",
+  "evidence": "Public GitHub workflow summaries, each successfully completed at the same exact source revision. Native artifact digests are recorded separately.",
+  "checks": [
+    {
+      "name": "ios",
+      "status": "Success",
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500"
+    },
+    {
+      "name": "web",
+      "status": "Success",
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593"
+    },
+    {
+      "name": "sources",
+      "status": "Success",
+      "runUrl": "https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625"
+    }
+  ],
+  "doesNotEstablish": [
+    "agency approval or complete eligibility verification",
+    "live unit, voucher or appointment availability",
+    "physical-device or applicant usability testing",
+    "signing, TestFlight or public deployment"
+  ]
+}

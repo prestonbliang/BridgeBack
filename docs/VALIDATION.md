@@ -22,7 +22,7 @@ The final local browser regression run completed in 52.0 seconds, after recoveri
 
 ## Native compilation evidence
 
-The previous recorded native source `8e08fbe6aeb225a904771c3aee8d67e9d71ab1d0` passed [macOS iOS preflight](https://github.com/prestonbliang/BridgeBack/actions/runs/39987422049): both unsigned simulator and unsigned device builds were compiled and uploaded. [Machine-readable evidence](ios-build-evidence.json) records the successful status and both artifact SHA-256 digests. The workflow keeps binaries for seven days; the tested source and digest record remain in Git. This is compilation evidence, not an actual-device, signing or App Store result.
+The production-candidate source `3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda` passed [macOS iOS preflight](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239500): both unsigned simulator and unsigned device builds were compiled and uploaded. [Machine-readable evidence](ios-build-evidence.json) records the successful status and both artifact SHA-256 digests. The workflow keeps binaries for seven days; the tested source and digest record remain in Git. This is compilation evidence, not an actual-device, signing or App Store result.
 
 ## What the checks establish
 
@@ -72,3 +72,7 @@ The separate live official-source audit matched all eleven reviewed pages/PDFs. 
 The production npm audit found inherited Sharp/PostCSS advisories. The lockfile now uses Sharp 0.35.5 and PostCSS 8.5.31 with explicit overrides, and the production audit reports zero known vulnerabilities on October 23, 2026. [The dated report](production-dependency-audit.json) is retained. This is not a claim of complete security or zero future vulnerabilities. Builds, tests, license checks and native artifact checks validate the patched tree.
 
 The production container was built locally and served the actual app under UID 1000, with a healthy status and all eleven public-source checks matched. Additional container-browser scans covered the real directory, phone checklist, dark document workspace and 320px document layout: no Axe violations, page errors or horizontal overflow were reported. The committed screenshots show illustrative local test state; no actual provider contact or document acceptance is claimed.
+
+## Exact pushed revision
+
+All three workflows passed for `3ac0234a1c1f873fd5379d8a60f511aa9e4d1dda`: [web production checks](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239593) (including the container build/HTTP smoke and full browser/native-bundle suite), [official source audit](https://github.com/prestonbliang/BridgeBack/actions/runs/39999239625), and the native compilation linked above. [The CI evidence record](production-ci-evidence.json) preserves the same-source successful run URLs. The final packet formatting and optional-practice label are included in that revision; success is observed, not assumed from workflow configuration.
