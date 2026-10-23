@@ -7,22 +7,22 @@ Validation was performed in the cloud Linux environment with Node 24, the locked
 | Command                          | Result                                                                                                 |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `npm ci --cache /workspace/.npm` | Succeeded during environment setup                                                                     |
-| `npm run test`                   | 63 tests passed across 9 files; none skipped or disabled                                               |
+| `npm run test`                   | 76 tests passed across 10 files; none skipped or disabled                                              |
 | `npm run evaluate`               | 22/22 independently specified fictional benchmark cases passed                                         |
 | `npm run lint`                   | Passed                                                                                                 |
 | `npm run build`                  | Passed; postbuild generated the build-stamped offline worker                                           |
 | `npm run typecheck`              | Passed                                                                                                 |
-| `npm run test:e2e`               | All 20 tests passed: 10 desktop and 10 mobile                                                          |
+| `npm run test:e2e`               | All 24 tests passed: 12 desktop and 12 mobile                                                          |
 | `npm run notices:check`          | Lockfile fingerprint, direct runtime dependency coverage and full license texts passed                 |
 | `npm run ios:bundle`             | Static export and Capacitor iOS synchronization passed                                                 |
 | `npm run ios:check`              | Generated-bundle, privacy-manifest, configuration, permission-scope, deployment and icon checks passed |
-| `npm run test:ios-web`           | All 4 bundled-web/bridge-shim tests passed: phone and tablet; networking disabled                      |
+| `npm run test:ios-web`           | All 6 bundled-web/bridge-shim tests passed: phone and tablet; networking disabled                      |
 
-The final browser regression run completed in 39.9 seconds; the four native-bundle checks completed in 4.9 seconds. Production first-load JavaScript was reported as 260 kB by Next.js. This is build output, not a device performance or user-time study.
+The final local browser regression run completed in 52.0 seconds, after recovering disk space used by temporary Docker builds. All six native-bundle checks passed in 7.1 seconds. Production first-load JavaScript was reported as 275 kB by Next.js. The final optional-practice label is additionally covered by the pushed CI revision. This is build output, not a device performance or user-time study.
 
 ## Native compilation evidence
 
-The final application source `8e08fbe6aeb225a904771c3aee8d67e9d71ab1d0` passed [macOS iOS preflight](https://github.com/prestonbliang/BridgeBack/actions/runs/39987422049): both unsigned simulator and unsigned device builds were compiled and uploaded. [Machine-readable evidence](ios-build-evidence.json) records the successful status and both artifact SHA-256 digests. The workflow keeps binaries for seven days; the tested source and digest record remain in Git. This is compilation evidence, not an actual-device, signing or App Store result.
+The previous recorded native source `8e08fbe6aeb225a904771c3aee8d67e9d71ab1d0` passed [macOS iOS preflight](https://github.com/prestonbliang/BridgeBack/actions/runs/39987422049): both unsigned simulator and unsigned device builds were compiled and uploaded. [Machine-readable evidence](ios-build-evidence.json) records the successful status and both artifact SHA-256 digests. The workflow keeps binaries for seven days; the tested source and digest record remain in Git. This is compilation evidence, not an actual-device, signing or App Store result.
 
 ## What the checks establish
 
@@ -58,7 +58,17 @@ The captioned [review clip](media/README.md) was produced from actual production
 - Real iPhone/iPad/VoiceOver runtime testing, provisioning and signing, final archive privacy report, production policy URL and publisher metadata. Unsigned simulator and device compilation passed on macOS CI. Current Apple upload/review pages were read October 23, 2026; see [the TestFlight gates](IOS.md) and [dated source record](submission-sources.json).
 - Screen-reader review (VoiceOver/TalkBack/NVDA), real-device keyboard/touch usability and representative applicant testing.
 - Actual iPhone/Android home-screen installation and storage-eviction behavior.
-- Reviewed program-specific eligibility/document rules before offering real program screening. Five guidance/contact pages were fetched and reviewed, and ten public counselor listings were imported from the CFPB finder. Two referral homepages remain unreviewed after access-denied responses. All shipped screening criteria and preparation programs remain explicitly fictional. No appointment, housing availability or agency deadline is represented as live.
+- Reviewed program-specific eligibility/document rules before offering real program screening. Five guidance/contact pages were fetched and reviewed, and ten public counselor listings were imported from the CFPB finder. Two referral homepages remain unreviewed after access-denied responses. The fictional practice rules remain separate. Three real-program entries and eleven official sources now support partial comparisons, follow-up guidance and a specific working-preference evidence rule. Full agency eligibility is not modeled, and contradictory published criteria remain uncertain. No appointment, housing availability or agency deadline is represented as live.
 - HTTPS deployment and a new-task environment snapshot restoration. Saved reusable setup/start instructions are not publication or restoration validation.
 
 No impact statistics, testimonials, endorsements or partnerships are asserted. The application supports multiple fictional preparation plans and never submits applications to agencies.
+
+## Real-program production checks
+
+Thirteen additional deterministic unit tests cover catalog provenance, actual table boundaries, policy conflicts, missing/larger-household information, source-review expiry, AND/OR access, independent letter review, corrections, schema-2 migration to 3, persisted real documents, deletion, bounded source fetching, changed HTML/PDFs and stale/offline reports. Four added browser runs (desktop/phone) cover the real-program workflow, profile/city comparisons, source-change warnings, failed refresh preservation, actual IndexedDB/offline reloads, exports, demo isolation, dark-theme accessibility and production response headers. Two new native-bundle runs cover real guidance and document tracking without claiming a live check.
+
+The separate live official-source audit matched all eleven reviewed pages/PDFs. [The checked report](official-source-audit.json) identifies the actual date, catalog version and digests; it establishes excerpt/PDF consistency, not current units, appointments or full rule verification. A daily workflow repeats that diagnostic. Deterministic tests use explicit network fixtures rather than government calls.
+
+The production npm audit found inherited Sharp/PostCSS advisories. The lockfile now uses Sharp 0.35.5 and PostCSS 8.5.31 with explicit overrides, and the production audit reports zero known vulnerabilities on October 23, 2026. [The dated report](production-dependency-audit.json) is retained. This is not a claim of complete security or zero future vulnerabilities. Builds, tests, license checks and native artifact checks validate the patched tree.
+
+The production container was built locally and served the actual app under UID 1000, with a healthy status and all eleven public-source checks matched. Additional container-browser scans covered the real directory, phone checklist, dark document workspace and 320px document layout: no Axe violations, page errors or horizontal overflow were reported. The committed screenshots show illustrative local test state; no actual provider contact or document acceptance is claimed.

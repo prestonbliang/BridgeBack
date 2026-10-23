@@ -10,12 +10,12 @@ The native scene cover, app icon, launch screen, Info.plist and privacy manifest
 
 ## Existing foundation, clearer boundaries
 
-Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow remain the stack. No backend, account, external database or language model is required. The interface uses a navy navigation rail and a readable help-desk layout, with locally hosted Atkinson Hyperlegible type, dark mode and large-text preferences. See `DESIGN.md` for the design sources and rationale.
+Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow remain the stack. Profiles remain local, with no account, external database or language model. A read-only Next.js route checks a fixed set of public official sources; no applicant data is received. The interface uses a navy navigation rail and a readable help-desk layout, with locally hosted Atkinson Hyperlegible type, dark mode and large-text preferences. See `DESIGN.md` for the design sources and rationale.
 
 - `lib/engine.ts`: compatible original deterministic engine, graph validation and topological sorting. Mixed-consumer OR handling is corrected; recorded deadlines are not mislabeled as verified.
-- `lib/programs.ts`: explicit program entities, canonical document types, per-program acceptance gates, screening criteria and source provenance. All shipped program rules are fictional.
+- `lib/programs.ts`: explicit program entities, canonical document types, per-program acceptance gates, screening criteria and source provenance. This module contains the fictional practice rules; the real catalog is isolated in `lib/official-catalog.json`.
 - `lib/planner.ts`: compiles a selected-program DAG, computes statuses/readiness, actual action impact, barrier consequences, structured explanations, simulations, deadline collisions and Route Rescue.
-- `lib/workspace.ts`: validated version 2 workspace, migration, typed mutations, timestamped events and guarded corrections.
+- `lib/workspace.ts`: validated schema-3 workspace, migration, typed mutations, timestamped events and guarded corrections.
 - `lib/store.ts`: the existing IndexedDB database with ordered saves, transactional cross-tab revision checks and read-only migration until successful loading.
 - `hooks/useWorkspace.ts`: hydration, persistence status, cross-tab refresh and a guard that prevents autosaving over unreadable data.
 - `components/PathFinder.tsx`, `Documents.tsx`, `Explain.tsx`: shared engine results rendered as interactive decision tools.
@@ -56,7 +56,7 @@ The exact bounded subset search finds the fewest additional accepted document ty
 
 ## Local state and correction
 
-Version 1 records migrate to version 2 without losing document availability, task flags, theme, effort, dates or prior undated history. Migration creates one honest import event, not fabricated historic timestamps. Invalid or future records reject on load and remain untouched; the UI offers session-only work and explicit reset recovery.
+Version 1/2 records migrate to schema 3 without losing document availability, task flags, theme, effort, dates or prior undated history. Migration creates one honest import event, not fabricated historic timestamps. Invalid or future records reject on load and remain untouched; the UI offers session-only work and explicit reset recovery.
 
 Writes are validated, copied and queued. IndexedDB database version 2 adds a metadata table with a non-personal revision counter. Each UI session carries the revision it loaded; an atomic read/write transaction compares it before saving and increments it after a successful change. Deletion drains prior writes and advances that revision while removing the personal record. A stale tab cannot restore a pre-deletion snapshot. BroadcastChannel messages contain only a change signal; clean tabs reload the latest data, and visibility changes also refresh clean tabs. Even without notifications, a conflicting save is rejected, the latest state is loaded and the user is told to review/repeat their change. Concurrent edits are not silently merged.
 
@@ -76,4 +76,12 @@ The catalog is deliberately small. Full evaluation is clear and cheap for this g
 
 `components/Support.tsx` coordinates the guided flow; `SupportTools.tsx` contains reusable source cards, contact preparation and learning exercises. `CounselorDirectory.tsx` filters the validated public snapshot from `lib/counselor-snapshot.json`. `scripts/import-counselors.mjs` fetches the official CFPB search; `lib/counselor-import.mjs` parses JSON without executing page scripts, validates geography/fields/IDs, and returns a candidate that is atomically written. Failed refreshes retain the prior snapshot. No runtime backend, API key or client profile request is introduced. See `SUPPORT.md` for provenance, limitations and reproducible commands.
 
-Source review and reachability are distinct. `lib/support-resources.ts` records manual content-review dates. `sources:check` writes reachability diagnostics without promoting pages to verified criteria. All real contact data remains separate from fictional program rules. Imported data ships in the application bundle, is cached by the existing complete-shell worker and is explicitly dated rather than represented as live availability.
+Source review and reachability are distinct. `lib/support-resources.ts` records manual content-review dates. `sources:check` writes reachability diagnostics without promoting pages to verified criteria. Real contact data and the reviewed official catalog remain separate from fictional program rules. Imported data ships in the application bundle, is cached by the existing complete-shell worker and is explicitly dated rather than represented as live availability.
+
+## Reviewed real-program guidance
+
+`lib/official-catalog.ts` validates the real catalog, citations, tables, source dates and jurisdiction values. `official-screening.ts` compares known factors while explicitly preserving uncertainty: the County overview and admissions policy conflict about income and residency, so they never produce a fabricated positive or negative determination. `official-plans.ts` reuses graph validation for separate new/existing routes and AND/OR access dependencies; corrections clear only dependent completions. Working-preference document status is separate from fictional evidence and never changes application readiness.
+
+`official-source-check.ts` is server/maintenance code: registered HTTPS URLs only, redirect rejection, timeout/size/type bounds, reviewed-text comparisons and full PDF hashes. `/api/source-status` uses 15-minute Next ISR. Native static export produces a bundled marker with no check timestamp or online requests. `official-status.ts` validates persisted/API reports and rejects fresh labels for offline, old, future or mismatched data. A daily audit requires manual review on changes instead of rewriting criteria.
+
+Record schema 3 adds real plans, optional municipality and source-check reports. V2 migrates with empty/default real state; no destructive IndexedDB reset is required. The database index schema remains version 2. See [production design and release gates](PRODUCTION-READINESS.md).

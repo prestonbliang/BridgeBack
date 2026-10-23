@@ -15,6 +15,19 @@ import { buildSupportPlan } from "./support";
 import { supportResources } from "./support-resources";
 import { counselorSnapshot } from "./counselors";
 
+import { officialCatalog, officialProgramIdSchema } from "./official-catalog";
+import {
+  officialDocumentIdSchema,
+  officialPlanSchema,
+  officialRoleSchema,
+  officialStepIdSchema,
+  updateOfficialStep,
+  type OfficialDocumentId,
+  type OfficialRole,
+  type OfficialStepId,
+} from "./official-plans";
+import { sourceReportSchema, type SourceReport } from "./official-status";
+
 const programIds = new Set(programs.map((program) => program.id));
 const documentIds = new Set(documentTypes.map((document) => document.id));
 const taskIds = new Set(
@@ -97,6 +110,7 @@ export const progressEventSchema = z.object({
     "migration",
     "unavailable",
     "support",
+    "official",
   ]),
   label: z.string().min(1).max(500),
   targetId: z.string().max(100).optional(),
@@ -109,9 +123,18 @@ export type ProgressEvent = z.infer<typeof progressEventSchema>;
 
 export const workspaceSchema = z
   .object({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     id: z.literal("current"),
     profile: profileSchema,
+    officialPlans: z
+      .array(officialPlanSchema)
+      .max(officialCatalog.programs.length)
+      .refine(
+        (plans) => new Set(plans.map((p) => p.programId)).size === plans.length,
+        "Duplicate official plan",
+      )
+      .default([]),
+    sourceReport: sourceReportSchema.nullable().default(null),
     selectedProgramIds: z
       .array(programIdSchema)
       .max(programs.length)
@@ -192,8 +215,10 @@ export type WorkspacePlannerInput = Workspace extends PlannerInput
 
 export function initialWorkspace(): Workspace {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     id: "current",
+    officialPlans: [],
+    sourceReport: null,
     profile: {
       household: null,
       income: null,
@@ -234,8 +259,11 @@ export function migrateWorkspace(
   value: unknown,
   now = new Date().toISOString(),
 ): Workspace {
-  if (typeof value === "object" && value !== null && "schemaVersion" in value)
+  if (typeof value === "object" && value !== null && "schemaVersion" in value) {
+    if (value.schemaVersion === 2)
+      return workspaceSchema.parse({ ...value, schemaVersion: 3 });
     return workspaceSchema.parse(value);
+  }
   const old = legacyWorkspaceSchema.parse(value);
   const current = initialWorkspace();
   current.profile = old.profile;
@@ -274,6 +302,21 @@ export function migrateWorkspace(
 }
 
 export type WorkspaceAction =
+  | {
+      type: "official-document";
+      id: string;
+      documentId: OfficialDocumentId;
+      available: boolean;
+    }
+  | { type: "official-plan"; id: string; selected: boolean }
+  | { type: "official-role"; id: string; role: OfficialRole }
+  | {
+      type: "official-step";
+      id: string;
+      stepId: OfficialStepId;
+      checked: boolean;
+    }
+  | { type: "source-report"; report: SourceReport }
   | { type: "task"; id: string; complete: boolean }
   | { type: "document"; id: string; available: boolean }
   | { type: "program"; id: string; selected: boolean }
@@ -375,6 +418,113 @@ export function updateWorkspace(
   let details:
     Omit<ProgressEvent, "id" | "at" | "undone" | "canUndo"> | undefined;
   switch (action.type) {
+    case "official-document": {
+      const id = officialProgramIdSchema.parse(action.id);
+      const documentId = officialDocumentIdSchema.parse(action.documentId);
+      if (
+        id !== "county-public" ||
+        !state.officialPlans.some((p) => p.programId === id)
+      )
+        throw Error(
+          "This document option belongs only to a saved County Public Housing plan.",
+        );
+      if (typeof action.available !== "boolean")
+        throw Error("Document availability must be a boolean.");
+      state = {
+        ...state,
+        officialPlans: state.officialPlans.map((p) =>
+          p.programId === id
+            ? {
+                ...p,
+                documents: { ...p.documents, [documentId]: action.available },
+                updatedAt: now,
+              }
+            : p,
+        ),
+      };
+      details = {
+        type: "official",
+        label: `Updated a County Public Housing working-preference document option. This does not establish eligibility, selection priority or document acceptance for another program.`,
+      };
+      break;
+    }
+    case "source-report": {
+      const report = sourceReportSchema.parse(action.report);
+      if (report.catalogVersion !== officialCatalog.version)
+        throw Error(
+          "This source check belongs to another catalog version. Reload the updated app before using it.",
+        );
+      state = { ...state, sourceReport: report };
+      break;
+    }
+    case "official-plan": {
+      const id = officialProgramIdSchema.parse(action.id);
+      const exists = state.officialPlans.some((p) => p.programId === id);
+      if (exists === action.selected) return previous;
+      state = {
+        ...state,
+        officialPlans: action.selected
+          ? [
+              ...state.officialPlans,
+              {
+                programId: id,
+                role: "new",
+                documents: {},
+                completed: [],
+                updatedAt: now,
+              },
+            ]
+          : state.officialPlans.filter((p) => p.programId !== id),
+      };
+      details = {
+        type: "official",
+        label: `${action.selected ? "Saved" : "Removed"} real-program follow-up plan: ${officialCatalog.programs.find((p) => p.id === id)!.name}. No agency application was sent.`,
+      };
+      break;
+    }
+    case "official-role": {
+      const id = officialProgramIdSchema.parse(action.id);
+      const role = officialRoleSchema.parse(action.role);
+      const plan = state.officialPlans.find((p) => p.programId === id);
+      if (!plan) throw Error("Save this real program before choosing a route.");
+      if (plan.role === role) return previous;
+      state = {
+        ...state,
+        officialPlans: state.officialPlans.map((p) =>
+          p.programId === id
+            ? {
+                ...p,
+                role,
+                completed: p.completed.filter((step) => step === "read-status"),
+                updatedAt: now,
+              }
+            : p,
+        ),
+      };
+      details = {
+        type: "official",
+        label: `Changed ${officialCatalog.programs.find((p) => p.id === id)!.name} to ${role === "existing" ? "existing applicant" : "new inquiry"} guidance. Route-specific check marks were reset.`,
+      };
+      break;
+    }
+    case "official-step": {
+      const id = officialProgramIdSchema.parse(action.id);
+      const stepId = officialStepIdSchema.parse(action.stepId);
+      const plan = state.officialPlans.find((p) => p.programId === id);
+      if (!plan) throw Error("Save this real program before tracking a step.");
+      const next = updateOfficialStep(plan, stepId, action.checked, now);
+      state = {
+        ...state,
+        officialPlans: state.officialPlans.map((p) =>
+          p.programId === id ? next : p,
+        ),
+      };
+      details = {
+        type: "official",
+        label: `${action.checked ? "Finished" : "Corrected"} a personal follow-up step for ${officialCatalog.programs.find((p) => p.id === id)!.name}. This does not record agency acceptance.`,
+      };
+      break;
+    }
     case "support-finish": {
       const record = state.supportRecords.find(
         (record) => record.targetId === action.targetId,

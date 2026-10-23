@@ -1,0 +1,13 @@
+.git
+.next
+out
+node_modules
+artifacts
+test-results
+playwright-report
+docs
+ios
+.env
+.env.*
+*.tsbuildinfo
+**/__pycache__

@@ -18,7 +18,7 @@ Try clearly labeled fictional preparation plans to see why one document can unlo
 
 No account, document uploads or advertising. Checklists, explanations, a saved resource directory and the privacy policy are included for offline use. Export a checklist or your saved progress through the iOS share sheet. Delete saved data in Settings.
 
-BridgeBack is an independent preparation and learning tool. Its program rules and eligibility examples are fictional. It does not submit applications, decide official eligibility, provide legal advice, or guarantee housing. Counselor listings are dated public information, not available appointments; confirm services and actual program requirements with the provider. Website visits and calls need a connection. Personal follow-up dates are not agency deadlines, and there are no background reminder notifications.
+BridgeBack is an independent preparation and learning tool. Its practice examples are fictional; real County entries cite reviewed official guidance, show closures/conflicts and provide partial criteria comparisons. It does not submit applications, decide official eligibility, provide legal advice, or guarantee housing. Counselor listings are dated public information, not available appointments; confirm services and actual program requirements with the provider. Website visits and calls need a connection. Personal follow-up dates are not agency deadlines, and there are no background reminder notifications.
 
 ## Review notes
 
@@ -30,7 +30,9 @@ No login, subscription or reviewer credentials are needed. The app bundles its w
 4. In Settings, **Export my progress** opens the native share sheet. Save to Files or cancel. Cancellation does not add a success event. Delete all saved data requires confirmation and clears help plans as well.
 5. After a fresh install, airplane mode still permits the checklist, calculations, directory, learning tools and policy. External sites/calls need connectivity. Browser and native app storage do not sync.
 
-The directory is a small, dated CFPB/HUD-powered search snapshot, not an exhaustive county directory or a live government integration. All actual eligibility screening and document acceptance rules in preparation plans are deliberately labeled fictional. This beta does not claim official housing placement or provider partnerships.
+The directory is a small, dated CFPB/HUD-powered search snapshot, not an exhaustive county directory or a live government integration. Real-program guidance is separately cited and limited. Its Public Housing document options concern a working-family preference, not full admission. Practice-plan screening/acceptance rules remain fictional. This beta does not claim official housing placement or provider partnerships.
+
+6. In Find help, save County Public Housing, then choose the existing-waiting-list route. Read the closure, try one online/assisted access route and correct a step. In Documents, mark either published working-preference evidence option available; no paper is uploaded and no eligibility is established. The installed app explains that public-page checks belong to the hosted web version and its bundled guidance is dated.
 
 ## Privacy-label and export-compliance review
 

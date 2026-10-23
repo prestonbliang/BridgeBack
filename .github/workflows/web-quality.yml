@@ -1,0 +1,74 @@
+name: Web production checks
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "components/**"
+      - "hooks/**"
+      - "lib/**"
+      - "public/**"
+      - "service-worker/**"
+      - "scripts/**"
+      - "tests/**"
+      - "package*.json"
+      - "*config*"
+      - "Dockerfile"
+      - ".dockerignore"
+      - ".github/workflows/web-quality.yml"
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: web-production-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm run notices:check
+      - run: npm run test
+      - run: npm run lint
+      - run: npx playwright install --with-deps chromium
+      - run: npm run ios:bundle
+      - run: npm run ios:check
+      - run: npm run test:ios-web
+      - run: npm run build
+      - run: npm run typecheck
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: browser-failure-evidence
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - run: docker build --tag bridgeback-production .
+      - name: Check non-root runtime and HTTP readiness
+        run: |
+          set -euo pipefail
+          docker run --detach --name bridgeback-check --publish 3000:3000 bridgeback-production
+          trap 'docker logs bridgeback-check; docker rm --force bridgeback-check' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3000/ >/dev/null
+          test "$(docker exec bridgeback-check id -u)" != 0
+          curl --fail --silent http://127.0.0.1:3000/api/source-status | python3 -c 'import json,sys; r=json.load(sys.stdin); assert r["schemaVersion"] == 1 and r["mode"] == "online" and r["checkedAt"]; assert len(r["checks"]) > 0'
+          curl --fail --silent http://127.0.0.1:3000/privacy >/dev/null
+          curl --fail --silent http://127.0.0.1:3000/notices >/dev/null

@@ -35,6 +35,10 @@ const sourcePaths = [
   "capacitor.config.ts",
   "next.config.ts",
   "tsconfig.json",
+  "Dockerfile",
+  ".dockerignore",
+  ".github/workflows/web-quality.yml",
+  ".github/workflows/official-source-audit.yml",
   ".github/workflows/ios-preflight.yml",
 ];
 execFileSync(

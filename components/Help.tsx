@@ -25,20 +25,20 @@ const guides: Record<
   Dashboard: {
     title: "New here? Start with these three things.",
     steps: [
-      "Choose a plan in Find help. Current plans are examples so you can try the checklist safely.",
+      "Find help lists real County programs with official sources and separate fictional practice plans. Read whether a program is accepting applications before gathering papers.",
       "In Documents, tick the papers you already have. Keep the actual files with you; there is nothing to upload.",
       "Open My checklist. It shows the next step you can do and what needs to happen first.",
     ],
-    note: "For real housing support, use the official website links in Find help. BridgeBack does not send an application or find housing for you.",
+    note: "Real-program check marks track your follow-up work; practice check marks demonstrate paperwork dependencies. Neither submits an application, changes agency priority or guarantees housing.",
   },
   Discover: {
     title: "Real services and practice checklists are different.",
     steps: [
-      "Official website links take you to organizations that provide housing information or services. Ask them about current openings and how to apply.",
+      "Real-program entries explain reviewed official instructions, application access and source conflicts. Save a follow-up plan for your situation. Generic organization links remain separate.",
       "Practice plans are made up. Add one to learn how BridgeBack organizes paperwork; adding a plan does not apply for assistance.",
       "A sample eligibility result only compares the details you entered with that example's rules. Open its explanation to see what was checked.",
     ],
-    note: "The official links have not been reviewed for current requirements or availability. Confirm those details with the organization.",
+    note: "Source review dates and dated page checks are different. A page check looks for reviewed wording; it does not show live housing openings or decide eligibility. Confirm unclear or conflicting rules with the provider.",
   },
   PathFinder: {
     title: "How to work through your checklist",
@@ -65,13 +65,13 @@ const guides: Record<
       "Choose ‘Correct this action’ to undo the latest change to that document, task or plan.",
       "The checklist updates too. Removing income proof, for example, can make a later form wait again.",
     ],
-    note: "Only the latest change to an item can be corrected here. You can also change document status directly in Documents. The latest 100 events are kept.",
+    note: "Practice actions can be corrected here when the latest change offers that control. Correct real-program steps directly in their checklist and document status in Documents. Dependent steps recalculate. The latest 100 events are kept.",
   },
   Settings: {
     title: "Only share what you want to use here.",
     steps: [
       "Household means the people who would be included on the same application. You can leave household size and income blank.",
-      "Income means the approximate total for a whole year. The current comparison uses made-up sample limits, not an agency decision.",
+      "Income means an approximate yearly household total. Real comparisons explain which official table was used and flag conflicting rules. Practice examples use fictional limits. No result is an agency decision.",
       "Changes save in this browser. Export keeps a copy on your device; Delete removes the profile and progress stored here.",
     ],
     note: "This browser's storage is not encrypted secure storage. Someone using the same browser profile may be able to see your progress. No account or document upload is needed.",

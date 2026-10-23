@@ -22,7 +22,7 @@ The district page lists 858-455-5550 for competition questions. Contact is the e
 - **Languages:** TypeScript/JavaScript, HTML/CSS, Swift for native lifecycle integration, Python for packaging checks.
 - **Core tools:** Next.js/React, Dexie/IndexedDB, Zod, React Flow, Lucide, Capacitor, Vitest, Playwright and Axe. See `package.json`, `package-lock.json` and the dependency notices for exact versions/attribution.
 - **Original feature to explain:** A program-specific dependency graph with AND/OR alternatives, explainable next-action ranking, actual/hypothetical state differences, and bounded exact alternate-document search.
-- **Accuracy boundary:** Real public counselor/guidance sources are separate from fictional program screening/acceptance rules. No placement, appointments, official eligibility, measured housing outcomes or endorsements are claimed.
+- **Accuracy boundary:** Reviewed real County entries and public counselor/guidance sources are separate from fictional practice screening/acceptance rules. The real comparisons explain policy conflicts and remain partial, with explicit access closures. No placement, appointments, official eligibility, measured housing outcomes or endorsements are claimed.
 
 ## Draft answer material
 
@@ -32,7 +32,7 @@ The district page lists 858-455-5550 for competition questions. Contact is the e
 
 **Inspiration, learning and personal contribution.** The entrant must write these in their own words from actual experience. The entrant reports completely reviewing and understanding the code. No personal housing story, specific independent implementation history, interview or learning outcome has been supplied. Use [the walkthrough](CODE-WALKTHROUGH.md) to review the code, and [the process record](DEVELOPMENT-PROCESS.md) to disclose AI assistance. Do not submit generated first-person claims as facts.
 
-**A possible future version.** Review current real program rules with authoritative sources and clear update ownership; conduct consent-based usability sessions; validate iOS behavior with real applicants/devices. These are future directions, not completed partnerships or research.
+**A possible future version.** Expand the reviewed real-program subset with agency-confirmed rules and clear update ownership; conduct consent-based usability sessions; validate iOS behavior with real applicants/devices. These are future directions, not completed partnerships or research.
 
 ## Demonstration video
 

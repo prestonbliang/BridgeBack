@@ -2,7 +2,7 @@
 
 [Watch the captioned recording](BridgeBack-review.mp4) · [Download captions](BridgeBack-review.srt) · [Timed narration draft](../DEMO-NARRATION.md)
 
-Recorded October 23, 2026 through real production-browser interactions in a fresh fictional workspace. H.264 MP4, 1280×912, approximately 120 seconds. The lower caption band is added outside the app viewport. No percentages or algorithm outcomes were inserted into the interface. The counselor directory is a real dated public snapshot; the program rules and applicant are fictional.
+Recorded October 23, 2026 through real production-browser interactions in a fresh fictional workspace, before the reviewed real-program layer was added. It demonstrates the fictional dependency workflow; current real-program screenshots are linked from [production readiness](../PRODUCTION-READINESS.md). H.264 MP4, 1280×912, approximately 120 seconds. The lower caption band is added outside the app viewport. No percentages or algorithm outcomes were inserted into the interface. The counselor directory is a real dated public snapshot; the program rules and applicant are fictional.
 
 This is **silent review footage**, created with Playwright/FFmpeg and AI-assisted recording/caption tooling. It is not a completed or submitted contest video. Add actual participant identification, your own accurate narration, and full assistance disclosure; review every frame and the current [entry requirements](../SUBMISSION.md). No public YouTube/Vimeo upload or competition registration has been performed.
 

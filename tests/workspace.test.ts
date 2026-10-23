@@ -33,7 +33,7 @@ describe("versioned local workspace", () => {
       history: ["Prepared identity"],
     });
     const s = await loadWorkspace();
-    expect(s?.schemaVersion).toBe(2);
+    expect(s?.schemaVersion).toBe(3);
     expect(s?.selectedProgramIds).toEqual(["fresh"]);
     expect(s?.completed).toEqual(["fresh:form"]);
     expect(s?.documents).toEqual({ identity: true, paystub: true });

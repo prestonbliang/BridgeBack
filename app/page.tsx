@@ -47,6 +47,11 @@ import {
 } from "../components/WorkspaceViews";
 import { download } from "../components/ui";
 import { Overview } from "../components/Overview";
+import {
+  OfficialOverview,
+  OfficialDocuments,
+  OfficialPlans,
+} from "../components/OfficialPrograms";
 import { HelpGuide, PageHelp } from "../components/Help";
 import { Support } from "../components/Support";
 import {
@@ -272,7 +277,7 @@ export default function App() {
       act({
         type: "record",
         eventType: "export",
-        label: `Exported preparation packet for ${analysis.programs.length} plans`,
+        label: `Exported preparation packet for ${state.officialPlans.length} real-program follow-up and ${analysis.programs.length} practice plans`,
       });
       setNotification(
         result === "shared"
@@ -512,6 +517,16 @@ export default function App() {
                 navigate("Support");
               }}
               onLocalHelp={localHelp}
+              hasOfficialPlans={state.officialPlans.length > 0}
+              officialContent={
+                !demo ? (
+                  <OfficialOverview
+                    plans={state.officialPlans}
+                    onPath={() => navigate("PathFinder")}
+                    onDiscover={() => navigate("Discover")}
+                  />
+                ) : undefined
+              }
             />
           )}
           {tab === "Discover" && (
@@ -520,21 +535,46 @@ export default function App() {
               analysis={analysis}
               onAction={act}
               onPath={() => navigate("PathFinder")}
+              onSettings={() => navigate("Settings")}
             />
           )}
-          {tab === "PathFinder" && (
-            <PathFinder
-              input={state}
-              analysis={analysis}
-              onComplete={complete}
-              onEffort={(id, value) => act({ type: "effort", id, value })}
-              highlightedIds={transition?.newlyAvailable}
-              onSupport={getSupport}
+          {tab === "PathFinder" && state.officialPlans.length > 0 && (
+            <OfficialPlans
+              state={state}
+              onAction={act}
+              onLocalHelp={localHelp}
             />
           )}
+          {tab === "PathFinder" &&
+            (state.selectedProgramIds.length > 0 ||
+              !state.officialPlans.length) && (
+              <div>
+                {state.officialPlans.length > 0 && (
+                  <p className="notice">
+                    Fictional practice checklists below. These example rules and
+                    readiness percentages are separate from your real-program
+                    follow-up above.
+                  </p>
+                )}
+                <PathFinder
+                  input={state}
+                  analysis={analysis}
+                  onComplete={complete}
+                  onEffort={(id, value) => act({ type: "effort", id, value })}
+                  highlightedIds={transition?.newlyAvailable}
+                  onSupport={getSupport}
+                />
+              </div>
+            )}
           {tab === "Documents" && (
             <>
               <Documents
+                officialContent={
+                  state.officialPlans.length > 0 ? (
+                    <OfficialDocuments state={state} onAction={act} />
+                  ) : undefined
+                }
+                onPath={() => navigate("PathFinder")}
                 input={state}
                 analysis={analysis}
                 onDocument={(id, available) =>

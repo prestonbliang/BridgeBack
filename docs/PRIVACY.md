@@ -22,7 +22,7 @@ Delete all saved data explicitly clears the personal record after earlier queued
 
 ## Accuracy boundary
 
-Every shipped preparation program and threshold is fictional. Guidance sources and public contacts show individual review or retrieval dates; two referral homepages remain unreviewed. Sources are not endorsements or partnerships. No availability, deadline, housing placement or acceptance is promised. No agency application is created or submitted. Real eligibility and document acceptance must be confirmed by the provider.
+The three practice programs and thresholds are fictional. Three real-program entries cite reviewed official sources; they offer partial comparisons and follow-up guidance, with conflicts explicitly shown. Guidance sources and public contacts show individual review or retrieval dates; two referral homepages remain unreviewed. Sources are not endorsements or partnerships. No availability, deadline, housing placement or acceptance is promised. No agency application is created or submitted. Real eligibility and document acceptance must be confirmed by the provider.
 
 ## Help plans and outside resources
 
@@ -39,3 +39,9 @@ The iOS candidate stores the same validated workspace in its own WKWebView Index
 Native exports use a randomly named temporary file in the app cache and the system share sheet. Cancellation is distinct from a completed share. The app attempts to remove its temporary copy after completion, cancellation or failure, and retries interrupted cleanup at next startup. A slow startup cleanup finishes before a new export is written. Failures are surfaced. Saved/shared copies are outside the app’s control. Bridge logging is disabled to avoid logging exported contents. A scene cover is intended to hide private screens in app-switcher previews and requires real-device verification; it is not screenshot prevention or encryption.
 
 No native camera, photo-library, location, contacts, microphone, tracking or notification permission is requested. The app target includes a privacy manifest with Filesystem’s File Timestamp reason C617.1 and no tracking/collected-data declarations. Review the actual archived SDK privacy report before distribution. The readable policy is implemented at `/privacy`, with a bundled `/privacy.html` version. A production policy URL must be hosted before submission. See [iOS release gates](IOS.md).
+
+## Real plans and public source checks
+
+Schema 3 stores optional municipality, real-program routes/check marks, a narrow real-document availability inventory and dated source-check reports. These remain in the same local workspace, export and deletion controls. No document contents, employer name, account codes, military/medical data or identity numbers are collected. Real-document status does not flow into fictional acceptance rules or an agency decision.
+
+The hosted web source-status endpoint receives an ordinary GET without a profile body, household query parameters or caller-selected URL. It checks only registered public County pages and may share a report for 15 minutes. Hosting providers still see ordinary connection metadata; configure the actual host and policy before public rollout. The endpoint has no profile database or analytics. Native iOS uses bundled guidance and user-selected official links instead of this web endpoint. Cached/offline checks are dated and are not called live.

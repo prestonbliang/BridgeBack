@@ -21,7 +21,7 @@ The export uses Next.js’s `.next` working directory. After an iOS bundle, run 
 
 ## What is different on iOS
 
-- The shell, fonts, dated counselor directory, privacy/acknowledgments pages and graph engine ship inside the app. A first launch does not depend on a prior online visit or service-worker caching.
+- The shell, fonts, real-program catalog and follow-up steps, dated counselor directory, privacy/acknowledgments pages and graph engine ship inside the app. A first launch does not depend on a prior online visit or service-worker caching.
 - Native exports use the system share sheet and a temporary file in app cache. Dismissal does not record a successful export. Sharing/cleanup errors are surfaced; neither changes preparation progress. Cleanup runs after the sheet and at next startup for interrupted exports. Copies the person saves or shares belong to that destination.
 - The app’s cache export prefix is narrow; cleanup does not remove unrelated cache files. Native bridge logging is disabled so export contents are not written to debug logs by BridgeBack’s bridge configuration.
 - Websites and calls go through Capacitor’s default external-navigation handling. No `server.url`, `allowNavigation`, arbitrary-transport exemption or remotely downloaded application code is configured.
@@ -83,3 +83,7 @@ Apple’s [current upload requirements](https://developer.apple.com/news/upcomin
 Once these gates pass, Archive a **Release** device build in Xcode, validate it in Organizer, upload to App Store Connect, complete privacy/export/age-rating answers and review contact details, then invite internal TestFlight testers. External testing may require Apple beta review. Public App Store submission is a separate publisher decision. No upload, invitation or publication has been performed.
 
 See [submission copy and review notes](IOS-SUBMISSION.md) and [district-facing demonstration brief](DISTRICT-BRIEF.md).
+
+## Real-program layer
+
+The native export bundles reviewed real-program guidance, source citations, optional city input, follow-up dependencies and specific Public Housing working-preference document options. Six bundled-web checks cover these offline. `/api/source-status` is exported as an explicit `bundled` marker with no online timestamp; the checker validates that marker. The iOS UI uses official links and does not call the hosted web endpoint. A future native connection to a publisher-controlled API requires an actual HTTPS origin and its own privacy/security review; no origin is invented here.

@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   Check,
@@ -10,6 +10,7 @@ import {
   Route,
   ShieldCheck,
 } from "lucide-react";
+import type { OfficialPlan } from "../lib/official-plans";
 import { documentTypes } from "../lib/programs";
 import {
   findRescueRoute,
@@ -20,7 +21,9 @@ import { Explain } from "./Explain";
 import { useNativeApp } from "../hooks/useNativeApp";
 
 export type DocumentsProps = {
-  input: PlannerInput;
+  input: PlannerInput & { officialPlans?: OfficialPlan[] };
+  onPath?: () => void;
+  officialContent?: ReactNode;
   analysis: PlanAnalysis;
   onDocument: (id: string, available: boolean) => void;
   onUnavailable: (id: string, value: boolean) => void;
@@ -35,6 +38,8 @@ export function Documents({
   onUnavailable,
   onExport,
   onSupport,
+  onPath,
+  officialContent,
 }: DocumentsProps) {
   const native = useNativeApp();
   const [view, setView] = useState<"inventory" | "programs">("inventory");
@@ -87,13 +92,35 @@ export function Documents({
           contents here.
         </p>
       </div>
+      {officialContent}
+      {input.officialPlans?.length && analysis.programs.length > 0 ? (
+        <p className="notice">
+          The inventory below belongs to fictional practice plans. It does not
+          establish which documents a real agency accepts.
+        </p>
+      ) : null}
       {!analysis.programs.length ? (
         <section className="card empty">
           <Files size={30} />
-          <h2>Add a plan to see which documents it needs.</h2>
+          <h2>
+            {input.officialPlans?.length
+              ? "Ask the real provider for its document checklist."
+              : "Choose a plan before gathering documents."}
+          </h2>
           <p>
-            Find help has made-up practice plans you can add to try this
-            checklist.
+            Real-program follow-up plans do not borrow the practice examples’
+            document rules. The reviewed County pages do not supply a complete
+            accepted-document list for your case. Ask which records and
+            alternatives the agency accepts; keep the actual documents with you.
+          </p>
+          {input.officialPlans?.length && onPath ? (
+            <button className="button secondary" onClick={onPath}>
+              Open real-program checklist
+            </button>
+          ) : null}
+          <p className="fine-print">
+            The fictional demo offers a separate document inventory for learning
+            how alternatives work.
           </p>
         </section>
       ) : (

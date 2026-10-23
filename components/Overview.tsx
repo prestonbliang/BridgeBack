@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   ArrowRight,
   Check,
@@ -31,6 +31,8 @@ export function Overview({
   helpNotes = [],
   onSupport,
   onLocalHelp,
+  officialContent,
+  hasOfficialPlans = false,
 }: {
   analysis: PlanAnalysis;
   example: Simulation;
@@ -43,6 +45,8 @@ export function Overview({
   helpNotes?: SupportRecord[];
   onSupport?: () => void;
   onLocalHelp?: () => void;
+  officialContent?: ReactNode;
+  hasOfficialPlans?: boolean;
 }) {
   const [preview, setPreview] = useState(false);
   const hasPlan = analysis.programs.length > 0;
@@ -95,224 +99,235 @@ export function Overview({
           </button>
         </section>
       )}
-      <div className="desk-layout">
-        <section className={`desk-main ${hasPlan ? "with-next-action" : ""}`}>
-          <div className="folder-tab">
-            <FolderOpen size={18} aria-hidden="true" />
-            {hasPlan ? "Your next step" : "Getting started"}
-          </div>
-          {hasPlan ? (
-            <div className="desk-content">
-              <span className="task-type">
-                {next?.id.startsWith("doc:")
-                  ? "A document to gather"
-                  : "A task to finish"}
-              </span>
-              <h2>
-                {next?.name ??
-                  (analysis.readiness === 100
-                    ? "Your preparation steps are finished."
-                    : "A missing document needs another option.")}
-              </h2>
-              <p>
-                {nextNode?.description ??
-                  (analysis.readiness === 100
-                    ? "Download your checklist, then ask the provider how to apply. Nothing has been sent from BridgeBack."
-                    : "Some steps still need documents marked as unavailable. Open Documents to check the listed alternatives. If none work, a real provider would need to tell you what else it accepts.")}
-              </p>
-              {next && (
-                <p className="next-impact">
-                  {next.unlockedIds.length
-                    ? `Getting this ready lets you start ${next.unlockedIds.length} more ${next.unlockedIds.length === 1 ? "step" : "steps"}.`
-                    : "You can work on this now. The things it needs are already ready."}
-                </p>
-              )}
-              <button
-                className="button primary"
-                onClick={
-                  !next && analysis.readiness < 100 ? onDocuments : onPath
-                }
-              >
-                {next
-                  ? "See this step"
-                  : analysis.readiness === 100
-                    ? "Review my checklist"
-                    : "Check missing documents"}
-                <ArrowRight size={18} aria-hidden="true" />
-              </button>
-              {next && (
-                <Explain
-                  explanation={next.explanation}
-                  label="Why start with this?"
-                />
-              )}
-              <div className="desk-reminder">
-                <CircleHelp size={17} aria-hidden="true" />
-                <p>
-                  A check mark means prepared. It does not mean you have applied
-                  or been approved.
-                </p>
-              </div>
+      {officialContent}
+      {(!hasOfficialPlans || hasPlan) && (
+        <div className="desk-layout">
+          <section className={`desk-main ${hasPlan ? "with-next-action" : ""}`}>
+            <div className="folder-tab">
+              <FolderOpen size={18} aria-hidden="true" />
+              {hasPlan ? "Your next step" : "Optional practice setup"}
             </div>
-          ) : (
-            <div className="desk-content">
-              <h2>You can start with what you already have.</h2>
-              <p>
-                Choose a sample plan, tell us which papers you have, and get a
-                checklist that explains what to do next.
-              </p>
-              <ol className="getting-started">
-                <li>
-                  <strong>Pick a plan</strong>
-                  <span>
-                    Try made-up programs first. Real service links are in Find
-                    help.
-                  </span>
-                </li>
-                <li>
-                  <strong>Check off your documents</strong>
-                  <span>
-                    Just tell us what you have. Keep the actual files with you.
-                  </span>
-                </li>
-                <li>
-                  <strong>See your next step</strong>
-                  <span>
-                    If something is missing, we’ll show what else that plan
-                    accepts.
-                  </span>
-                </li>
-              </ol>
-              <div className="desk-actions">
-                <button className="button primary" onClick={onStart}>
-                  {resume
-                    ? "Continue my checklist setup"
-                    : "Help me get started"}
+            {hasPlan ? (
+              <div className="desk-content">
+                <span className="task-type">
+                  {next?.id.startsWith("doc:")
+                    ? "A document to gather"
+                    : "A task to finish"}
+                </span>
+                <h2>
+                  {next?.name ??
+                    (analysis.readiness === 100
+                      ? "Your preparation steps are finished."
+                      : "A missing document needs another option.")}
+                </h2>
+                <p>
+                  {nextNode?.description ??
+                    (analysis.readiness === 100
+                      ? "Download your checklist, then ask the provider how to apply. Nothing has been sent from BridgeBack."
+                      : "Some steps still need documents marked as unavailable. Open Documents to check the listed alternatives. If none work, a real provider would need to tell you what else it accepts.")}
+                </p>
+                {next && (
+                  <p className="next-impact">
+                    {next.unlockedIds.length
+                      ? `Getting this ready lets you start ${next.unlockedIds.length} more ${next.unlockedIds.length === 1 ? "step" : "steps"}.`
+                      : "You can work on this now. The things it needs are already ready."}
+                  </p>
+                )}
+                <button
+                  className="button primary"
+                  onClick={
+                    !next && analysis.readiness < 100 ? onDocuments : onPath
+                  }
+                >
+                  {next
+                    ? "See this step"
+                    : analysis.readiness === 100
+                      ? "Review my checklist"
+                      : "Check missing documents"}
                   <ArrowRight size={18} aria-hidden="true" />
                 </button>
-                <button className="text-button" onClick={onDemo}>
-                  <Play size={16} aria-hidden="true" />
-                  Try a guided example
-                </button>
+                {next && (
+                  <Explain
+                    explanation={next.explanation}
+                    label="Why start with this?"
+                  />
+                )}
+                <div className="desk-reminder">
+                  <CircleHelp size={17} aria-hidden="true" />
+                  <p>
+                    A check mark means prepared. It does not mean you have
+                    applied or been approved.
+                  </p>
+                </div>
               </div>
-              <p className="desk-footnote">
-                You can skip questions. Your answers stay in this browser.
-              </p>
-            </div>
-          )}
-        </section>
-        {hasPlan ? (
-          <aside className="checklist-progress" aria-label="Checklist progress">
-            <span className="section-label">Your checklist so far</span>
-            <div className="progress-count">
-              <strong>{analysis.complete}</strong>
-              <span>
-                of {analysis.total}
-                <br />
-                steps finished
-              </span>
-            </div>
-            <Progress
-              value={analysis.readiness}
-              label="Preparation steps finished"
-            />
-            <p>
-              {analysis.complete} of {analysis.total} steps finished
-            </p>
-            <details className="progress-explainer">
-              <summary>What does this percentage mean?</summary>
+            ) : (
+              <div className="desk-content">
+                <h2>You can start with what you already have.</h2>
+                <p>
+                  Choose a sample plan, tell us which papers you have, and get a
+                  checklist that explains what to do next.
+                </p>
+                <ol className="getting-started">
+                  <li>
+                    <strong>Try a practice plan</strong>
+                    <span>
+                      For real services, choose Find real programs above. This
+                      optional setup uses made-up plans to explain the
+                      checklist.
+                    </span>
+                  </li>
+                  <li>
+                    <strong>Check off your documents</strong>
+                    <span>
+                      Just tell us what you have. Keep the actual files with
+                      you.
+                    </span>
+                  </li>
+                  <li>
+                    <strong>See your next step</strong>
+                    <span>
+                      If something is missing, we’ll show what else that plan
+                      accepts.
+                    </span>
+                  </li>
+                </ol>
+                <div className="desk-actions">
+                  <button className="button primary" onClick={onStart}>
+                    {resume
+                      ? "Continue my checklist setup"
+                      : "Help me get started"}
+                    <ArrowRight size={18} aria-hidden="true" />
+                  </button>
+                  <button className="text-button" onClick={onDemo}>
+                    <Play size={16} aria-hidden="true" />
+                    Try a guided example
+                  </button>
+                </div>
+                <p className="desk-footnote">
+                  You can skip questions. Your answers stay in this browser.
+                </p>
+              </div>
+            )}
+          </section>
+          {hasPlan ? (
+            <aside
+              className="checklist-progress"
+              aria-label="Checklist progress"
+            >
+              <span className="section-label">Your checklist so far</span>
+              <div className="progress-count">
+                <strong>{analysis.complete}</strong>
+                <span>
+                  of {analysis.total}
+                  <br />
+                  steps finished
+                </span>
+              </div>
+              <Progress
+                value={analysis.readiness}
+                label="Preparation steps finished"
+              />
               <p>
-                We count the preparation steps in your selected plans. A shared
-                document may finish a step in more than one plan. This number is
-                not your chance of getting assistance.
+                {analysis.complete} of {analysis.total} steps finished
               </p>
-            </details>
-            <div className="progress-places">
-              <button onClick={onPath}>
-                <span>
-                  <strong>{analysis.actions.length}</strong> steps you can do
-                  now
-                </span>
-                <ArrowRight size={17} aria-hidden="true" />
-              </button>
-              <button onClick={onDocuments}>
-                <span>
-                  <strong>
-                    {analysis.documents.filter((d) => d.needed).length}
-                  </strong>{" "}
-                  document options to review
-                </span>
-                <ArrowRight size={17} aria-hidden="true" />
-              </button>
-            </div>
-          </aside>
-        ) : (
-          <aside className="worked-example" aria-label="Try a sample checklist">
-            <span className="section-label">Why one document can matter</span>
-            <h2>Two forms. One missing pay stub.</h2>
-            <p>
-              This made-up applicant already has ID and proof of address. Both
-              forms still need income proof.
-            </p>
-            <div className={`sample-paper ${preview ? "paper-ready" : ""}`}>
-              <FileText size={24} aria-hidden="true" />
-              <div>
-                <strong>Pay stub</strong>
-                <span>
-                  {preview
-                    ? "Marked as available in this example"
-                    : "Not available yet"}
-                </span>
-              </div>
-              {preview && <Check size={20} aria-hidden="true" />}
-            </div>
-            <div className="sample-connections" aria-hidden="true" />
-            <div className="sample-form-list">
-              {sample.programs.map((program) => (
-                <div key={program.id}>
-                  {sample.statuses[`${program.id}:form`] === "available" ? (
-                    <Check size={17} aria-hidden="true" />
-                  ) : (
-                    <LockKeyhole size={16} aria-hidden="true" />
-                  )}
+              <details className="progress-explainer">
+                <summary>What does this percentage mean?</summary>
+                <p>
+                  We count the preparation steps in your selected plans. A
+                  shared document may finish a step in more than one plan. This
+                  number is not your chance of getting assistance.
+                </p>
+              </details>
+              <div className="progress-places">
+                <button onClick={onPath}>
+                  <span>
+                    <strong>{analysis.actions.length}</strong> steps you can do
+                    now
+                  </span>
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
+                <button onClick={onDocuments}>
                   <span>
                     <strong>
-                      {programs.find((item) => item.id === program.id)
-                        ?.shortName ?? program.name}{" "}
-                      form
-                    </strong>
-                    <small>
-                      {sample.statuses[`${program.id}:form`] === "available"
-                        ? "Ready to work on"
-                        : "Waiting for income proof"}
-                    </small>
+                      {analysis.documents.filter((d) => d.needed).length}
+                    </strong>{" "}
+                    document options to review
+                  </span>
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
+              </div>
+            </aside>
+          ) : (
+            <aside
+              className="worked-example"
+              aria-label="Try a sample checklist"
+            >
+              <span className="section-label">Why one document can matter</span>
+              <h2>Two forms. One missing pay stub.</h2>
+              <p>
+                This made-up applicant already has ID and proof of address. Both
+                forms still need income proof.
+              </p>
+              <div className={`sample-paper ${preview ? "paper-ready" : ""}`}>
+                <FileText size={24} aria-hidden="true" />
+                <div>
+                  <strong>Pay stub</strong>
+                  <span>
+                    {preview
+                      ? "Marked as available in this example"
+                      : "Not available yet"}
                   </span>
                 </div>
-              ))}
-            </div>
-            <button
-              className="button secondary"
-              aria-pressed={preview}
-              onClick={() => setPreview(!preview)}
-            >
-              {preview ? (
-                <RotateCcw size={16} aria-hidden="true" />
-              ) : (
-                <Play size={16} aria-hidden="true" />
-              )}
-              {preview ? "Reset the example" : "See what a pay stub changes"}
-            </button>
-            <p className="sample-result" role="status">
-              {preview
-                ? `Now ${example.newlyAvailable.length} more steps are ready to start. Checklist progress changes from ${example.before.readiness}% to ${example.after.readiness}%.`
-                : "Try it here. This does not change your own checklist."}
-            </p>
-            <span className="sample-disclaimer">
-              Example only. These programs and their rules are made up.
-            </span>
-          </aside>
-        )}
-      </div>
+                {preview && <Check size={20} aria-hidden="true" />}
+              </div>
+              <div className="sample-connections" aria-hidden="true" />
+              <div className="sample-form-list">
+                {sample.programs.map((program) => (
+                  <div key={program.id}>
+                    {sample.statuses[`${program.id}:form`] === "available" ? (
+                      <Check size={17} aria-hidden="true" />
+                    ) : (
+                      <LockKeyhole size={16} aria-hidden="true" />
+                    )}
+                    <span>
+                      <strong>
+                        {programs.find((item) => item.id === program.id)
+                          ?.shortName ?? program.name}{" "}
+                        form
+                      </strong>
+                      <small>
+                        {sample.statuses[`${program.id}:form`] === "available"
+                          ? "Ready to work on"
+                          : "Waiting for income proof"}
+                      </small>
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="button secondary"
+                aria-pressed={preview}
+                onClick={() => setPreview(!preview)}
+              >
+                {preview ? (
+                  <RotateCcw size={16} aria-hidden="true" />
+                ) : (
+                  <Play size={16} aria-hidden="true" />
+                )}
+                {preview ? "Reset the example" : "See what a pay stub changes"}
+              </button>
+              <p className="sample-result" role="status">
+                {preview
+                  ? `Now ${example.newlyAvailable.length} more steps are ready to start. Checklist progress changes from ${example.before.readiness}% to ${example.after.readiness}%.`
+                  : "Try it here. This does not change your own checklist."}
+              </p>
+              <span className="sample-disclaimer">
+                Example only. These programs and their rules are made up.
+              </span>
+            </aside>
+          )}
+        </div>
+      )}
       {hasPlan ? (
         <section className="overview-plans">
           <div className="section-heading">

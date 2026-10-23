@@ -17,6 +17,10 @@ import {
 } from "lucide-react";
 import { programs } from "../lib/programs";
 import { resources } from "../lib/data";
+import { OfficialDirectory } from "./OfficialPrograms";
+import { municipalitySchema, type Municipality } from "../lib/official-catalog";
+import { screenOfficialProgram } from "../lib/official-screening";
+import { officialCatalog } from "../lib/official-catalog";
 import { screenProgram, type PlanAnalysis } from "../lib/planner";
 import { type Workspace, type WorkspaceAction } from "../lib/workspace";
 import { Explain } from "./Explain";
@@ -26,11 +30,13 @@ export function Discover({
   analysis,
   onAction,
   onPath,
+  onSettings,
 }: {
   state: Workspace;
   analysis: PlanAnalysis;
   onAction: (a: WorkspaceAction) => void;
   onPath: () => void;
+  onSettings: () => void;
 }) {
   const [query, setQuery] = useState(""),
     [category, setCategory] = useState("All resources"),
@@ -54,11 +60,20 @@ export function Discover({
             .toLowerCase()
             .includes(query.toLowerCase()),
         );
+  const hasOfficialMatches =
+    category !== "Practice plans" &&
+    (region === "All areas" || region === "San Diego County") &&
+    officialCatalog.programs.some((program) =>
+      `${program.name} ${program.organization} ${program.description} ${program.category}`
+        .toLowerCase()
+        .includes(query.toLowerCase()),
+    );
   return (
     <>
       <PageHeading eyebrow="FIND A POSSIBLE FIT" title="Find housing help">
-        Use official websites to look for real services. Add a practice plan to
-        try organizing the paperwork here; it will not apply for a program.
+        Read reviewed real-program instructions, check application access, and
+        save a follow-up plan. Optional practice plans are labeled separately;
+        nothing is submitted here.
       </PageHeading>
       <div className="filters">
         <label>
@@ -91,10 +106,20 @@ export function Discover({
         </label>
       </div>
       <div className="notice">
-        <ShieldCheck size={18} /> Real provider rules and availability have not
-        been verified. Only the fictional practice plans below are screened.
-        Confirm current requirements directly with an official provider.
+        <ShieldCheck size={18} /> Real-program guidance cites reviewed official
+        sources. Page checks can flag changes; they do not show live housing
+        openings. Practice-plan criteria remain fictional.
       </div>
+      {category !== "Practice plans" && (
+        <OfficialDirectory
+          state={state}
+          onAction={onAction}
+          onPath={onPath}
+          onSettings={onSettings}
+          query={query}
+          region={region}
+        />
+      )}
       <div className="resource-grid">
         {real.length > 0 && (
           <div className="directory-section">
@@ -115,10 +140,9 @@ export function Discover({
               {r.region}
             </span>
             <p className="fine-print">
-              Rules: unverified · Availability: unknown
-              <br />
-              Open the website to ask about programs, current openings and how
-              to apply. This link does not check your eligibility.
+              Organization link; not an eligibility check. Specific reviewed
+              County programs are listed above. Confirm current services
+              directly.
             </p>
             <a
               className="button secondary"
@@ -192,7 +216,7 @@ export function Discover({
           );
         })}
       </div>
-      {!samples.length && !real.length && (
+      {!samples.length && !real.length && !hasOfficialMatches && (
         <section className="card empty">
           <h2>No matching resources</h2>
           <p>Try another area, category, or search term.</p>
@@ -235,8 +259,9 @@ export function SettingsView({
         eyebrow="YOUR CHOICES, ALWAYS"
         title="Your information and settings"
       >
-        These questions are optional. They help compare your answers with the
-        practice plans. Leave anything blank if you are unsure.
+        These questions are optional. Real-program entries explain exactly which
+        published factors they compare. Practice-plan screening stays separate.
+        Leave anything blank if unsure.
       </PageHeading>
       {isDemo && (
         <div className="notice">
@@ -292,8 +317,9 @@ export function SettingsView({
             />
           </label>
           <p className="helper-text" id="income-help">
-            Use an approximate total for a whole year. For example, $2,000 a
-            month is about $24,000 a year. Leave it blank if you do not know.
+            For the real County Public Housing income comparison, use
+            approximate gross income before deductions for the whole household
+            and year. The agency decides what counts. Leave it blank if unsure.
           </p>
           <label>
             Location
@@ -315,6 +341,31 @@ export function SettingsView({
               <option>Other</option>
             </select>
           </label>
+          <label>
+            City or community for real programs
+            <select
+              value={state.profile.municipality ?? "Unknown"}
+              onChange={(event) =>
+                onAction({
+                  type: "profile",
+                  profile: {
+                    ...state.profile,
+                    municipality: event.target.value as Municipality,
+                  },
+                })
+              }
+            >
+              {municipalitySchema.options.map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+          <p className="helper-text">
+            No street address or ZIP code is needed. The County housing
+            authority and City of San Diego housing authority serve different
+            areas. The broader Location field above is retained for the practice
+            examples.
+          </p>
           <label>
             Housing need
             <select
@@ -350,9 +401,41 @@ export function SettingsView({
                 );
               })}
           </div>
+          {state.officialPlans.map((plan) => {
+            const program = officialCatalog.programs.find(
+              (p) => p.id === plan.programId,
+            )!;
+            const changed =
+              state.sourceReport?.catalogVersion === officialCatalog.version
+                ? state.sourceReport.checks
+                    .filter((c) => c.state === "needs-review")
+                    .map((c) => c.sourceId)
+                : [];
+            const screening = screenOfficialProgram(
+              program,
+              state.profile,
+              Date.now(),
+              changed,
+            );
+            return (
+              <div className="screen-result" key={plan.programId}>
+                <strong>
+                  {program.name}: {screening.result}
+                </strong>
+                {screening.reasons.map((reason) => (
+                  <p key={reason}>{reason}</p>
+                ))}
+                <p className="fine-print">
+                  Partial published-criteria check. Application access is shown
+                  separately in Find help.
+                </p>
+              </div>
+            );
+          })}
           <p className="fine-print">
-            Screening uses fictional rules only. Housing need is context, not a
-            disqualifying rule.
+            Practice results above use fictional rules. Real-program comparisons
+            cite their own published criteria and can remain uncertain. Housing
+            need is context, not a disqualifying rule.
           </p>
         </section>
         <div className="settings-stack">

@@ -2,7 +2,15 @@
 
 **Your Path to Housing, Made Clear.** A private housing-preparation PWA that makes application dependencies visible, explains the next useful action, and finds accepted alternatives when a document is out of reach.
 
-Phase 2 evolves the original Next.js/TypeScript, Dexie and graph-engine foundation. It adds meaningful planning capabilities without a backend, account, uploads or AI service.
+BridgeBack combines a reviewed real-program guidance layer with a separate fictional demonstration of its dependency engine. Profiles stay local; a small read-only web endpoint checks public source pages. No account, document uploads or AI service is required.
+
+## Real-program production candidate
+
+Find help now includes **County Section 8, County Public Housing and HUD-VASH referral guidance**, reviewed against eleven official sources on October 23, 2026. Save a real follow-up plan and choose new-inquiry or existing-waiting-list guidance. Track actual personal steps, use online **or** assisted access, correct mistakes and export the plan. The Public Housing working-preference inventory uses the actual policy's recent-pay-stubs **OR** employer-statement rule; it is separate from fictional document acceptance.
+
+**Both County waiting lists are closed to new applicants in the reviewed application directions.** The app explains contradictory application, income and residency wording across official sources and asks for agency confirmation. It never turns a residency preference into an automatic denial. Real screening is a partial comparison, not a complete eligibility determination.
+
+In the hosted web app, **Check official pages** loads a dated, shared source check (up to 15-minute refresh). Changed wording/PDFs are flagged for human review. Offline and installed iOS use reviewed saved guidance; no live vouchers, units or appointments are claimed. Daily source-audit CI and production browser/container checks support maintenance. See [production scope, deployment and release gates](docs/PRODUCTION-READINESS.md), including screenshots from the running container.
 
 ## What changed in the interface
 
@@ -98,13 +106,13 @@ The checked-in [benchmark results](docs/evaluation-results.json) record 22 passi
 
 ## Accuracy and privacy
 
-**All three preparation programs and their criteria are explicitly fictional.** Real counselor/contact data and reviewed guidance sources are separated from fictional preparation rules. Each source shows its own review or retrieval date; two referral homepages remain unreviewed after access-denied responses. No live appointments, housing availability or agency deadline is asserted. Real program screening still requires reviewed program-specific rules. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
+**The three practice programs remain fictional and separate from the three real-program entries.** Real entries cite reviewed official sources, show closures/conflicts and provide limited criteria comparisons and personal follow-up plans. Counselor data is a dated public snapshot. Two generic referral homepages remain unreviewed after access-denied responses. No live appointments, housing availability, agency deadline or complete eligibility screening is asserted. No government application is submitted and no eligibility, acceptance or housing is guaranteed.
 
 Only document status is stored. Do not enter names, Social Security numbers or document contents. Browser storage is not encrypted secure storage. Export before clearing site data if you want a copy. See [privacy details](docs/PRIVACY.md).
 
 ## Deploy
 
-Deploy to an HTTPS Next.js-compatible host such as Vercel or any Node server. Build: `npm ci && npm run build`. Start: `npm start`. No secrets, database or API configuration are needed. Builds use the checked-in counselor snapshot without an external request. Maintainers can refresh it with `npm run sources:counselors` and then rebuild; failed imports retain the prior snapshot. Serve at the origin root. HTTPS is required for installation outside local development. Keep `/sw.js` revalidated by the host; its build ID changes automatically after every production build. Worker updates wait for older tabs to close so the HTML/assets remain paired.
+Deploy to an HTTPS Next.js-compatible host such as Vercel or any Node server. Build: `npm ci && npm run build`. Start: `npm start`. No secrets, database or API configuration are needed. The counselor directory and reviewed rules use checked-in snapshots. The web source-status route performs bounded public-page checks during prerender/revalidation; fetch failures return explicit unavailable results and do not fail the application build. The native export generates a bundled marker and makes no source-check requests. Maintainers can refresh it with `npm run sources:counselors` and then rebuild; failed imports retain the prior snapshot. Serve at the origin root. HTTPS is required for installation outside local development. Keep `/sw.js` revalidated by the host; its build ID changes automatically after every production build. Worker updates wait for older tabs to close so the HTML/assets remain paired.
 
 Android: browser menu → Install app. iPhone: Safari → Share → Add to Home Screen. Visit online and wait for **Offline ready** before relying on offline operation. External provider links require a connection. Actual iPhone/Android installation and screen-reader review remain distinct manual checks; Chromium emulation is not a device certification.
 
@@ -129,3 +137,5 @@ Start with the [2026 submission guide](docs/SUBMISSION.md), [code walkthrough](d
 `npm run notices:check` verifies the lockfile-matched open-source inventory; Settings opens full acknowledgments, including offline. After committing changes and recording a successful matching CI run with `npm run ci:evidence -- RUN_ID`, run `npm run submission:pack` for a source ZIP and SHA-256 review manifest. Packaging refuses uncommitted changes or application source that differs from the native-tested commit.
 
 With a production server running, system FFmpeg installed and the Playwright recording binary available (`npx playwright install ffmpeg`), `npm run demo:record` records two minutes of real browser interactions and creates a captioned review MP4/SRT in `artifacts/`. This silent review footage still needs participant identification, your own accurate narration and full assistance disclosure before the required public video submission. It does not upload or submit anything.
+
+The [production readiness record](docs/PRODUCTION-READINESS.md) explains Docker deployment, the web source-check endpoint, source-change review and schema-3 migration. `npm run programs:audit` is a separate live diagnostic; ordinary unit/E2E tests remain deterministic.

@@ -53,16 +53,24 @@ The shipped catalog has five document types, so at most 32 subsets are examined.
 
 ## Defend the scope and the tradeoffs
 
-| Choice | Reason | Cost or limit |
-|---|---|---|
-| Deterministic rules instead of runtime AI | Every screening/recommendation has inspectable inputs and causes | Accurate real screening still needs reviewed program-specific rules |
-| Local-first IndexedDB | No account/backend or document uploads; offline computation | No cross-device sync, guaranteed backup or encryption claim |
-| Explicit milestones and AND/OR gates | Alternatives satisfy requirements without inflating progress | Catalog modeling needs careful review; a bad published rule is not fixed by a correct algorithm |
-| Dated public counselor snapshot | Useful offline, no profile transmission to a third-party API | Limited geography/results; services and appointments must be confirmed |
-| Native bundled web target | Reuse tested logic and add offline first launch, sharing and app lifecycle behavior | UIKit/WKWebView and VoiceOver still require real-device tests; compilation does not establish review approval |
+| Choice                                    | Reason                                                                              | Cost or limit                                                                                                 |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Deterministic rules instead of runtime AI | Every screening/recommendation has inspectable inputs and causes                    | Accurate real screening still needs reviewed program-specific rules                                           |
+| Local-first IndexedDB                     | No account/backend or document uploads; offline computation                         | No cross-device sync, guaranteed backup or encryption claim                                                   |
+| Explicit milestones and AND/OR gates      | Alternatives satisfy requirements without inflating progress                        | Catalog modeling needs careful review; a bad published rule is not fixed by a correct algorithm               |
+| Dated public counselor snapshot           | Useful offline, no profile transmission to a third-party API                        | Limited geography/results; services and appointments must be confirmed                                        |
+| Native bundled web target                 | Reuse tested logic and add offline first launch, sharing and app lifecycle behavior | UIKit/WKWebView and VoiceOver still require real-device tests; compilation does not establish review approval |
 
 ## Questions to answer live
 
 What breaks if an OR list is treated as AND? Why does an employer letter not satisfy Harbor? Why is 100% readiness not approval? What if a form was checked complete before its evidence disappeared? What survives a failed storage read? What is the difference between a blocked descendant and an immediate unlock? Which claims remain unverified? Which parts did **you** personally implement, and how was AI involved?
 
 Answers should follow the actual code and evidence. See [development process](DEVELOPMENT-PROCESS.md) for the authorship requirements and [validation](VALIDATION.md) for what was actually executed.
+
+## Follow the real-program boundary
+
+Inspect `official-catalog.json`, `official-screening.ts` and `official-plans.ts`. Explain why the 50%-AMI overview cannot disqualify someone when the linked admissions policy describes 80% and uses residency preferences. The actual table has separate household rows; limits are not a guessed linear increment. Missing/contradictory factors remain uncertain.
+
+The real follow-up graph shares an OR access milestone between the online and assisted routes. Letters can be reviewed without arranging portal access. Correcting access clears dependent contact/follow-up checks while preserving the independent letter review. The separately tracked pay-stubs OR employer-statement option is explicitly working-preference evidence, not general program admission.
+
+Trace the source checker’s allowlist, redirect/size/timeout guards, text/PDF comparison and ISR timestamps. A quote still present is narrower evidence than “all rules verified.” Native export produces an offline marker, not a fake current check. Explain how a stale or unavailable result is handled before demonstrating it.

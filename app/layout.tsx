@@ -4,6 +4,7 @@ import "./phase2.css";
 import "./workspace.css";
 import "./guide.css";
 import "./mobile.css";
+import "./official.css";
 export const metadata: Metadata = {
   title: "BridgeBack · Your path to housing",
   description:

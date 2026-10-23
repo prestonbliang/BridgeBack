@@ -1,5 +1,7 @@
 import { z } from "zod";
+import { municipalitySchema } from "./official-catalog";
 export const profileSchema = z.object({
+  municipality: municipalitySchema.optional(),
   household: z.number().int().min(1).max(20).nullable(),
   income: z.number().min(0).max(1000000).nullable(),
   location: z.enum(["San Diego", "Other", "Unknown"]),

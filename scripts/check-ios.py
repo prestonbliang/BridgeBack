@@ -33,6 +33,8 @@ assert project.count("PRODUCT_BUNDLE_IDENTIFIER = org.bridgeback.app;") == 2
 public = APP / "public"
 assert (public / "index.html").exists(), "Run npm run ios:bundle first"
 assert (public / "privacy.html").exists()
+source_report = json.loads((public / "api/source-status").read_text())
+assert source_report["mode"] == "bundled" and source_report["checkedAt"] is None and source_report["checks"] == [], "Native export must never claim that its bundled source response is a current online check"
 assert (public / "notices.html").exists()
 assert not (public / "sw.js").exists(), "Native bundle must not ship a browser worker"
 html = (public / "index.html").read_text()

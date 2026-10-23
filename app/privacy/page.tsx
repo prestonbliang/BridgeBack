@@ -17,11 +17,11 @@ export default function PrivacyPolicy() {
       <h2>What you choose to save</h2>
       <p>
         Your device stores optional household size, approximate annual income, a
-        broad location and housing need, selected practice plans, document
-        availability, checklist progress, reading preferences, help questions,
-        public contacts, personal reminder dates, and recent activity. Do not
-        enter Social Security numbers, document contents, or private case notes.
-        There are no document uploads.
+        broad location, optional city/community and housing need, real-program
+        follow-up and practice plans, document availability, checklist progress,
+        reading preferences, help questions, public contacts, personal reminder
+        dates, and recent activity. Do not enter Social Security numbers,
+        document contents, or private case notes. There are no document uploads.
       </p>
       <h2>Where it lives</h2>
       <p>
@@ -48,9 +48,17 @@ export default function PrivacyPolicy() {
         Dated public counselor listings and guidance references ship with the
         app. Loading them does not contact those providers. If you choose a
         website or phone link, your browser or phone opens that service under
-        its own policies. BridgeBack does not append your income, household
-        profile, or documents to those links. A deployed website host may
-        process ordinary connection information under its own hosting policy.
+        its own policies. In the hosted web version, “Check official pages”
+        requests a small source-status report from this website. The server
+        checks a fixed list of public County pages; it does not receive your
+        household, income, documents, agency login or a caller-supplied URL.
+        Checks may be shared for 15 minutes. Saved check results and their
+        timestamps can be stored with your workspace; offline results are
+        labeled as saved. The iOS build uses bundled guidance and official links
+        instead of this web endpoint. BridgeBack does not append your income,
+        household profile, or documents to external links. A deployed website
+        host may process ordinary connection information under its own hosting
+        policy.
       </p>
       <h2>Control and deletion</h2>
       <p>
@@ -72,8 +80,10 @@ export default function PrivacyPolicy() {
         </a>{" "}
         for app problems. Do not include income, identity documents, or other
         private details in a public issue. BridgeBack is an independent project,
-        not a government agency or an endorsed service. Preparation-program
-        rules are fictional; ask the real provider about current requirements.
+        not a government agency or an endorsed service. Real-program guidance
+        cites official sources and explains conflicts or missing rules.
+        Practice-program rules are fictional. Ask the real provider about
+        current requirements and document acceptance.
       </p>
     </main>
   );

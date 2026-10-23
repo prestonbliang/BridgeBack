@@ -3,22 +3,75 @@ import {
   type PlanAnalysis,
   findRescueRoute,
 } from "./planner";
+import {
+  analyzeOfficialPlan,
+  officialPreferenceProof,
+  type OfficialPlan,
+} from "./official-plans";
+import { officialSource } from "./official-catalog";
 import { programs, documentTypes } from "./programs";
 import { type SupportRecord } from "./support-model";
 import { providerQuestionSheet, supportTargetName } from "./support";
 export function preparationPacket(
-  input: PlannerInput & { supportRecords?: SupportRecord[] },
+  input: PlannerInput & {
+    supportRecords?: SupportRecord[];
+    officialPlans?: OfficialPlan[];
+  },
   analysis: PlanAnalysis,
   now = new Date(),
 ): string {
   const lines = [
     "BRIDGEBACK — PREPARATION PACKET",
     `Created: ${now.toISOString()}`,
-    "FICTIONAL PRACTICE PLANS. Not an application, eligibility determination or housing offer.",
+    input.officialPlans?.length
+      ? "REAL-PROGRAM FOLLOW-UP AND SEPARATELY LABELED FICTIONAL PRACTICE. Not an application, eligibility decision or housing offer."
+      : "FICTIONAL PRACTICE PLANS. Not an application, eligibility determination or housing offer.",
     "No current availability or deadlines are asserted. Confirm real requirements with an official provider.",
     "",
-    `Preparation: ${analysis.complete}/${analysis.total} milestones (${analysis.readiness}%)`,
+    ...(analysis.total
+      ? [
+          `Practice preparation: ${analysis.complete}/${analysis.total} milestones (${analysis.readiness}%)`,
+        ]
+      : input.officialPlans?.length
+        ? [
+            `Real-program follow-up plans: ${input.officialPlans.length}. Each plan's milestones are shown separately below.`,
+          ]
+        : ["No preparation plans selected."]),
   ];
+  for (const plan of input.officialPlans ?? []) {
+    const real = analyzeOfficialPlan(plan);
+    lines.push(
+      "",
+      "REAL PROGRAM — PERSONAL FOLLOW-UP",
+      real.program.name,
+      `Route: ${plan.role === "existing" ? "Already on the County waiting list" : "New inquiry / referral"}`,
+      `Follow-up milestones: ${real.complete}/${real.total} (${real.progress}%). Not application readiness or agency acceptance.`,
+      `Saved access guidance: ${real.program.availability.detail}`,
+      "Content reviewed October 23, 2026; confirm current instructions directly.",
+      `Official instructions: ${officialSource(real.program.availability.sourceId).url}`,
+      `Next: ${real.next?.name ?? "Confirm the result with the provider"}`,
+      real.program.documentNote,
+    );
+    if (plan.programId === "county-public") {
+      const proof = officialPreferenceProof(plan);
+      lines.push(
+        "OPTIONAL WORKING-PREFERENCE EVIDENCE (NOT BASIC ELIGIBILITY)",
+        "Recent paystub(s) OR employer statement; the County confirms whether this preference and the records apply.",
+        `Recent paystub(s): ${plan.documents["recent-paystubs"] ? "marked available" : "not marked available"}`,
+        `Employer statement: ${plan.documents["employer-statement"] ? "marked available" : "not marked available"}`,
+        `One listed option marked available: ${proof.satisfied ? "yes" : "no"}. Not agency verification or admission.`,
+        `Source: ${officialSource(proof.sourceId).url}, page 7-23. Confirm current acceptance; no other substitute is inferred.`,
+      );
+    }
+    for (const task of real.nodes.filter((n) => n.type === "task"))
+      lines.push(
+        `[${real.statuses[task.id] === "complete" ? "x" : " "}] ${task.name} — ${real.statuses[task.id]}`,
+        task.description,
+        `Source: ${officialSource(task.source).url}`,
+      );
+  }
+  if (analysis.programs.length)
+    lines.push("", "FICTIONAL PRACTICE PLANS — NOT REAL PROGRAM RULES");
   if (analysis.actions[0])
     lines.push(
       `NEXT ACTION: ${analysis.actions[0].name}`,
@@ -45,20 +98,24 @@ export function preparationPacket(
         task.description,
       );
   }
-  lines.push("", "DOCUMENT REUSE (EXPLICIT ACCEPTANCE ONLY)");
-  for (const doc of analysis.documents)
+  if (analysis.programs.length) {
+    lines.push("", "DOCUMENT REUSE (EXPLICIT ACCEPTANCE ONLY)");
+    for (const doc of analysis.documents)
+      lines.push(
+        `${doc.name}: ${input.documents[doc.id] ? "available" : input.unavailable.includes(doc.id) ? "unavailable" : "not yet available"}; accepted by ${doc.programIds.map((id) => programs.find((p) => p.id === id)!.shortName).join(", ")}`,
+      );
+    const rescue = findRescueRoute(input);
     lines.push(
-      `${doc.name}: ${input.documents[doc.id] ? "available" : input.unavailable.includes(doc.id) ? "unavailable" : "not yet available"}; accepted by ${doc.programIds.map((id) => programs.find((p) => p.id === id)!.shortName).join(", ")}`,
+      "",
+      "ROUTE RESCUE",
+      rescue.explanation.summary,
+      ...rescue.impossibleRequirements,
+      ...rescue.documentIds.map(
+        (id) => documentTypes.find((d) => d.id === id)!.name,
+      ),
     );
-  const rescue = findRescueRoute(input);
+  }
   lines.push(
-    "",
-    "ROUTE RESCUE",
-    rescue.explanation.summary,
-    ...rescue.impossibleRequirements,
-    ...rescue.documentIds.map(
-      (id) => documentTypes.find((d) => d.id === id)!.name,
-    ),
     "",
     "This packet contains availability and preparation steps only. Keep actual documents secure.",
   );

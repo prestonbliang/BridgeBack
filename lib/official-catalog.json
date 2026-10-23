@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "version": "2026-10-23.2",
+  "reviewedAt": "2026-10-23",
+  "incomeTable": {
+    "sourceId": "county-income",
+    "effectiveOn": "2026-05-06",
+    "year": 2026,
+    "percentOfAmi": 50,
+    "values": [
+      61250,
+      70000,
+      78750,
+      87450,
+      94450,
+      101450,
+      108450,
+      115450
+    ],
+    "values80": [
+      97950,
+      111950,
+      125950,
+      139900,
+      151100,
+      162300,
+      173500,
+      184700
+    ]
+  },
+  "sources": [
+    {
+      "id": "county-applications",
+      "title": "Application directions",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/application-directions.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "74c7f31318f706c727b252582d626db2eaf12c92c5f0eaa5a6d6210b8aa0a99b",
+      "format": "html",
+      "evidence": [
+        "HACSD closed its waitlist for the Housing Choice Voucher (Section 8), Project Based Vouchers, Public Housing, Moderate Rehabilitation and Housing Opportunities for People with AIDS (HOPWA) TBRA programs to new applicants.",
+        "858-694-4801"
+      ]
+    },
+    {
+      "id": "county-hcv",
+      "title": "Section 8 Housing Choice Voucher overview",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/section-8-hcv-overview.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "b75ed0b67ecacb1be046703fed636ae802467931399b9dbbc8d231e01d6f12ee",
+      "format": "html",
+      "evidence": [
+        "the Section 8 Housing Choice Voucher waitlist closed on February 20, 2026"
+      ]
+    },
+    {
+      "id": "county-areas",
+      "title": "Housing authority service areas",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/areas-served/hacsd.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "3d3c3b7d25397d50a706ce7fe3c70d1c7cccab0b146cbc73675b29269eb407a3",
+      "format": "html",
+      "evidence": [
+        "jurisdiction includes 13 incorporated cities and the unincorporated areas",
+        "13 Incorporated Cities Chula Vista Imperial Beach Santee Coronado La Mesa Solana Beach Del Mar Lemon Grove Vista El Cajon Poway Escondido San Marcos"
+      ]
+    },
+    {
+      "id": "county-income",
+      "title": "2026 income limits",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/income-limits-ami.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "569685a4b166428c6c9d22a0c6fbff0ca9322878f621cc6c684714e9f13a595c",
+      "format": "html",
+      "evidence": [
+        "Effective May 6, 2026",
+        "1 36,750 61,250 97,950",
+        "2 42,000 70,000 111,950",
+        "3 47,250 78,750 125,950",
+        "4 52,450 87,450 139,900",
+        "5 56,650 94,450 151,100",
+        "6 60,850 101,450 162,300",
+        "7 65,050 108,450 173,500",
+        "8 69,250 115,450 184,700"
+      ]
+    },
+    {
+      "id": "county-public",
+      "title": "Public Housing eligibility",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/public-housing.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "19cbe556d7df5fd581951df65c46f3aab97ee480bdeff65e3ec21a8cd4a035da",
+      "format": "html",
+      "evidence": [
+        "Your household's annual gross income must be at or below 50% of San Diego's Area Median Income."
+      ]
+    },
+    {
+      "id": "county-update",
+      "title": "Existing waiting-list application updates",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/update-application.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "1d937d1a6c251f8a656c6334f04d2ed40f5ed1181227eec82cf0b5fd687c56a9",
+      "format": "html",
+      "evidence": [
+        "All applicants currently on a wait list have been successfully migrated into the new system, Yardi."
+      ]
+    },
+    {
+      "id": "county-access",
+      "title": "Online and assisted access",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/Yardi.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "286a74b32288183b583d28cbe6cc752dc95028796bc4aa3c70116b630648b91e",
+      "format": "html",
+      "evidence": [
+        "Traditional methods (mail, fax, and in-person) will still be accepted for those without internet or device access."
+      ]
+    },
+    {
+      "id": "county-vash",
+      "title": "Veterans Affairs Supportive Housing",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/veterans-services/vash.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "4362a77d768ed78ac02e3d48acb4a77eb53852d9f2878171020f925d5b5d0f94",
+      "format": "html",
+      "evidence": [
+        "Please call the Veterans Affairs (VA) office (877) 424-3838"
+      ]
+    },
+    {
+      "id": "county-urgent",
+      "title": "Immediate housing referrals",
+      "url": "https://www.sandiegocounty.gov/content/sdc/sdhcd/ending-homelessness/overview.html",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "56e3b3c0c8d84c55b4448bf9e22515c502af59b1ce20c1b4c0521504cbf5153b",
+      "format": "html",
+      "evidence": [
+        "If you need a place to stay tonight or in the near future, please call 211"
+      ]
+    },
+    {
+      "id": "county-registration",
+      "title": "Applicant portal registration guide (January 22, 2026), pages 3\u201315 and 28\u201332",
+      "url": "https://www.sandiegocounty.gov/content/dam/sdc/sdhcd/new-docs/Rental_assistance/Yardi/Registration-How_an_Applicant_Registers_in_RentCafe_Portal1.pdf",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "dbc66aae3ec03da8f6d4be3e18b17e1d727e3a1684edff6486053e3860563339",
+      "format": "pdf",
+      "evidence": [
+        "A valid email address is used for future logins (page 3).",
+        "With a registration code, use that route; without one, the guide describes an alternative registration route or contacting HACSD (pages 4\u201315).",
+        "Profile contact information can be updated in the agency portal (pages 28\u201332)."
+      ]
+    },
+    {
+      "id": "county-public-policy",
+      "title": "Public Housing policy: admission (2-1), residency preferences (4-4\u20134-5), and preference verification (7-23)",
+      "url": "https://www.sandiegocounty.gov/content/dam/sdc/sdhcd/new-docs/Rental_assistance/FINAL-ACOP_2025-2026_12-1-2025.pdf",
+      "reviewedAt": "2026-10-23",
+      "reviewAfterDays": 30,
+      "sha256": "d6d16248dd409ed87632af457413eb578def77551a90c06601648343e52fd8b2",
+      "format": "pdf",
+      "evidence": [
+        "Page 2-1 discusses HUD income limits and an 80%-AMI admission threshold; the program overview instead states 50%. Agency clarification is needed.",
+        "Pages 4-4\u20134-5 treat residency as a preference and list a category for applicants without that preference.",
+        "Page 7-23 states that working-preference verification uses recent paystub(s) or a statement from the employer. This is preference evidence, not proof of full eligibility."
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "id": "county-hcv",
+      "name": "County Section 8 Housing Choice Voucher",
+      "organization": "Housing Authority of the County of San Diego (HACSD)",
+      "description": "Rental assistance paid toward a participating home. The County waiting list is closed to new applicants; people already on it can keep their existing application up to date.",
+      "category": "Rent assistance",
+      "coverage": "13 County-served cities and unincorporated communities; other cities have separate housing authorities.",
+      "sourceIds": [
+        "county-applications",
+        "county-hcv",
+        "county-areas",
+        "county-update",
+        "county-access",
+        "county-registration",
+        "county-urgent"
+      ],
+      "eligibility": "hcv",
+      "availability": {
+        "kind": "closed",
+        "sourceId": "county-applications",
+        "detail": "Closed to new waiting-list applications. The HCV page reports closure on February 20, 2026 at 11:59 p.m.",
+        "closedOn": "2026-02-21"
+      },
+      "contactPhone": "858-694-4801",
+      "contactUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/update-application.html",
+      "documentNote": "A full, current program-specific document acceptance list has not been modeled. Do not treat practice-plan pay stubs or employer letters as accepted evidence for this program. Ask HACSD for the checklist for your case.",
+      "cautions": [
+        "The housing authority, not BridgeBack, determines eligibility after selection.",
+        "Local residence/work preferences are not treated as automatic disqualification. Choosing another city directs you to its authority instead.",
+        "The closed waiting list is not emergency shelter. For help tonight, call 211."
+      ]
+    },
+    {
+      "id": "county-public",
+      "name": "County Public Housing",
+      "organization": "Housing Authority of the County of San Diego (HACSD)",
+      "description": "Publicly owned rental housing for qualifying households. Application directions say this waiting list is closed, while the overview still describes an online application. Income and residency wording also differs between the overview and policy; ask the County which rules apply.",
+      "category": "Public housing",
+      "coverage": "The County lists 13 served cities and unincorporated areas. Public housing units are in Chula Vista and San Marcos.",
+      "sourceIds": [
+        "county-applications",
+        "county-public",
+        "county-income",
+        "county-areas",
+        "county-update",
+        "county-access",
+        "county-registration",
+        "county-urgent",
+        "county-public-policy"
+      ],
+      "eligibility": "public-housing",
+      "availability": {
+        "kind": "closed",
+        "sourceId": "county-applications",
+        "detail": "The application-directions page says new waiting-list applications are closed. Its wording conflicts with the apply-online description in the program overview; confirm with the County."
+      },
+      "contactPhone": "858-694-4801",
+      "contactUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/rental-assistance/update-application.html",
+      "documentNote": "The policy (page 7-23) lists recent paystub(s) OR an employer statement for the working-family preference. This is a specific preference-verification option, not a complete application checklist or proof of eligibility. Ask HACSD whether it applies to your case.",
+      "cautions": [
+        "The overview states 50%-AMI income, but the admissions policy describes an 80%-AMI threshold. BridgeBack shows both published figures and does not disqualify you based on the 50% overview value.",
+        "The policy treats residency as a preference and includes applicants who lack it. BridgeBack does not turn living outside the County authority\u2019s jurisdiction into automatic ineligibility.",
+        "Current application instructions say the waiting list is closed. Confirm conflicting overview wording, income rules, preferences and other requirements directly with HACSD."
+      ]
+    },
+    {
+      "id": "county-vash",
+      "name": "Veterans Affairs Supportive Housing (HUD-VASH)",
+      "organization": "HACSD and the U.S. Department of Veterans Affairs",
+      "description": "Rental assistance with VA case management for veterans experiencing homelessness. The County directs people to the VA for information and assessment.",
+      "category": "Veteran support",
+      "coverage": "San Diego County referral information; the VA confirms the appropriate service route.",
+      "sourceIds": [
+        "county-vash",
+        "county-urgent"
+      ],
+      "eligibility": "referral",
+      "availability": {
+        "kind": "referral",
+        "sourceId": "county-vash",
+        "detail": "The County publishes a VA contact route. Voucher, assessment and appointment availability have not been verified."
+      },
+      "contactPhone": "877-424-3838",
+      "contactUrl": "https://www.sandiegocounty.gov/content/sdc/sdhcd/veterans-services/vash.html",
+      "documentNote": "Do not upload military, medical, identity or financial records. Ask the VA what to bring and which referral process applies.",
+      "cautions": [
+        "This is a referral route, not a voucher application or confirmation that assistance is available.",
+        "Veteran status, housing circumstances and other VA requirements must be assessed by the provider. BridgeBack does not collect those records."
+      ]
+    }
+  ]
+}

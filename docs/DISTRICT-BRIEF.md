@@ -22,7 +22,7 @@ The [22-case deterministic benchmark](evaluation-results.json) and [validation r
 
 ## An answer about government integration
 
-“The real counselor/contact information and educational references come from identified public sources. Application-rule examples are fictional and clearly separated. Publishing real program screening would require reviewed current program-specific rules, service areas, application instructions and update ownership. BridgeBack does not send applications or private profiles to government systems.”
+“The real counselor/contact information and educational references come from identified public sources. The practice application rules remain fictional. A separate real County catalog now cites reviewed instructions, distinguishes closed waiting lists from existing-applicant routes, and flags conflicts across official policies. A complete real eligibility determination is not modeled; additional rules need agency confirmation and ongoing update ownership. BridgeBack does not send applications or private profiles to government systems.”
 
 San Diego County is the starting service area. Do not equate county boundaries or a downtown ZIP search with a congressional district boundary. A district office is not presented as a housing placement agency or a route around program requirements.
 

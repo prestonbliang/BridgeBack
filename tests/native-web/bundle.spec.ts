@@ -202,3 +202,65 @@ test("native export dismissal and failures preserve progress and clean temporary
     ),
   ).toBe(3);
 });
+test("bundled real-program instructions and preference documents persist without claiming an online check", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Find real programs", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Check official pages", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".official-check-control")).toContainText(
+    "bundled reviewed guidance",
+  );
+  const card = page.getByTestId("official-program-county-public");
+  await expect(card).toContainText("Waiting list closed to new applicants");
+  await card
+    .getByRole("button", {
+      name: "Save County Public Housing follow-up plan",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("combobox", { name: "Which situation fits you?", exact: true })
+    .selectOption("existing");
+  await page
+    .getByRole("checkbox", {
+      name: "Read the current access instructions",
+      exact: false,
+    })
+    .check();
+  await page
+    .getByRole("checkbox", {
+      name: "Arrange County help without the online portal",
+      exact: false,
+    })
+    .check();
+  await expect(
+    page.locator('.official-plan-card [role="progressbar"]'),
+  ).toHaveAttribute("aria-valuenow", "40");
+  await nav(page, "Documents");
+  await page
+    .getByRole("checkbox", {
+      name: "Employer statement for the working preference",
+      exact: true,
+    })
+    .check();
+  await expect(page.locator(".sidebar-foot")).toContainText(
+    "Saved on this device",
+  );
+  await page.reload();
+  await nav(page, "Documents");
+  await expect(
+    page.getByRole("checkbox", {
+      name: "Employer statement for the working preference",
+      exact: true,
+    }),
+  ).toBeChecked();
+  await nav(page, "My checklist");
+  await expect(
+    page.locator('.official-plan-card [role="progressbar"]'),
+  ).toHaveAttribute("aria-valuenow", "40");
+});
