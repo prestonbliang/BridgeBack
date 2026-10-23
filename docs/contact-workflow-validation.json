@@ -26,5 +26,13 @@
     "package": "zod",
     "installedPatchedVersion": "4.6.7",
     "note": "93 units, lint, type checking, native and normal builds, 28 browser cases and 8 bundled browser cases pass after migrating record schemas. Production audit reports zero known advisories."
+  },
+  "deploymentAssetRehearsal": {
+    "observedAt": "2026-10-23T22:22:55.237370+00:00",
+    "unitCases": 94,
+    "browserCases": 28,
+    "browserDuration": "59.6s",
+    "deploymentId": "dpl_bridgeback_local_rehearsal",
+    "scope": "Local web build with version-tagged assets. Native/API release and published-origin CI are recorded separately."
   }
 }

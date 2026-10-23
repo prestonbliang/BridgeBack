@@ -33,7 +33,7 @@ function harness() {
         : new Response(
             '<html>Privacy policy<script src="/_next/static/privacy.js"></script></html>',
           );
-    if (brokenAsset && url.endsWith(".js"))
+    if (brokenAsset && new URL(url).pathname.endsWith(".js"))
       return new Response("failure", { status: 503 });
     return new Response("asset");
   };
@@ -122,6 +122,33 @@ function harness() {
 }
 
 describe("atomic offline shell lifecycle", () => {
+  it("preserves deployment-tagged URLs and never serves one deployment's chunk as another", async () => {
+    const app = harness();
+    app.setHtml(
+      '<html><script src="/_next/static/app-a.js?dpl=deployment-a&amp;v=1"></script></html>',
+    );
+    await app.dispatch("install");
+    await app.dispatch("activate");
+    app.failAssets();
+    expect(
+      await (
+        await app.dispatch(
+          "fetch",
+          "/_next/static/app-a.js?dpl=deployment-a&v=1",
+          "cors",
+        )
+      )?.text(),
+    ).toBe("asset");
+    expect(
+      (
+        await app.dispatch(
+          "fetch",
+          "/_next/static/app-a.js?dpl=deployment-b&v=1",
+          "cors",
+        )
+      )?.status,
+    ).toBe(503);
+  });
   it("activates only a fully cached shell and preserves unrelated origin caches", async () => {
     const app = harness();
     await app.caches.open("unrelated-app-cache");

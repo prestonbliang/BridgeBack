@@ -6,6 +6,11 @@ export function GET() {
   return Response.json({
     schemaVersion: 1,
     revision: candidate && /^[a-f0-9]{40}$/.test(candidate) ? candidate : null,
+    deploymentId:
+      process.env.BRIDGEBACK_NATIVE !== "1" &&
+      /^[a-zA-Z0-9_-]{1,160}$/.test(process.env.VERCEL_DEPLOYMENT_ID ?? "")
+        ? process.env.VERCEL_DEPLOYMENT_ID
+        : null,
     workspaceVersion: 4,
     catalogVersion: officialCatalog.version,
     target: process.env.BRIDGEBACK_NATIVE === "1" ? "native-bundle" : "web",

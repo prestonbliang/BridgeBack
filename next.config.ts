@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const native = process.env.BRIDGEBACK_NATIVE === "1";
+const deploymentId = process.env.VERCEL_DEPLOYMENT_ID;
 const config: NextConfig = {
+  ...(!native && deploymentId && /^[a-zA-Z0-9_-]{1,160}$/.test(deploymentId)
+    ? { deploymentId }
+    : {}),
   ...(native ? { output: "export", distDir: "out" } : {}),
   images: { unoptimized: true },
   poweredByHeader: false,

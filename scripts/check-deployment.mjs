@@ -85,18 +85,24 @@ async function check(name, run) {
   }
 }
 async function get(path, type) {
-  const response = await fetch(new URL(path, url), {
-    redirect: "manual",
-    signal: AbortSignal.timeout(45000),
-    headers: {
-      "User-Agent": "BridgeBack-deployment-check",
-      "Cache-Control": "no-cache",
-    },
-  });
+  let response;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    response = await fetch(new URL(path, url), {
+      redirect: "manual",
+      signal: AbortSignal.timeout(45000),
+      headers: {
+        "User-Agent": "BridgeBack-deployment-check",
+        "Cache-Control": "no-cache",
+      },
+    });
+    if (![404, 502, 503].includes(response.status) || attempt === 2) break;
+    await response.body?.cancel();
+    await new Promise((resolve) => setTimeout(resolve, 750));
+  }
   assert.equal(
     response.status,
     200,
-    `${path}: expected HTTP 200; check deployment protection, redirects and host logs`,
+    `${path}: HTTP ${response.status}; expected 200 after bounded retries. Check the published build and host logs`,
   );
   if (type)
     assert.ok(
@@ -115,6 +121,11 @@ await check("Published web revision and guided-contact feature", async () => {
         .regex(/^[a-f0-9]{40}$/)
         .nullable(),
       workspaceVersion: z.literal(4),
+      deploymentId: z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]{1,160}$/)
+        .nullable()
+        .default(null),
       catalogVersion: z.literal(catalog.version),
       target: z.literal("web"),
       features: z.array(z.string()),
@@ -160,6 +171,14 @@ await check("Public app, security headers and compiled assets", async () => {
     ),
   ];
   assert.ok(assets.length > 0, "Missing compiled application assets");
+  if (release?.deploymentId)
+    assert.ok(
+      assets.some(
+        (path) =>
+          new URL(path, url).searchParams.get("dpl") === release.deploymentId,
+      ),
+      "Compiled assets are not tagged with the published deployment ID",
+    );
   await Promise.all(
     assets.map(async (path) => {
       await get(path);

@@ -40,6 +40,8 @@ Code pushes also trigger the public workflow. It waits up to six minutes for `/a
 
 If `/api/release` returns 404, inspect the Vercel project's latest Production deployment and its source commit. Confirm that Settings → Git connects **prestonbliang/BridgeBack** and production branch **main**. A previous Ready deployment does not publish newer code. Inspect any failed/blocked build and deploy the current source before rerunning verification. The read-only **Inspect public release evidence** workflow can publish the retained HTTP report's public result fields as annotations; it never publishes browser workspace exports or hosting credentials.
 
+When Vercel supplies `VERCEL_DEPLOYMENT_ID`, the web build passes it to Next's `deploymentId` configuration so compiled asset URLs carry a deployment tag. The release report includes only this public identifier and the validated revision; the checker verifies the tag. The offline worker preserves full asset URLs, including these queries, and a regression test rejects serving one deployment's chunk as another. Native exports do not receive the web tag. This configuration does not promise older-deployment retention or a hosting plan's skew-protection features. Short 404/502/503 rollout errors receive at most three attempts; a persistent missing asset still fails verification.
+
 Alternatively, open the repository's **Actions → Check a public deployment → Run workflow**, select the deployed revision, and enter the production HTTPS origin. The workflow uses no hosting secret. Its evidence is uploaded as an artifact. If Vercel authentication protection is still enabled, the check should fail; do not bypass protection with tokens in URLs.
 
 ## Check the visitor experience
