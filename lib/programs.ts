@@ -25,7 +25,7 @@ export type Program = {
   milestones: string[];
 };
 export const fictionalSource: Source = {
-  label: "BridgeBack fictional competition fixture — not an agency rule",
+  label: "Made-up BridgeBack programs for practice; not agency rules",
   kind: "fictional",
   verifiedAt: null,
 };
@@ -34,31 +34,31 @@ export const documentTypes: DocumentType[] = [
     id: "identity",
     name: "Identity document",
     description:
-      "Track availability only. Never enter an ID number or upload a document.",
+      "A document that shows who you are, such as photo ID. Just check whether you have one; never enter an ID number or upload a file here.",
   },
   {
     id: "paystub",
     name: "Pay stub",
     description:
-      "A fictional accepted income route for Fresh Start and Harbor. Not accepted by every sample program.",
+      "The statement you get with a paycheck, usually showing your earnings and deductions. Fresh Start and Harbor accept it as income proof in these examples.",
   },
   {
     id: "letter",
     name: "Employer letter",
     description:
-      "A fictional income route accepted by Fresh Start and Keys, but not Harbor.",
+      "A letter from your employer about your work and pay. Fresh Start and Keys accept it in these examples; Harbor does not.",
   },
   {
     id: "residence",
     name: "Proof of residence",
     description:
-      "A shared document route explicitly accepted by Harbor and Keys in this demonstration.",
+      "Paperwork showing where you live. The Harbor and Keys examples both need it. A real provider decides which address documents count.",
   },
   {
     id: "benefits",
     name: "Benefits statement",
     description:
-      "An alternative income route accepted by Harbor and Keys in this demonstration.",
+      "A letter or statement showing benefits you receive. The Harbor and Keys examples accept it instead of another listed income document.",
   },
 ];
 const task = (
@@ -91,33 +91,33 @@ export const programs: Program[] = [
         name: "Identity verification",
         documentIds: ["identity"],
         description:
-          "This fictional plan accepts the identity document listed here.",
+          "Have your identity document ready. This practice rule does not check or upload the actual document.",
       },
       {
         id: "income",
         name: "Income verification",
         documentIds: ["paystub", "letter"],
         description:
-          "Either a pay stub OR an employer letter. One accepted route is enough.",
+          "Have a pay stub or an employer letter ready. Either one meets this sample rule; you do not need both.",
       },
     ],
     tasks: [
       task(
         "household",
         "Confirm household details",
-        "Review household information; unknown income can remain unknown.",
+        "Check your household size and approximate yearly income in Settings. Leave income blank if you do not know it; this step does not require an exact amount.",
         [],
       ),
       task(
         "form",
         "Prepare the Fresh Start form",
-        "Use the accepted identity and income route to prepare this fictional form.",
+        "For this practice step, check that your ID and one accepted income document are ready. There is no real Fresh Start application form to send from this app.",
         ["identity", "income"],
       ),
       task(
         "review",
         "Review the Fresh Start checklist",
-        "Check the form and household information before contacting a provider.",
+        "Review the items you marked ready and your household details. Correct any mistakes before treating this practice checklist as finished.",
         ["form", "household"],
       ),
       task(
@@ -144,34 +144,34 @@ export const programs: Program[] = [
         name: "Identity verification",
         documentIds: ["identity"],
         description:
-          "The same identity document is explicitly accepted in this sample plan.",
+          "Have your identity document ready. The same document also counts for the Fresh Start example.",
       },
       {
         id: "income",
         name: "Income verification",
         documentIds: ["paystub", "benefits"],
         description:
-          "Either a pay stub OR a benefits statement. An employer letter is not accepted by this fictional rule.",
+          "Have a pay stub or a benefits statement ready. You only need one. This sample rule does not accept an employer letter.",
       },
       {
         id: "residence",
         name: "Residence verification",
         documentIds: ["residence"],
         description:
-          "Prepare the residence document for this fictional requirement.",
+          "Have your proof of address ready. Keep the actual paper or file with you; do not upload it here.",
       },
     ],
     tasks: [
       task(
         "form",
         "Prepare the Harbor form",
-        "Identity and income information unlock this fictional form.",
+        "Once your ID and one accepted income document are ready, check off this practice form step. There is no real Harbor form to send from this app.",
         ["identity", "income"],
       ),
       task(
         "review",
         "Review the Harbor checklist",
-        "Review the form alongside residence information.",
+        "Check your form preparation and proof of address. Uncheck any document you no longer have before marking the review done.",
         ["form", "residence"],
       ),
       task(
@@ -198,33 +198,33 @@ export const programs: Program[] = [
         name: "Income verification",
         documentIds: ["letter", "benefits"],
         description:
-          "Either an employer letter OR a benefits statement. A pay stub is not accepted by this fictional rule.",
+          "Have an employer letter or a benefits statement ready. You only need one. A pay stub does not meet this sample rule.",
       },
       {
         id: "residence",
         name: "Residence verification",
         documentIds: ["residence"],
         description:
-          "The residence document is explicitly accepted by this sample plan.",
+          "Have your proof of address ready. The same document also counts for the Harbor example.",
       },
     ],
     tasks: [
       task(
         "preferences",
         "Choose housing-search priorities",
-        "Decide which housing needs to discuss with a provider; do not enter sensitive details.",
+        "Think about what you need from a home, such as location or accessibility, so you can explain it to a provider. You do not need to write personal details here.",
         [],
       ),
       task(
         "form",
         "Prepare the Keys request",
-        "Use the accepted income and residence route to prepare this fictional request.",
+        "Check that your proof of address and one accepted income document are ready. This is a practice request; nothing is sent to an agency.",
         ["income", "residence"],
       ),
       task(
         "review",
         "Review the Keys checklist",
-        "Check your request against your chosen housing-search priorities.",
+        "Review your prepared documents and the housing needs you want to discuss. Correct anything missing before marking this practice review done.",
         ["form", "preferences"],
       ),
       task(

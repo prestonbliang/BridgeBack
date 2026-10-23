@@ -54,12 +54,9 @@ export function Discover({
         );
   return (
     <>
-      <PageHeading
-        eyebrow="FIND A POSSIBLE FIT"
-        title="More clarity. Fewer dead ends."
-      >
-        Explore official resources, or build your preparation skills with
-        clearly labeled sample plans.
+      <PageHeading eyebrow="FIND A POSSIBLE FIT" title="Find housing help">
+        Use official websites to look for real services. Add a practice plan to
+        try organizing the paperwork here; it will not apply for a program.
       </PageHeading>
       <div className="filters">
         <label>
@@ -97,13 +94,56 @@ export function Discover({
         Confirm current requirements directly with an official provider.
       </div>
       <div className="resource-grid">
+        {real.length > 0 && (
+          <div className="directory-section">
+            <h2>Official housing websites</h2>
+            <p>
+              These links lead to real organizations. Ask them about current
+              programs, openings and how to apply.
+            </p>
+          </div>
+        )}
+        {real.map((r) => (
+          <article className="card resource" key={r.name}>
+            <span className="tag neutral">Official website</span>
+            <h2>{r.name}</h2>
+            <p>{r.description}</p>
+            <span className="location">
+              <MapPin size={16} />
+              {r.region}
+            </span>
+            <p className="fine-print">
+              Rules: unverified · Availability: unknown
+              <br />
+              Open the website to ask about programs, current openings and how
+              to apply. This link does not check your eligibility.
+            </p>
+            <a
+              className="button secondary"
+              href={r.url}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Visit official website <ArrowUpRight size={16} />
+            </a>
+          </article>
+        ))}
+        {samples.length > 0 && (
+          <div className="directory-section">
+            <h2>Try a practice checklist</h2>
+            <p>
+              These programs are made up. Add one to see how the paperwork
+              checklist works; it does not apply for assistance.
+            </p>
+          </div>
+        )}
         {samples.map((p) => {
           const screening = screenProgram(p, state.profile);
           const selected = state.selectedProgramIds.includes(p.id);
           const progress = analysis.programs.find((a) => a.id === p.id);
           return (
             <article className="card resource" key={p.id}>
-              <span className="tag">FICTIONAL PRACTICE PLAN</span>
+              <span className="tag">Practice plan — not a real program</span>
               <h2>{p.name}</h2>
               <p>{p.description}</p>
               <div className="screen-result">
@@ -149,30 +189,6 @@ export function Discover({
             </article>
           );
         })}
-        {real.map((r) => (
-          <article className="card resource" key={r.name}>
-            <span className="tag neutral">OFFICIAL RESOURCE LINK</span>
-            <h2>{r.name}</h2>
-            <p>{r.description}</p>
-            <span className="location">
-              <MapPin size={16} />
-              {r.region}
-            </span>
-            <p className="fine-print">
-              Rules: unverified · Availability: unknown
-              <br />
-              No screening or application plan is inferred from this link.
-            </p>
-            <a
-              className="button secondary"
-              href={r.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Visit official website <ArrowUpRight size={16} />
-            </a>
-          </article>
-        ))}
       </div>
       {!samples.length && !real.length && (
         <section className="card empty">
@@ -212,10 +228,10 @@ export function SettingsView({
     <>
       <PageHeading
         eyebrow="YOUR CHOICES, ALWAYS"
-        title="A workspace that works for you."
+        title="Your information and settings"
       >
-        Optional information helps explain screening. No names, addresses,
-        identity numbers, or uploads.
+        These questions are optional. They help compare your answers with the
+        practice plans. Leave anything blank if you are unsure.
       </PageHeading>
       {isDemo && (
         <div className="notice">
@@ -230,6 +246,9 @@ export function SettingsView({
             Household size
             <input
               type="number"
+              inputMode="numeric"
+              name="household-size"
+              aria-describedby="household-help"
               min={1}
               max={20}
               value={state.profile.household ?? ""}
@@ -243,10 +262,17 @@ export function SettingsView({
               }}
             />
           </label>
+          <p className="helper-text" id="household-help">
+            Count the people who would be on the same application. You can leave
+            this blank.
+          </p>
           <label>
             Approximate annual household income ($)
             <input
               type="number"
+              inputMode="decimal"
+              name="annual-income"
+              aria-describedby="income-help"
               min={0}
               max={1000000}
               value={state.profile.income ?? ""}
@@ -260,6 +286,10 @@ export function SettingsView({
               }}
             />
           </label>
+          <p className="helper-text" id="income-help">
+            Use an approximate total for a whole year. For example, $2,000 a
+            month is about $24,000 a year. Leave it blank if you do not know.
+          </p>
           <label>
             Location
             <select
@@ -358,8 +388,9 @@ export function SettingsView({
               </select>
             </label>
             <p>
-              PathFinder explains how your preferences affect ranking. Effort is
-              used only when you choose a rating.
+              This changes which step we suggest first. We only use difficulty
+              ratings you have chosen; we do not guess how hard a task is for
+              you.
             </p>
           </section>
           <section className="card">
@@ -442,7 +473,7 @@ export function SettingsView({
         onClose={() => setConfirm(false)}
         title="Confirm data deletion"
       >
-        <h2>{isDemo ? "Reset the demo?" : "Delete your local workspace?"}</h2>
+        <h2>{isDemo ? "Reset the demo?" : "Delete your saved checklist?"}</h2>
         <p>
           This clears{" "}
           {isDemo
@@ -495,15 +526,15 @@ export function Timeline({
     <>
       <PageHeading
         eyebrow="THE STEPS YOU’VE TAKEN"
-        title="Your progress has a story."
+        title="Your recent activity"
       >
-        Real actions, recorded on this device. Correct a mistake and the entire
-        path updates with it.
+        See the changes you made to your checklist. If you checked something by
+        mistake, you can correct it below.
       </PageHeading>
       <label className="timeline-filter">
         Show events
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">All milestones</option>
+          <option value="all">All changes</option>
           <option value="editable">Actions I can correct</option>
           <option value="corrections">Corrections</option>
         </select>
@@ -547,7 +578,7 @@ export function Timeline({
         <section className="card empty">
           <h2>
             {filter === "all"
-              ? "Your first step starts the story."
+              ? "No changes recorded yet"
               : "No events in this view."}
           </h2>
           <p>
@@ -567,46 +598,46 @@ export function Timeline({
         </details>
       )}
       <p className="fine-print">
-        Only the latest change to a document or task can be corrected. Later
-        changes supersede earlier ones. The latest 100 events are retained.
+        You can undo the most recent change to a document, task or plan. Newer
+        changes replace earlier ones. The latest 100 events are retained.
       </p>
     </>
   );
 }
 export const demoScenes = [
   {
-    title: "The obstacle is often the process.",
-    copy: "Meet a fictional applicant preparing two plans. Missing income evidence keeps both forms blocked.",
+    title: "Start with two unfinished checklists.",
+    copy: "This made-up applicant has ID and proof of address, but no income document. Both forms need that missing paperwork.",
     tab: "Dashboard",
   },
   {
-    title: "See the path, not a pile of paperwork.",
-    copy: "Open the journey map. Follow an AND requirement and an OR alternative; switch to the checklist any time.",
+    title: "See why a step is waiting.",
+    copy: "Choose Journey map to see the connections. A form waits for the papers linked to it. You can always use the checklist instead.",
     tab: "PathFinder",
   },
   {
-    title: "Find the barrier with the biggest consequence.",
-    copy: "BarrierBreak counts blocked steps and actual immediate unlocks. Open “Why this?” to inspect the evidence.",
+    title: "Find the missing item that holds up the most.",
+    copy: "Look at “What’s holding things up?” A pay stub helps both plans. Open “Why this?” to see exactly which rules count.",
     tab: "PathFinder",
   },
   {
-    title: "Try the next step before committing.",
-    copy: "Choose “What if?” for a pay stub or employer letter. Compare the newly available steps and remaining barriers. Nothing is saved.",
+    title: "Try a change without checking anything off.",
+    copy: "In “See what would change,” choose Pay stub. Compare the before and after numbers. Your actual checklist has not changed.",
     tab: "PathFinder",
   },
   {
-    title: "Turn a possibility into progress.",
-    copy: "Apply a simulated step or mark a document available. Readiness, recommendations and the timeline recalculate together.",
+    title: "Now mark the document as ready.",
+    copy: "Choose “Update my checklist” in the preview. The forms become available in your checklist too. Activity records the change, and you can undo it.",
     tab: "PathFinder",
   },
   {
-    title: "One document. More than one route.",
-    copy: "Compare explicit acceptance rules. A pay stub helps Fresh Start and Harbor; an employer letter does not satisfy Harbor. Try Route Rescue.",
+    title: "Use a document for more than one plan.",
+    copy: "The same pay stub counts for Fresh Start and Harbor. An employer letter only counts for Fresh Start. Mark a document as hard to get to see accepted alternatives.",
     tab: "Documents",
   },
   {
-    title: "Leave with a practical plan.",
-    copy: "Export your preparation packet with program-specific checklists, accepted alternatives and your next action. Then return to your preserved workspace.",
+    title: "Keep a copy of your next steps.",
+    copy: "Choose Export preparation packet to download the checklist, or Print to make a paper copy. Neither sends an application. Return to your workspace when you are done.",
     tab: "Documents",
   },
 ] as const;
@@ -625,7 +656,7 @@ export function DemoGuide({
     <section className="demo-guide" aria-label="Interactive demo guide">
       <div className="demo-guide-head">
         <span>
-          <Play size={15} /> FICTIONAL DEMO · SCENE {scene + 1} OF 7
+          <Play size={15} /> Practice example · Step {scene + 1} of 7
         </span>
         <button className="text-button" onClick={onExit}>
           Return to my workspace
@@ -683,8 +714,8 @@ export function DemoGuide({
         </div>
       </details>
       <p className="demo-preserved">
-        <ShieldCheck size={14} /> Your personal workspace stays untouched. Demo
-        changes are temporary.
+        <ShieldCheck size={14} /> Your own checklist is saved separately.
+        Changes to this example disappear when you leave it.
       </p>
     </section>
   );

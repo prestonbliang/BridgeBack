@@ -47,7 +47,6 @@ export function Dialog({
   );
 }
 export function PageHeading({
-  eyebrow,
   title,
   children,
   action,
@@ -60,7 +59,6 @@ export function PageHeading({
   return (
     <div className="page-heading">
       <div>
-        <div className="eyebrow">{eyebrow}</div>
         <h1 tabIndex={-1}>{title}</h1>
         {children && <p>{children}</p>}
       </div>

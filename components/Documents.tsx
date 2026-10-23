@@ -47,10 +47,13 @@ export function Documents({
       <section className="pathfinder-intro">
         <div>
           <div className="eyebrow">
-            <Files size={15} /> DOCUMENT READINESS
+            <Files size={15} /> Document checklist
           </div>
-          <h1>Prepare once. Open more routes.</h1>
-          <p>Know where a document can help—and exactly where it cannot.</p>
+          <h1>Your documents</h1>
+          <p>
+            Keep track of the papers you have. The same document may help with
+            more than one plan, but each plan decides what it accepts.
+          </p>
         </div>
         <div className="document-toolbar">
           <button className="button secondary" onClick={onExport}>
@@ -66,32 +69,36 @@ export function Documents({
       <div className="document-privacy">
         <ShieldCheck size={20} />
         <p>
-          Availability only. Keep the actual documents somewhere safe. No
-          uploads, Social Security numbers, or sensitive document contents.
+          Just check whether you have a document. Keep actual papers and files
+          somewhere safe. Do not enter Social Security numbers or document
+          contents here.
         </p>
       </div>
       {!analysis.programs.length ? (
         <section className="card empty">
           <Files size={30} />
-          <h2>Add a plan to see what you can reuse.</h2>
+          <h2>Add a plan to see which documents it needs.</h2>
           <p>
-            Discover has clearly labeled fictional plans for practicing document
-            preparation.
+            Find help has made-up practice plans you can add to try this
+            checklist.
           </p>
         </section>
       ) : (
         <>
           <section className="reuse-overview">
             <div>
-              <span className="eyebrow">DOCUMENT REUSE OPTIMIZATION</span>
+              <span className="eyebrow">
+                Documents that help with several plans
+              </span>
               <h2>
                 {shared.length
                   ? `${shared.length} document ${shared.length === 1 ? "type can" : "types can"} contribute to more than one plan.`
                   : "Each document has a specific purpose."}
               </h2>
               <p>
-                Matches come from each program’s explicit acceptance list.
-                Sharing a document type does not imply shared eligibility.
+                We only reuse a document where a plan lists it as accepted.
+                Having the right document does not mean you qualify for that
+                program.
               </p>
             </div>
             <div className="reuse-chips">
@@ -104,71 +111,11 @@ export function Documents({
               ))}
             </div>
           </section>
-          <section className="card rescue-panel" aria-labelledby="rescue-title">
-            <div className="pf-section-header">
-              <div>
-                <span className="eyebrow">ROUTE RESCUE</span>
-                <h2 id="rescue-title">When a document is out of reach.</h2>
-              </div>
-              <Route size={25} aria-hidden="true" />
-            </div>
-            <p>
-              Mark a document you cannot obtain below. Route Rescue finds the
-              smallest remaining set of accepted documents for your selected
-              plans.
-            </p>
-            <div className="rescue-result">
-              <span
-                className={`pf-status ${rescue.feasible ? "available" : "blocked"}`}
-              >
-                {rescue.feasible
-                  ? "Accepted route found"
-                  : "Provider clarification needed"}
-              </span>
-              <p>{rescue.explanation.summary}</p>
-              {rescue.documentIds.length > 0 && (
-                <ol>
-                  {rescue.documentIds.map((id) => (
-                    <li key={id}>
-                      <span>{documentName(id)}</span>
-                      <button
-                        className="text-button"
-                        onClick={() => onDocument(id, true)}
-                      >
-                        I have this <Check size={14} />
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-              )}
-              {rescue.impossibleRequirements.length > 0 && (
-                <div className="rescue-impossible">
-                  <strong>No accepted route remains for:</strong>
-                  <ul>
-                    {rescue.impossibleRequirements.map((id) => (
-                      <li key={id}>
-                        {analysis.nodes.find((node) => node.id === id)?.name ??
-                          id}
-                      </li>
-                    ))}
-                  </ul>
-                  <p>
-                    Ask the provider about accepted alternatives. BridgeBack
-                    will not invent a substitute.
-                  </p>
-                </div>
-              )}
-              <Explain
-                explanation={rescue.explanation}
-                label="How was this route chosen?"
-              />
-            </div>
-          </section>
           <section className="document-inventory">
             <div className="pf-section-header">
               <div>
-                <span className="eyebrow">ONE SHARED INVENTORY</span>
-                <h2>Your document workspace</h2>
+                <span className="eyebrow">Keep this list up to date</span>
+                <h2>What you have and what’s missing</h2>
               </div>
               <div className="segmented">
                 <button
@@ -206,16 +153,23 @@ export function Documents({
                           className={`pf-status ${available ? "complete" : unavailable ? "blocked" : "available"}`}
                         >
                           {available
-                            ? "Available"
+                            ? "You have this"
                             : unavailable
-                              ? "Out of reach"
+                              ? "Cannot get this right now"
                               : document.needed
-                                ? "Needed for a route"
-                                : "Optional alternative"}
+                                ? "Still needed"
+                                : "Another option"}
                         </span>
                       </div>
                       <h3>{document.name}</h3>
                       <p>{definition?.description}</p>
+                      <p className="helper-text">
+                        Listed by:{" "}
+                        {document.programIds.length
+                          ? document.programIds.map(programName).join(", ")
+                          : "none of your selected plans"}
+                        .
+                      </p>
                       <label className="document-control">
                         <input
                           type="checkbox"
@@ -238,18 +192,37 @@ export function Documents({
                         />
                         <span>I cannot obtain this right now</span>
                       </label>
-                      <details
-                        className="document-acceptance"
-                        open={document.programIds.length > 1}
-                      >
+                      {unavailable && (
+                        <button
+                          className="text-button"
+                          onClick={() =>
+                            window.document
+                              .querySelector(".rescue-panel")
+                              ?.scrollIntoView({
+                                block: "start",
+                                behavior: "instant",
+                              })
+                          }
+                        >
+                          See listed alternatives{" "}
+                          <ArrowRight size={14} aria-hidden="true" />
+                        </button>
+                      )}
+                      <details className="document-acceptance">
                         <summary>
                           <GitBranch size={15} />
-                          Acceptance across {
+                          Where it counts in your {
                             analysis.programs.length
-                          } selected{" "}
+                          }{" "}
+                          selected{" "}
                           {analysis.programs.length === 1 ? "plan" : "plans"}
                         </summary>
                         <div>
+                          <p className="helper-text">
+                            This document only counts for the requirement named
+                            below. For example, income proof does not also prove
+                            your identity.
+                          </p>
                           {document.acceptance.map((acceptance, index) => (
                             <div
                               className={`acceptance-row ${acceptance.accepted ? "accepted" : "rejected"}`}
@@ -268,8 +241,8 @@ export function Documents({
                                 </strong>
                                 <p>
                                   {acceptance.accepted
-                                    ? `Accepted for ${acceptance.requirementName.toLowerCase()}`
-                                    : `Not accepted for ${acceptance.requirementName.toLowerCase()}`}
+                                    ? `Counts toward ${acceptance.requirementName.toLowerCase()}`
+                                    : `Does not cover ${acceptance.requirementName.toLowerCase()}`}
                                 </p>
                                 <small>
                                   {acceptance.source.kind === "fictional"
@@ -357,6 +330,67 @@ export function Documents({
                 ))}
               </div>
             )}
+          </section>
+          <section className="card rescue-panel" aria-labelledby="rescue-title">
+            <div className="pf-section-header">
+              <div>
+                <span className="eyebrow">Route Rescue</span>
+                <h2 id="rescue-title">Can’t get a document?</h2>
+              </div>
+              <Route size={25} aria-hidden="true" />
+            </div>
+            <p>
+              Can’t get one of these papers? Tick “I cannot obtain this right
+              now” on that document. We’ll check whether your selected plans
+              allow something else instead.
+            </p>
+            <div className="rescue-result">
+              <span
+                className={`pf-status ${rescue.feasible ? "available" : "blocked"}`}
+              >
+                {rescue.feasible
+                  ? "An alternative is available"
+                  : "Ask the provider about another option"}
+              </span>
+              <p>{rescue.explanation.summary}</p>
+              {rescue.documentIds.length > 0 && (
+                <ol>
+                  {rescue.documentIds.map((id) => (
+                    <li key={id}>
+                      <span>{documentName(id)}</span>
+                      <button
+                        className="text-button"
+                        onClick={() => onDocument(id, true)}
+                      >
+                        I have this <Check size={14} />
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              )}
+              {rescue.impossibleRequirements.length > 0 && (
+                <div className="rescue-impossible">
+                  <strong>No accepted route remains for:</strong>
+                  <ul>
+                    {rescue.impossibleRequirements.map((id) => (
+                      <li key={id}>
+                        {analysis.nodes.find((node) => node.id === id)?.name ??
+                          id}
+                      </li>
+                    ))}
+                  </ul>
+                  <p>
+                    There is no substitute listed in these rules. For a real
+                    program, ask its provider what else you can use. We cannot
+                    assume another document will count.
+                  </p>
+                </div>
+              )}
+              <Explain
+                explanation={rescue.explanation}
+                label="How was this route chosen?"
+              />
+            </div>
           </section>
         </>
       )}

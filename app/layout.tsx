@@ -2,9 +2,11 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./phase2.css";
 import "./workspace.css";
+import "./guide.css";
 export const metadata: Metadata = {
   title: "BridgeBack · Your path to housing",
-  description: "A private, local-first housing preparation companion.",
+  description:
+    "Understand housing paperwork, keep track of documents, and see what to do next.",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/icon-192.png", apple: "/icon-192.png" },
   appleWebApp: {
@@ -14,13 +16,22 @@ export const metadata: Metadata = {
   },
 };
 export const viewport: Viewport = {
-  themeColor: "#133e3c",
+  themeColor: "#172f43",
   width: "device-width",
   initialScale: 1,
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/AtkinsonHyperlegible-Regular.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

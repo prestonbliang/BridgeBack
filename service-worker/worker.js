@@ -9,6 +9,8 @@ const LOCAL_ASSETS = [
   "/icon-192.png",
   "/icon-512.png",
   "/fonts.css",
+  "/fonts/AtkinsonHyperlegible-Regular.ttf",
+  "/fonts/AtkinsonHyperlegible-Bold.ttf",
 ];
 
 async function shellCache() {

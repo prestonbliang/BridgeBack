@@ -20,7 +20,7 @@ export function Explain({
         <p className="explain-summary">{explanation.summary}</p>
         {explanation.facts.length > 0 && (
           <section>
-            <h4>What was evaluated</h4>
+            <h4>What we checked</h4>
             <ul>
               {explanation.facts.map((fact, index) => (
                 <li key={`${index}-${fact}`}>{fact}</li>
@@ -30,7 +30,7 @@ export function Explain({
         )}
         {explanation.missing.length > 0 && (
           <section>
-            <h4>Still unknown</h4>
+            <h4>What’s still missing</h4>
             <ul>
               {explanation.missing.map((fact, index) => (
                 <li key={`${index}-${fact}`}>{fact}</li>
@@ -40,7 +40,7 @@ export function Explain({
         )}
         {explanation.assumptions.length > 0 && (
           <section>
-            <h4>Assumptions & limits</h4>
+            <h4>What to keep in mind</h4>
             <ul>
               {explanation.assumptions.map((fact, index) => (
                 <li key={`${index}-${fact}`}>{fact}</li>
@@ -50,7 +50,7 @@ export function Explain({
         )}
         {explanation.changesIf.length > 0 && (
           <section>
-            <h4>What could change this</h4>
+            <h4>When this answer could change</h4>
             <ul>
               {explanation.changesIf.map((fact, index) => (
                 <li key={`${index}-${fact}`}>{fact}</li>
@@ -62,13 +62,13 @@ export function Explain({
           <section className="explain-sources">
             <h4>
               <ShieldCheck size={14} aria-hidden="true" />
-              Rule sources
+              Where these rules come from
             </h4>
             {explanation.sources.map((source, index) => (
               <div key={`${source.label}-${index}`}>
                 <strong>
                   {source.kind === "fictional"
-                    ? "Fictional demo rule"
+                    ? "Made-up practice rule"
                     : "Published source"}
                 </strong>
                 {source.url ? (

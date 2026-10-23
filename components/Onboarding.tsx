@@ -40,17 +40,17 @@ export function Onboarding({
   const titles = [
     "What would help right now?",
     "Where are you looking?",
-    "A little context, if you’re comfortable.",
-    "Choose a route to practice.",
+    "Who would be on the application?",
+    "Choose a practice checklist.",
     "What do you already have?",
   ];
   return (
     <Dialog open={open} onClose={onClose} title="Find your starting point">
-      <div className="eyebrow">YOUR STARTING POINT · {step + 1} / 5</div>
+      <div className="eyebrow">Step {step + 1} / 5</div>
       <h2>{titles[step]}</h2>
       <p className="onboarding-note">
-        You can skip any question. Answers stay in this browser and help explain
-        sample screening results.
+        You can skip any question. Answers save in this browser, so you can come
+        back later. These are practice plans, not real applications.
       </p>
       <div className="onboarding-content">
         {step === 0 && (
@@ -90,8 +90,8 @@ export function Onboarding({
         {step === 1 && (
           <>
             <p>
-              Service areas matter. A city-level choice is enough; we never need
-              your address.
+              Housing programs serve specific places. Choose a city so we can
+              explain the examples. You do not need to share your address.
             </p>
             <label>
               Location
@@ -124,9 +124,9 @@ export function Onboarding({
         {step === 2 && (
           <>
             <p>
-              These optional answers compare your circumstances with explicitly
-              fictional sample rules. Real provider eligibility is not
-              evaluated.
+              Household means the people included on the same application.
+              Income means the approximate total for a whole year. We only
+              compare these answers with made-up sample rules.
             </p>
             <label>
               Household size (optional)

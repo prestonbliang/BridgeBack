@@ -489,9 +489,9 @@ export function evaluatePlan(
           : 0);
       const facts = [
         `${unlockedIds.length} ${unlockedIds.length === 1 ? "task becomes" : "tasks become"} available immediately.`,
-        `${affected.length} unfinished downstream requirements depend on this route.`,
+        `${affected.length} later, unfinished items are connected to this step. Some may also need other documents or tasks first.`,
         `${satisfiedIds.length} additional ${satisfiedIds.length === 1 ? "requirement becomes" : "requirements become"} satisfied.`,
-        `Planning priority: ${input.priority}.`,
+        `Your planning preference: ${input.priority === "momentum" ? "make more steps ready to start" : input.priority === "effort" ? "start with easier tasks" : "balance progress and effort"}.`,
         ...(effort ? [`Your reported effort: ${effort} of 5.`] : []),
         ...(input.preferredProgram &&
         programIds.includes(input.preferredProgram)
@@ -513,12 +513,14 @@ export function evaluatePlan(
         unlockedIds,
         score,
         explanation: {
-          summary: `Preparing ${node.name.toLowerCase()} ${unlockedIds.length ? `makes ${unlockedIds.length} ${unlockedIds.length === 1 ? "task" : "tasks"} available` : `satisfies ${satisfiedIds.length} ${satisfiedIds.length === 1 ? "requirement" : "requirements"}`} across ${programIds.length} selected ${programIds.length === 1 ? "program" : "programs"}.`,
+          summary: unlockedIds.length
+            ? `${node.type === "document" ? `Having your ${node.name.toLowerCase()} ready` : "Finishing this step"} lets you start ${unlockedIds.length} more ${unlockedIds.length === 1 ? "step" : "steps"}: ${unlockedIds.map((id) => compiled.byId.get(id)!.name).join("; ")}.`
+            : `You can work on ${node.name.toLowerCase()} now. It helps you finish the checklist for ${programIds.map((id) => compiled.selected.find((program) => program.id === id)!.shortName).join(" and ")}.`,
           facts,
           missing: missingPrerequisites(compiled, node.id, statuses),
           sources: nodeSources(compiled, node.id),
           assumptions: [
-            "Document availability is self-reported; agencies determine actual acceptance.",
+            "We use the document status you entered. A real provider decides whether it accepts the actual document.",
             ...(!effort
               ? [
                   "No effort estimate has been supplied; no time or difficulty is invented.",
@@ -572,7 +574,7 @@ export function evaluatePlan(
         effort,
         deadline,
         explanation: {
-          summary: `${node.name} is on the dependency path of ${affected.length} blocked ${affected.length === 1 ? "requirement" : "requirements"}.`,
+          summary: `${node.name} is connected to ${affected.length} later ${affected.length === 1 ? "item that is" : "items that are"} waiting. This item, or an accepted alternative, needs to be ready first. Other missing items may still hold up those steps.`,
           facts: [
             `${affected.length} currently blocked downstream requirements share this dependency route.`,
             action
@@ -603,7 +605,7 @@ export function evaluatePlan(
           ],
           missing: missingPrerequisites(compiled, node.id, statuses),
           assumptions: [
-            "Downstream impact is not the same as immediate unlocks; other prerequisites may remain.",
+            "A connection to a later step does not mean this one item is enough to finish it. Other papers or tasks may still be needed.",
             "Alternatives are program-specific; one replacement may not satisfy every plan.",
             ...(!effort ? ["No effort estimate has been supplied."] : []),
           ],
@@ -694,7 +696,7 @@ export function transitionPlan(
   return {
     ...delta,
     readinessDelta,
-    summary: `${delta.newlyAvailable.length} newly available ${delta.newlyAvailable.length === 1 ? "task" : "tasks"}; ${delta.newlyComplete.length} newly satisfied ${delta.newlyComplete.length === 1 ? "requirement" : "requirements"}. ${changed ? (newNext ? `The recommendation changed to ${newNext.name.toLowerCase()} because ${newNext.explanation.summary.charAt(0).toLowerCase() + newNext.explanation.summary.slice(1)}` : "No actionable preparation tasks remain in the current plan.") : newNext ? `${newNext.name} remains the highest-ranked action under your current priorities.` : "No action is currently available; review any remaining barriers."}`,
+    summary: `${delta.newlyAvailable.length ? `${delta.newlyAvailable.length} more ${delta.newlyAvailable.length === 1 ? "step is" : "steps are"} ready to start.` : "Your checklist has been updated."} ${after.complete} of ${after.total} preparation steps are finished. ${changed ? (newNext ? `The recommendation changed to ${newNext.name.toLowerCase()}. ${newNext.explanation.summary}` : after.readiness === 100 ? "Your preparation steps are finished. Nothing has been submitted." : "Check Documents for missing items and listed alternatives.") : newNext ? `The suggested next step is still ${newNext.name.toLowerCase()}.` : "Check the remaining missing items before continuing."}`,
   };
 }
 export function simulatePlan(
@@ -787,12 +789,14 @@ export function findRescueRoute(input: PlannerInput): RescueResult {
     alternativesConsidered,
     explanation: {
       summary: feasible
-        ? `The smallest accepted route needs ${best!.length} additional ${best!.length === 1 ? "document type" : "document types"}.`
-        : "The current unavailable documents leave at least one requirement without an accepted route.",
+        ? best!.length
+          ? `You need ${best!.length} additional ${best!.length === 1 ? "document type" : "document types"} to cover the remaining document requirements in these plans. This is the shortest list we found using their stated rules.`
+          : "You already have a listed document for every document requirement in these plans. Check the remaining form and review tasks next."
+        : "At least one plan needs a document you cannot get, and its rules do not list a usable alternative.",
       facts: [
         `${groups.length} program-specific acceptance rules were checked.`,
         `${available.size} document types are already reported available.`,
-        `${alternativesConsidered} possible document subsets were evaluated.`,
+        `${alternativesConsidered} possible combinations of documents were checked.`,
         ...(feasible
           ? [
               "Every selected program keeps its own acceptance rules; a route is reused only where explicitly accepted.",

@@ -8,7 +8,18 @@ async function nav(page: Page, label: string) {
   if (await menu.isVisible()) await menu.click();
   await page
     .getByRole("navigation")
-    .getByRole("button", { name: label, exact: true })
+    .getByRole("button", {
+      name:
+        (
+          {
+            Dashboard: "Overview",
+            Discover: "Find help",
+            PathFinder: "My checklist",
+            Timeline: "Activity",
+          } as Record<string, string>
+        )[label] ?? label,
+      exact: true,
+    })
     .click();
 }
 async function addPlan(page: Page, name: string) {
@@ -47,30 +58,28 @@ test("what-if parity, real progress, corrections and offline persistence across 
     })
     .click();
   await expect(page.locator(".pathfinder-total")).toContainText(
-    "4 of 10 milestones",
+    "4 of 10 steps",
   );
-  await page
-    .getByLabel("Preview an available action")
-    .selectOption("doc:paystub");
+  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
   const preview = page.locator(".what-if-panel");
-  await expect(preview.getByText("HYPOTHETICAL · NOT SAVED")).toBeVisible();
+  await expect(
+    preview.getByText("Preview only — not marked done"),
+  ).toBeVisible();
   await expect(preview.locator(".simulation-scores")).toContainText("60%");
   await expect(page.locator(".pathfinder-total")).toContainText("40");
   await saved(page);
   await page.reload();
   await nav(page, "PathFinder");
   await expect(page.locator(".pathfinder-total")).toContainText(
-    "4 of 10 milestones",
+    "4 of 10 steps",
   );
-  await expect(page.getByText("HYPOTHETICAL · NOT SAVED")).toHaveCount(0);
+  await expect(page.getByText("Preview only — not marked done")).toHaveCount(0);
+  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
   await page
-    .getByLabel("Preview an available action")
-    .selectOption("doc:paystub");
-  await page
-    .getByRole("button", { name: "Apply this step", exact: true })
+    .getByRole("button", { name: "Update my checklist", exact: true })
     .click();
   await expect(page.locator(".pathfinder-total")).toContainText(
-    "6 of 10 milestones",
+    "6 of 10 steps",
   );
   await expect(
     page.getByRole("button", {
@@ -85,7 +94,7 @@ test("what-if parity, real progress, corrections and offline persistence across 
     }),
   ).toBeEnabled();
   await expect(page.locator(".state-announcement")).toContainText(
-    "2 newly available tasks",
+    "2 more steps are ready",
   );
   await nav(page, "Timeline");
   await page
@@ -112,6 +121,12 @@ test("what-if parity, real progress, corrections and offline persistence across 
   await page.waitForFunction(() => !!navigator.serviceWorker.controller);
   await context.setOffline(true);
   await page.reload();
+  expect(
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      return document.fonts.check('16px "Atkinson Hyperlegible"');
+    }),
+  ).toBe(true);
   await expect(
     page.getByText("You’re offline.", { exact: false }),
   ).toBeVisible();
@@ -132,7 +147,7 @@ test("what-if parity, real progress, corrections and offline persistence across 
   await page.reload();
   await nav(page, "PathFinder");
   await expect(page.locator(".pathfinder-total")).toContainText(
-    "6 of 10 milestones",
+    "6 of 10 steps",
   );
   await context.setOffline(false);
   expect(errors).toEqual([]);
@@ -148,21 +163,19 @@ test("demo scenes and eligibility changes preserve the personal workspace", asyn
     .fill("36000");
   await saved(page);
   await nav(page, "Dashboard");
-  await page.getByRole("button", { name: "Try a guided demo" }).click();
+  await page.getByRole("button", { name: "Try a guided example" }).click();
   await expect(page.getByText("Personal progress preserved")).toBeAttached();
   await page.getByRole("button", { name: /Demo scene 4:/ }).click();
   await expect(
-    page.getByRole("heading", { name: "What changes if…" }),
+    page.getByRole("heading", { name: "See what would change" }),
   ).toBeVisible();
+  await page.getByLabel("Choose a step to preview").selectOption("doc:paystub");
   await page
-    .getByLabel("Preview an available action")
-    .selectOption("doc:paystub");
-  await page
-    .getByRole("button", { name: "Apply this step", exact: true })
+    .getByRole("button", { name: "Update my checklist", exact: true })
     .click();
   await page.getByRole("button", { name: /Demo scene 6:/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Prepare once. Open more routes." }),
+    page.getByRole("heading", { name: "Your documents" }),
   ).toBeVisible();
   await page
     .getByText("Try another fictional scenario", { exact: true })
@@ -237,7 +250,7 @@ test("explicit reuse, unavailable-document rescue, export, print and program rem
   await expect(
     page.getByRole("region", { name: "PathFinder interactive dependency map" }),
   ).toBeVisible();
-  await page.getByLabel("Show a focused route").selectOption("fresh");
+  await page.getByLabel("Show steps for").selectOption("fresh");
   await expect(page.locator(".react-flow__node")).toHaveCount(9);
   await nav(page, "Documents");
   const pending = page.waitForEvent("download");
@@ -284,7 +297,7 @@ test("adaptive onboarding skips irrelevant questions, resumes, and supports dele
 }) => {
   await page.goto("/");
   await page
-    .getByRole("button", { name: "Find my starting point", exact: true })
+    .getByRole("button", { name: "Help me get started", exact: true })
     .click();
   const dialog = page.getByRole("dialog", { name: "Find your starting point" });
   await dialog.getByRole("button", { name: "Continue", exact: true }).click();
@@ -295,12 +308,12 @@ test("adaptive onboarding skips irrelevant questions, resumes, and supports dele
   await expect(dialog).not.toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: "Continue my starting point",
+      name: "Continue my checklist setup",
       exact: true,
     }),
   ).toBeFocused();
   await page
-    .getByRole("button", { name: "Continue my starting point", exact: true })
+    .getByRole("button", { name: "Continue my checklist setup", exact: true })
     .click();
   await expect(
     dialog.getByRole("heading", { name: "Where are you looking?" }),
@@ -308,7 +321,7 @@ test("adaptive onboarding skips irrelevant questions, resumes, and supports dele
   await dialog.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(dialog).not.toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "More clarity. Fewer dead ends." }),
+    page.getByRole("heading", { name: "Find housing help" }),
   ).toBeVisible();
   await nav(page, "Settings");
   await expect(page.getByLabel("Household size", { exact: true })).toHaveValue(
@@ -400,4 +413,53 @@ test("other tabs refresh and stale tabs cannot resurrect deleted progress", asyn
     "",
   );
   await stale.close();
+});
+
+test("plain-language help explains the worked example and keeps it separate from personal progress", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "See what a pay stub changes", exact: true })
+    .click();
+  await expect(page.locator(".sample-result")).toContainText(
+    "2 more steps are ready to start",
+  );
+  await expect(page.locator(".sample-result")).toContainText("40% to 60%");
+  await expect(page.locator(".sample-form-list")).toContainText(
+    "Fresh Start form",
+  );
+  await expect(
+    page
+      .locator(".sample-form-list")
+      .getByText("Ready to work on", { exact: true }),
+  ).toHaveCount(2);
+  await page
+    .getByRole("button", { name: "Reset the example", exact: true })
+    .click();
+  await expect(
+    page
+      .locator(".sample-form-list")
+      .getByText("Waiting for income proof", { exact: true }),
+  ).toHaveCount(2);
+  await page.getByRole("button", { name: "Help", exact: true }).click();
+  const help = page.getByRole("dialog", { name: "Help with BridgeBack" });
+  await expect(
+    help.getByRole("heading", { name: "A few words you’ll see" }),
+  ).toBeVisible();
+  await expect(
+    help.getByText("Accepted alternative", { exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: "Help", exact: true }),
+  ).toBeFocused();
+  await nav(page, "PathFinder");
+  await expect(
+    page.getByRole("heading", { name: "Choose a plan to make a checklist." }),
+  ).toBeVisible();
+  await page.getByText("How to use this page", { exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "How to work through your checklist" }),
+  ).toBeVisible();
 });

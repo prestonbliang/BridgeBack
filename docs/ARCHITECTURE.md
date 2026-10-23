@@ -2,7 +2,7 @@
 
 ## Existing foundation, clearer boundaries
 
-Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow remain the stack. No backend, account, external database or language model is required. CSS extends the original calm teal/neutral design and supports dark and large-text preferences.
+Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow remain the stack. No backend, account, external database or language model is required. The interface uses a navy navigation rail and a readable help-desk layout, with locally hosted Atkinson Hyperlegible type, dark mode and large-text preferences. See `DESIGN.md` for the design sources and rationale.
 
 - `lib/engine.ts`: compatible original deterministic engine, graph validation and topological sorting. Mixed-consumer OR handling is corrected; recorded deadlines are not mislabeled as verified.
 - `lib/programs.ts`: explicit program entities, canonical document types, per-program acceptance gates, screening criteria and source provenance. All shipped program rules are fictional.
@@ -11,6 +11,8 @@ Next.js App Router, React, strict TypeScript, Dexie, Zod, Lucide and React Flow 
 - `lib/store.ts`: the existing IndexedDB database with ordered saves, transactional cross-tab revision checks and read-only migration until successful loading.
 - `hooks/useWorkspace.ts`: hydration, persistence status, cross-tab refresh and a guard that prevents autosaving over unreadable data.
 - `components/PathFinder.tsx`, `Documents.tsx`, `Explain.tsx`: shared engine results rendered as interactive decision tools.
+- `components/Overview.tsx`: first-visit instructions, real calculated sample preview without persistence, current next action and checklist counts.
+- `components/Help.tsx`: per-page instructions and a shared accessible help/glossary dialog.
 - `components/Onboarding.tsx`, `WorkspaceViews.tsx`, `ui.tsx`: adaptive guide, directory, profile, timeline, guided demo and native accessible dialog.
 - `app/page.tsx`: workspace orchestration, navigation, isolated demo and transition announcements. It delegates feature views and domain calculations.
 - `lib/packet.ts`: current-state preparation packet generation.
@@ -38,7 +40,7 @@ Shipped fixtures have no deadlines. Deadline priority/conflicts require a verifi
 
 `simulatePlan` uses exactly the same evaluator on a copied input. Only currently available actions can be simulated; it cannot magically bypass prerequisites. The result contains before/after analyses, newly available nodes, newly satisfied nodes and readiness delta. UI explicitly labels hypothetical results and persists nothing until “Apply this step.” Actual changes use the same mutation semantics. Transition explanations identify the changed recommendation and its engine-generated reasons.
 
-The graph layout follows topological depth rather than fixed fixture indexes. The user can focus one program or pan/zoom the combined map. Selecting nodes shows prerequisites and accepted alternatives. A full keyboard-accessible checklist remains available.
+The graph layout follows topological depth rather than fixed fixture indexes. Navigation uses familiar labels while the internal tab IDs remain compatible. My checklist puts actual tasks ahead of optional planning tools. The user can focus one program or pan/zoom the combined map. Selecting nodes shows prerequisites and accepted alternatives. A full keyboard-accessible checklist remains available.
 
 ## Route Rescue
 
@@ -56,6 +58,6 @@ The demo is a separate in-memory Workspace. Personal state is never replaced by 
 
 ## Offline and deployment
 
-The production service worker precaches a complete HTML shell plus referenced JS/CSS and local assets before activation. HTML and hashed assets stay paired. A failed candidate leaves the prior shell intact; unrelated origin caches are preserved. Updates wait for old tabs to close. The build generates a service-worker release ID, so every changed production build updates the worker without relying on a manual cache bump. IndexedDB, screening, graphs, simulations, exports and Route Rescue work offline after installation. External provider websites require network access.
+The production service worker precaches a complete HTML shell plus referenced JS/CSS, locally hosted fonts and local assets before activation. HTML and hashed assets stay paired. A failed candidate leaves the prior shell intact; unrelated origin caches are preserved. Updates wait for old tabs to close. The build generates a service-worker release ID, so every changed production build updates the worker without relying on a manual cache bump. IndexedDB, screening, graphs, simulations, exports and Route Rescue work offline after installation. External provider websites require network access.
 
 The catalog is deliberately small. Full evaluation is clear and cheap for this graph; the original incremental engine remains tested, but the multi-program planner does not claim unmeasured incremental performance gains. Graph/recommendation computations are memoized by workspace state. Benchmark results measure rule correctness, not real-world housing outcomes or completion-time improvements.

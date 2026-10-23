@@ -76,6 +76,17 @@ export function PathFinder({
     () => (simulatedAction ? simulatePlan(input, simulatedAction.id) : null),
     [input, simulatedAction],
   );
+  function previewStep(id: string) {
+    setSimulationId(id);
+    requestAnimationFrame(() =>
+      document.querySelector(".what-if-panel")?.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      }),
+    );
+  }
   const activeScope = analysis.programs.some((program) => program.id === scope)
     ? scope
     : "all";
@@ -141,7 +152,7 @@ export function PathFinder({
                 {status === "complete"
                   ? "Complete"
                   : status === "blocked"
-                    ? "Waiting on prerequisites"
+                    ? "Needs something first"
                     : "Ready to prepare"}
                 {shared > 1 ? ` · ${shared} plans` : ""}
                 {recommended?.id === id ? " · Recommended" : ""}
@@ -164,7 +175,7 @@ export function PathFinder({
             id: `${id}->${node.id}`,
             source: id,
             target: node.id,
-            label: node.any.includes(id) ? "OR" : "AND",
+            label: node.any.includes(id) ? "One option" : "Needed first",
             animated: false,
             className:
               analysis.statuses[id] === "complete"
@@ -191,10 +202,11 @@ export function PathFinder({
     return (
       <section className="card empty">
         <GitBranch size={32} />
-        <h2>Your path starts with a plan.</h2>
+        <h1>My checklist</h1>
+        <h2>Choose a plan to make a checklist.</h2>
         <p>
-          Choose a practice program in Discover, or open Explore Demo to see an
-          interactive route.
+          Open Find help and add a practice plan, or use Explore Demo to try a
+          ready-made example.
         </p>
       </section>
     );
@@ -203,11 +215,13 @@ export function PathFinder({
       <section className="pathfinder-intro">
         <div>
           <div className="eyebrow">
-            <GitBranch size={15} /> PATHFINDER
+            <GitBranch size={15} /> PathFinder
           </div>
-          <h1>One step can open a new route.</h1>
+          <h1>Your next steps</h1>
           <p>
-            Find the obstacle. Explore your options. Move forward with a reason.
+            Check off documents you have and tasks you have finished. A waiting
+            step tells you what it still needs. You can change a check mark if
+            you make a mistake.
           </p>
         </div>
         <div className="pathfinder-total">
@@ -216,9 +230,9 @@ export function PathFinder({
             <span>%</span>
           </strong>
           <div>
-            <span>prepared across your plans</span>
+            <span>of your checklist finished</span>
             <small>
-              {analysis.complete} of {analysis.total} milestones
+              {analysis.complete} of {analysis.total} steps
             </small>
           </div>
         </div>
@@ -270,7 +284,7 @@ export function PathFinder({
             <ArrowRight size={23} />
           </div>
           <div className="pf-next-copy">
-            <span className="eyebrow">YOUR NEXT BEST ACTION</span>
+            <span className="eyebrow">Start here</span>
             <h2>{recommended.name}</h2>
             <p>{recommended.explanation.summary}</p>
             <Explain explanation={recommended.explanation} />
@@ -281,11 +295,11 @@ export function PathFinder({
               onClick={() => onComplete(recommended.id)}
             >
               <Check size={16} />
-              Mark prepared
+              Mark this step done
             </button>
             <button
               className="button secondary"
-              onClick={() => setSimulationId(recommended.id)}
+              onClick={() => previewStep(recommended.id)}
             >
               <WandSparkles size={16} />
               What if I do this?
@@ -297,7 +311,7 @@ export function PathFinder({
         <section className="pf-change-note">
           <ShieldCheck size={23} />
           <div>
-            <strong>Your preparation milestones are complete.</strong>
+            <strong>Your preparation steps are finished.</strong>
             <p>
               Review your packet and confirm current instructions with the
               provider. Preparation is not approval.
@@ -305,17 +319,311 @@ export function PathFinder({
           </div>
         </section>
       )}
+      <section className="card journey-panel">
+        <div className="pf-section-header">
+          <div>
+            <span className="eyebrow">Your checklist</span>
+            <h2>
+              {activeScope === "all"
+                ? "All the steps"
+                : analysis.programs.find(
+                    (program) => program.id === activeScope,
+                  )?.name}
+            </h2>
+          </div>
+          <div className="segmented">
+            <button
+              aria-pressed={view === "checklist"}
+              onClick={() => setView("checklist")}
+            >
+              <ListChecks size={15} />
+              Checklist
+            </button>
+            <button
+              aria-pressed={view === "map"}
+              onClick={() => setView("map")}
+            >
+              <MapIcon size={15} />
+              Journey map
+            </button>
+          </div>
+        </div>
+        <p className="helper-text">
+          Check a box only when the document is available or the task is
+          finished. For a waiting task, gather the items listed under “Needs”
+          first. Nothing is sent to an agency.
+        </p>
+        <div className="journey-toolbar">
+          <label className="pf-field">
+            Show steps for
+            <select
+              value={activeScope}
+              onChange={(event) => setScope(event.target.value)}
+            >
+              <option value="all">All selected plans</option>
+              {analysis.programs.map((program) => (
+                <option value={program.id} key={program.id}>
+                  {program.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="journey-legend">
+            <span>
+              <i className="legend-complete" />
+              Done
+            </span>
+            <span>
+              <i className="legend-available" />
+              Can do now
+            </span>
+            <span>
+              <i className="legend-blocked" />
+              Waiting
+            </span>
+          </div>
+        </div>
+        {view === "map" && (
+          <>
+            <div
+              className="pf-flow"
+              role="region"
+              aria-label="PathFinder interactive dependency map"
+            >
+              <ReactFlow
+                key={activeScope}
+                nodes={graph.nodes}
+                edges={graph.edges}
+                fitView
+                minZoom={0.2}
+                maxZoom={1.5}
+                nodesDraggable={false}
+                nodesConnectable={false}
+                onNodeClick={(_, node) => setSelectedId(node.id)}
+                onNodeDoubleClick={(_, node) => setSelectedId(node.id)}
+                proOptions={{ hideAttribution: false }}
+              >
+                <Background gap={22} />
+                <Controls showInteractive={false} />
+              </ReactFlow>
+            </div>
+            <p className="map-help">
+              Drag the map to move around, or use the zoom buttons. Select a box
+              to see what it needs. “Needed first” means you need that item;
+              “One option” means you can choose one of the listed papers.
+            </p>
+          </>
+        )}
+        {selected && (
+          <div className="node-detail">
+            <div className="pf-section-header">
+              <div>
+                <span className="eyebrow">About this step</span>
+                <h3>{selected.name}</h3>
+              </div>
+              <button
+                className="icon-button"
+                aria-label="Close requirement details"
+                onClick={() => setSelectedId(null)}
+              >
+                <X size={17} />
+              </button>
+            </div>
+            <p>{selected.description}</p>
+            {selected.all.length > 0 && (
+              <p>
+                <strong>All required:</strong>{" "}
+                {selected.all.map((id) => names.get(id) ?? id).join(", ")}
+              </p>
+            )}
+            {selected.any.length > 0 && (
+              <p>
+                <strong>Choose one:</strong>{" "}
+                {selected.any.map((id) => names.get(id) ?? id).join(" or ")}
+              </p>
+            )}
+            <p className="node-source">Source: {selected.source}</p>
+            {selected.any.length > 0 && (
+              <div className="node-alternative-actions">
+                {selected.any
+                  .filter((id) =>
+                    analysis.actions.some((action) => action.id === id),
+                  )
+                  .map((id) => (
+                    <button
+                      key={id}
+                      className="button secondary"
+                      onClick={() => previewStep(id)}
+                    >
+                      Preview {names.get(id) ?? id}
+                      <WandSparkles size={14} />
+                    </button>
+                  ))}
+              </div>
+            )}
+            {analysis.actions.find((action) => action.id === selected.id) && (
+              <button
+                className="button secondary"
+                onClick={() => previewStep(selected.id)}
+              >
+                Preview this step <WandSparkles size={15} />
+              </button>
+            )}
+          </div>
+        )}
+        <div className={view === "map" ? "pf-map-checklist" : "pf-checklist"}>
+          {view === "map" && <h3>Accessible task checklist</h3>}
+          {taskNodes.map((node) => {
+            const status = analysis.statuses[node.id];
+            const action = analysis.actions.find((item) => item.id === node.id);
+            const owners = programIdsFor(node.id, analysis)
+              .map(
+                (id) =>
+                  analysis.programs.find((program) => program.id === id)?.name,
+              )
+              .filter(Boolean);
+            const blockedBy = node.all.filter(
+              (id) => analysis.statuses[id] !== "complete",
+            );
+            const alternatives =
+              node.any.length &&
+              !node.any.some((id) => analysis.statuses[id] === "complete")
+                ? node.any
+                : [];
+            return (
+              <article
+                className={`pf-task ${highlightedIds.includes(node.id) ? "newly-unlocked" : ""} ${status}`}
+                key={node.id}
+              >
+                <button
+                  className={`check ${status}`}
+                  disabled={
+                    status === "blocked" ||
+                    input.unavailable.includes(node.id.replace(/^doc:/, ""))
+                  }
+                  aria-label={`${status === "complete" ? "Reopen" : "Complete"} ${node.name}`}
+                  aria-pressed={status === "complete"}
+                  onClick={() => onComplete(node.id)}
+                >
+                  {status === "complete" ? (
+                    <Check size={17} />
+                  ) : status === "blocked" ? (
+                    <LockKeyhole size={15} />
+                  ) : null}
+                </button>
+                <div className="pf-task-body">
+                  <div className="pf-task-heading">
+                    <h3>{node.name}</h3>
+                    <span className={`pf-status ${status}`}>
+                      {input.unavailable.includes(node.id.replace(/^doc:/, ""))
+                        ? "Unavailable"
+                        : node.type === "document" &&
+                            status === "available" &&
+                            !action
+                          ? "Optional alternative"
+                          : {
+                              complete: "Done",
+                              available: "Can do now",
+                              blocked: "Waiting",
+                            }[status]}
+                    </span>
+                  </div>
+                  <p>{node.description}</p>
+                  {owners.length > 0 && (
+                    <div className="program-tags">
+                      {owners.map((owner) => (
+                        <span key={owner}>{owner}</span>
+                      ))}
+                      {owners.length > 1 && (
+                        <span className="shared-tag">
+                          One task · {owners.length} plans
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {blockedBy.length > 0 && (
+                    <p className="pf-blocker-text">
+                      Needs:{" "}
+                      {blockedBy.map((id) => names.get(id) ?? id).join(", ")}
+                    </p>
+                  )}
+                  {alternatives.length > 0 && (
+                    <p className="pf-blocker-text">
+                      One of:{" "}
+                      {alternatives
+                        .map((id) => names.get(id) ?? id)
+                        .join(" or ")}
+                    </p>
+                  )}
+                  <div className="pf-task-footer">
+                    {status !== "complete" && (
+                      <label className="pf-effort">
+                        How hard is this for you?
+                        <select
+                          aria-label={`Effort for ${node.name}`}
+                          value={input.effort[node.id] ?? ""}
+                          onChange={(event) =>
+                            onEffort(node.id, Number(event.target.value))
+                          }
+                        >
+                          <option value="" disabled>
+                            Not rated
+                          </option>
+                          <option value={1}>Straightforward</option>
+                          <option value={2}>A little effort</option>
+                          <option value={3}>Some effort</option>
+                          <option value={4}>Substantial effort</option>
+                          <option value={5}>Difficult</option>
+                        </select>
+                      </label>
+                    )}
+                    {action && (
+                      <>
+                        <button
+                          className="text-button"
+                          onClick={() => previewStep(node.id)}
+                        >
+                          Preview this step <WandSparkles size={14} />
+                        </button>
+                        <Explain explanation={action.explanation} />
+                      </>
+                    )}
+                    {status === "complete" && (
+                      <button
+                        className="text-button"
+                        onClick={() => onComplete(node.id)}
+                      >
+                        <Undo2 size={13} />
+                        Correct this step
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+      <div className="planning-tools-heading">
+        <h2>Check another option before you act</h2>
+        <p>
+          These tools explain what is holding things up and let you preview a
+          change.
+        </p>
+      </div>
       <div className="pf-workspace-grid">
         <section className="card barrier-panel" aria-labelledby="barrier-title">
           <div className="pf-section-header">
             <div>
-              <span className="eyebrow">BARRIERBREAK</span>
-              <h2 id="barrier-title">Find the obstacle that matters.</h2>
+              <span className="eyebrow">BarrierBreak</span>
+              <h2 id="barrier-title">What’s holding things up?</h2>
             </div>
             <GitBranch size={22} aria-hidden="true" />
           </div>
           <p className="pf-section-description">
-            Ranked by their actual consequences in your selected plans.
+            These missing items are connected to later steps. An item near the
+            top affects more of your checklist, but other missing things may
+            also need attention.
           </p>
           {analysis.barriers.length ? (
             <div className="barrier-list">
@@ -327,11 +635,11 @@ export function PathFinder({
                   <div>
                     <h3>{barrier.name}</h3>
                     <p>
-                      {barrier.blockedCount} downstream{" "}
+                      {barrier.blockedCount} later{" "}
                       {barrier.blockedCount === 1 ? "step" : "steps"} affected ·{" "}
                       {barrier.actionable
-                        ? "Actionable now"
-                        : "Prerequisites needed"}
+                        ? "You can work on this now"
+                        : "Needs another item first"}
                     </p>
                     {barrier.alternativeIds.length > 0 && (
                       <small className="barrier-alternatives">
@@ -388,21 +696,23 @@ export function PathFinder({
         <section className="card what-if-panel" aria-labelledby="what-if-title">
           <div className="pf-section-header">
             <div>
-              <span className="eyebrow">A SAFE SPACE TO EXPLORE</span>
-              <h2 id="what-if-title">What changes if…</h2>
+              <span className="eyebrow">Preview a change</span>
+              <h2 id="what-if-title">See what would change</h2>
             </div>
             <WandSparkles size={22} aria-hidden="true" />
           </div>
           <p className="pf-section-description">
-            Try a step before committing. Your actual progress stays untouched.
+            For example: what if you got your pay stub? Pick a step below to see
+            what would become ready. This will not check it off your real
+            checklist.
           </p>
           <label className="pf-field">
-            Preview an available action
+            Choose a step to preview
             <select
               value={simulatedAction?.id ?? ""}
               onChange={(event) => setSimulationId(event.target.value || null)}
             >
-              <option value="">Choose a step to simulate</option>
+              <option value="">Choose a step</option>
               {analysis.actions.map((action) => (
                 <option key={action.id} value={action.id}>
                   {action.name}
@@ -412,10 +722,12 @@ export function PathFinder({
           </label>
           {simulation && simulatedAction ? (
             <div className="simulation-result" aria-live="polite">
-              <span className="simulation-label">HYPOTHETICAL · NOT SAVED</span>
+              <span className="simulation-label">
+                Preview only — not marked done
+              </span>
               <div className="simulation-scores">
                 <div>
-                  <span>Actual readiness</span>
+                  <span>Your checklist now</span>
                   <strong>{simulation.before.readiness}%</strong>
                 </div>
                 <ArrowRight size={23} />
@@ -430,14 +742,11 @@ export function PathFinder({
                   available
                 </span>
                 <span>
-                  <strong>
-                    {simulation.readinessDelta > 0 ? "+" : ""}
-                    {simulation.readinessDelta}
-                  </strong>{" "}
-                  readiness points
+                  {simulation.before.complete} to {simulation.after.complete} of{" "}
+                  {simulation.after.total} steps finished
                 </span>
               </div>
-              <h3>What would open up</h3>
+              <h3>Steps you could start next</h3>
               {simulation.newlyAvailable.length ? (
                 <ul>
                   {simulation.newlyAvailable.map((id) => (
@@ -446,8 +755,8 @@ export function PathFinder({
                 </ul>
               ) : (
                 <p>
-                  No new actionable tasks immediately. This step may satisfy a
-                  prerequisite in a longer route.
+                  No extra steps become ready immediately. This still prepares
+                  part of your checklist; later steps may need other items too.
                 </p>
               )}
               <p className="simulation-next">
@@ -464,6 +773,10 @@ export function PathFinder({
                   : "obstacles"}
                 .
               </p>
+              <p className="helper-text">
+                Only update your checklist if you have actually done this step.
+                Otherwise, close the preview.
+              </p>
               <button
                 className="button primary"
                 onClick={() => {
@@ -472,301 +785,26 @@ export function PathFinder({
                 }}
               >
                 <Check size={16} />
-                Apply this step
+                Update my checklist
               </button>
               <button
                 className="text-button"
                 onClick={() => setSimulationId(null)}
               >
-                Discard simulation
+                Close preview
               </button>
             </div>
           ) : (
             <div className="pf-small-empty">
               <CircleHelp size={30} />
               <p>
-                Choose an action to see new routes, remaining obstacles, and
-                your next recommendation.
+                Choose a step above. You’ll see the new checklist progress,
+                which tasks become ready and what would still be missing.
               </p>
             </div>
           )}
         </section>
       </div>
-      <section className="card journey-panel">
-        <div className="pf-section-header">
-          <div>
-            <span className="eyebrow">YOUR PREPARATION ROUTE</span>
-            <h2>
-              {activeScope === "all"
-                ? "The shared picture"
-                : analysis.programs.find(
-                    (program) => program.id === activeScope,
-                  )?.name}
-            </h2>
-          </div>
-          <div className="segmented">
-            <button
-              aria-pressed={view === "checklist"}
-              onClick={() => setView("checklist")}
-            >
-              <ListChecks size={15} />
-              Checklist
-            </button>
-            <button
-              aria-pressed={view === "map"}
-              onClick={() => setView("map")}
-            >
-              <MapIcon size={15} />
-              Journey map
-            </button>
-          </div>
-        </div>
-        <div className="journey-toolbar">
-          <label className="pf-field">
-            Show a focused route
-            <select
-              value={activeScope}
-              onChange={(event) => setScope(event.target.value)}
-            >
-              <option value="all">All plans · shared preparation map</option>
-              {analysis.programs.map((program) => (
-                <option value={program.id} key={program.id}>
-                  {program.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="journey-legend">
-            <span>
-              <i className="legend-complete" />
-              Complete
-            </span>
-            <span>
-              <i className="legend-available" />
-              Available
-            </span>
-            <span>
-              <i className="legend-blocked" />
-              Blocked
-            </span>
-          </div>
-        </div>
-        {view === "map" && (
-          <>
-            <div
-              className="pf-flow"
-              role="region"
-              aria-label="PathFinder interactive dependency map"
-            >
-              <ReactFlow
-                key={activeScope}
-                nodes={graph.nodes}
-                edges={graph.edges}
-                fitView
-                minZoom={0.2}
-                maxZoom={1.5}
-                nodesDraggable={false}
-                nodesConnectable={false}
-                onNodeClick={(_, node) => setSelectedId(node.id)}
-                onNodeDoubleClick={(_, node) => setSelectedId(node.id)}
-                proOptions={{ hideAttribution: false }}
-              >
-                <Background gap={22} />
-                <Controls showInteractive={false} />
-              </ReactFlow>
-            </div>
-            <p className="map-help">
-              Pan or zoom to follow a route. Select any node for its
-              prerequisites. AND means all; OR means one accepted alternative.
-            </p>
-          </>
-        )}
-        {selected && (
-          <div className="node-detail">
-            <div className="pf-section-header">
-              <div>
-                <span className="eyebrow">SELECTED REQUIREMENT</span>
-                <h3>{selected.name}</h3>
-              </div>
-              <button
-                className="icon-button"
-                aria-label="Close requirement details"
-                onClick={() => setSelectedId(null)}
-              >
-                <X size={17} />
-              </button>
-            </div>
-            <p>{selected.description}</p>
-            {selected.all.length > 0 && (
-              <p>
-                <strong>All required:</strong>{" "}
-                {selected.all.map((id) => names.get(id) ?? id).join(", ")}
-              </p>
-            )}
-            {selected.any.length > 0 && (
-              <p>
-                <strong>Choose one:</strong>{" "}
-                {selected.any.map((id) => names.get(id) ?? id).join(" or ")}
-              </p>
-            )}
-            <p className="node-source">Source: {selected.source}</p>
-            {selected.any.length > 0 && (
-              <div className="node-alternative-actions">
-                {selected.any
-                  .filter((id) =>
-                    analysis.actions.some((action) => action.id === id),
-                  )
-                  .map((id) => (
-                    <button
-                      key={id}
-                      className="button secondary"
-                      onClick={() => setSimulationId(id)}
-                    >
-                      Preview {names.get(id) ?? id}
-                      <WandSparkles size={14} />
-                    </button>
-                  ))}
-              </div>
-            )}
-            {analysis.actions.find((action) => action.id === selected.id) && (
-              <button
-                className="button secondary"
-                onClick={() => setSimulationId(selected.id)}
-              >
-                Simulate this requirement <WandSparkles size={15} />
-              </button>
-            )}
-          </div>
-        )}
-        <div className={view === "map" ? "pf-map-checklist" : "pf-checklist"}>
-          {view === "map" && <h3>Accessible task checklist</h3>}
-          {taskNodes.map((node) => {
-            const status = analysis.statuses[node.id];
-            const action = analysis.actions.find((item) => item.id === node.id);
-            const owners = programIdsFor(node.id, analysis)
-              .map(
-                (id) =>
-                  analysis.programs.find((program) => program.id === id)?.name,
-              )
-              .filter(Boolean);
-            const blockedBy = node.all.filter(
-              (id) => analysis.statuses[id] !== "complete",
-            );
-            const alternatives =
-              node.any.length &&
-              !node.any.some((id) => analysis.statuses[id] === "complete")
-                ? node.any
-                : [];
-            return (
-              <article
-                className={`pf-task ${highlightedIds.includes(node.id) ? "newly-unlocked" : ""} ${status}`}
-                key={node.id}
-              >
-                <button
-                  className={`check ${status}`}
-                  disabled={
-                    status === "blocked" ||
-                    input.unavailable.includes(node.id.replace(/^doc:/, ""))
-                  }
-                  aria-label={`${status === "complete" ? "Reopen" : "Complete"} ${node.name}`}
-                  aria-pressed={status === "complete"}
-                  onClick={() => onComplete(node.id)}
-                >
-                  {status === "complete" ? (
-                    <Check size={17} />
-                  ) : status === "blocked" ? (
-                    <LockKeyhole size={15} />
-                  ) : null}
-                </button>
-                <div className="pf-task-body">
-                  <div className="pf-task-heading">
-                    <h3>{node.name}</h3>
-                    <span className={`pf-status ${status}`}>
-                      {input.unavailable.includes(node.id.replace(/^doc:/, ""))
-                        ? "Unavailable"
-                        : node.type === "document" &&
-                            status === "available" &&
-                            !action
-                          ? "Optional alternative"
-                          : status}
-                    </span>
-                  </div>
-                  <p>{node.description}</p>
-                  {owners.length > 0 && (
-                    <div className="program-tags">
-                      {owners.map((owner) => (
-                        <span key={owner}>{owner}</span>
-                      ))}
-                      {owners.length > 1 && (
-                        <span className="shared-tag">
-                          One task · {owners.length} plans
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {blockedBy.length > 0 && (
-                    <p className="pf-blocker-text">
-                      Needs:{" "}
-                      {blockedBy.map((id) => names.get(id) ?? id).join(", ")}
-                    </p>
-                  )}
-                  {alternatives.length > 0 && (
-                    <p className="pf-blocker-text">
-                      One of:{" "}
-                      {alternatives
-                        .map((id) => names.get(id) ?? id)
-                        .join(" or ")}
-                    </p>
-                  )}
-                  <div className="pf-task-footer">
-                    {status !== "complete" && (
-                      <label className="pf-effort">
-                        Your estimated effort
-                        <select
-                          aria-label={`Effort for ${node.name}`}
-                          value={input.effort[node.id] ?? ""}
-                          onChange={(event) =>
-                            onEffort(node.id, Number(event.target.value))
-                          }
-                        >
-                          <option value="" disabled>
-                            Not rated
-                          </option>
-                          <option value={1}>Straightforward</option>
-                          <option value={2}>A little effort</option>
-                          <option value={3}>Some effort</option>
-                          <option value={4}>Substantial effort</option>
-                          <option value={5}>Difficult</option>
-                        </select>
-                      </label>
-                    )}
-                    {action && (
-                      <>
-                        <button
-                          className="text-button"
-                          onClick={() => setSimulationId(node.id)}
-                        >
-                          Try what-if <WandSparkles size={14} />
-                        </button>
-                        <Explain explanation={action.explanation} />
-                      </>
-                    )}
-                    {status === "complete" && (
-                      <button
-                        className="text-button"
-                        onClick={() => onComplete(node.id)}
-                      >
-                        <Undo2 size={13} />
-                        Correct this step
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
     </div>
   );
 }

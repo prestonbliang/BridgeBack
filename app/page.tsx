@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ArrowRight,
   ArrowUpRight,
   Check,
   ChevronRight,
@@ -9,7 +8,6 @@ import {
   FileCheck2,
   GitBranch,
   Home,
-  Leaf,
   LockKeyhole,
   Menu,
   Moon,
@@ -19,8 +17,8 @@ import {
   Sun,
   WifiOff,
   X,
+  CircleHelp,
   History,
-  Route,
 } from "lucide-react";
 import { useWorkspace } from "../hooks/useWorkspace";
 import {
@@ -29,12 +27,15 @@ import {
   type Workspace,
   type WorkspaceAction,
 } from "../lib/workspace";
-import { evaluatePlan, transitionPlan, type Transition } from "../lib/planner";
-import { programs } from "../lib/programs";
+import {
+  evaluatePlan,
+  simulatePlan,
+  transitionPlan,
+  type Transition,
+} from "../lib/planner";
 import { preparationPacket } from "../lib/packet";
 import { PathFinder } from "../components/PathFinder";
 import { Documents } from "../components/Documents";
-import { Explain } from "../components/Explain";
 import { Onboarding } from "../components/Onboarding";
 import {
   Discover,
@@ -43,14 +44,16 @@ import {
   DemoGuide,
   demoScenes,
 } from "../components/WorkspaceViews";
-import { PageHeading, Progress, download } from "../components/ui";
+import { download } from "../components/ui";
+import { Overview } from "../components/Overview";
+import { HelpGuide, PageHelp } from "../components/Help";
 const navigation = [
-  { label: "Dashboard", icon: Home },
-  { label: "Discover", icon: Compass },
-  { label: "PathFinder", icon: GitBranch },
-  { label: "Documents", icon: FileCheck2 },
-  { label: "Timeline", icon: History },
-  { label: "Settings", icon: Settings },
+  { label: "Dashboard", title: "Overview", icon: Home },
+  { label: "Discover", title: "Find help", icon: Compass },
+  { label: "PathFinder", title: "My checklist", icon: GitBranch },
+  { label: "Documents", title: "Documents", icon: FileCheck2 },
+  { label: "Timeline", title: "Activity", icon: History },
+  { label: "Settings", title: "Settings", icon: Settings },
 ] as const;
 type Tab = (typeof navigation)[number]["label"];
 function demoWorkspace(index = 0): Workspace {
@@ -86,8 +89,11 @@ export default function App() {
   const menu = useRef<HTMLButtonElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const analysis = useMemo(() => evaluatePlan(state), [state]);
-  const example = useMemo(() => evaluatePlan(demoWorkspace()), []);
-  const next = analysis.actions[0];
+  const example = useMemo(
+    () => simulatePlan(demoWorkspace(), "doc:paystub"),
+    [],
+  );
+  const [helpOpen, setHelpOpen] = useState(false);
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
     update();
@@ -143,7 +149,7 @@ export default function App() {
         updated = updateWorkspace(updated, {
           type: "record",
           eventType: "screening",
-          label: `Screening recalculated: ${screened.map((program) => `${program.name} — ${program.screening.result.toLowerCase()} under fictional criteria`).join("; ")}. This is not an official decision.`,
+          label: `Sample rules checked again: ${screened.map((program) => `${program.name} — ${program.screening.result.toLowerCase()} under fictional criteria`).join("; ")}. This is not an official decision.`,
         });
       }
       if (delta.newlyAvailable.length) {
@@ -218,17 +224,17 @@ export default function App() {
       label: `Exported preparation packet for ${analysis.programs.length} plans`,
     });
     setNotification(
-      "Preparation packet downloaded. It includes current readiness, accepted alternatives, and next steps.",
+      "Your checklist was downloaded. It includes what you have, what is still missing, and the next steps. Nothing was sent to an agency.",
     );
   }
   if (!local.ready)
     return (
       <main className="loading" aria-busy="true">
-        Opening your private workspace…
+        Opening your saved checklist…
       </main>
     );
   return (
-    <div className="shell phase-two">
+    <div className="shell phase-two human-ui">
       <a className="skip" href="#main">
         Skip to content
       </a>
@@ -251,10 +257,20 @@ export default function App() {
           onClick={() => navigate("Dashboard")}
           aria-label="BridgeBack home"
         >
-          <span className="brand-mark">⌁</span>BridgeBack
-          <span className="brand-dot">.</span>
+          <span className="brand-mark">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path
+                d="M4 24V10m24 14V10M4 16c7-10 17-10 24 0M4 24h24M11 10v14m10-14v14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
+          BridgeBack
         </button>
-        <div className="workspace-label">A WAY FORWARD, TOGETHER</div>
+        <div className="workspace-label">Housing application help</div>
         <nav
           ref={navRef}
           id="main-navigation"
@@ -266,7 +282,7 @@ export default function App() {
             }
           }}
         >
-          {navigation.map(({ label, icon: Icon }) => (
+          {navigation.map(({ label, title, icon: Icon }) => (
             <button
               key={label}
               className={`nav ${tab === label ? "active" : ""}`}
@@ -274,7 +290,7 @@ export default function App() {
               aria-current={tab === label ? "page" : undefined}
             >
               <Icon size={19} />
-              {label}
+              {title}
               {tab === label && <span className="nav-dot" />}
             </button>
           ))}
@@ -282,11 +298,10 @@ export default function App() {
         <div className="sidebar-bottom">
           <div className="private-card">
             <ShieldCheck size={24} />
-            <strong>Private by design.</strong>
+            <strong>No document uploads</strong>
             <p>
-              Your documents stay with you.
-              <br />
-              We only keep track of what’s ready.
+              Just check off the papers you have. Keep the actual files with
+              you.
             </p>
           </div>
           <button
@@ -300,7 +315,9 @@ export default function App() {
           <div className="sidebar-foot">
             <span className="avatar">{demo ? "DE" : "BB"}</span>
             <div>
-              <strong>{demo ? "Fictional demo" : "My local workspace"}</strong>
+              <strong>
+                {demo ? "Fictional demo" : "Saved in this browser"}
+              </strong>
               <small>
                 {demo ? "Personal progress preserved" : local.saveStatus}
               </small>
@@ -335,15 +352,21 @@ export default function App() {
           <span>
             {demo ? "Demo workspace" : "My workspace"}
             <ChevronRight size={13} />
-            <strong>{tab}</strong>
+            <strong>
+              {navigation.find((item) => item.label === tab)?.title}
+            </strong>
           </span>
           <div>
+            <button className="help-trigger" onClick={() => setHelpOpen(true)}>
+              <CircleHelp size={18} aria-hidden="true" />
+              Help
+            </button>
             <span className="local-badge">
               <span />
               {online
                 ? offlineReady
                   ? "Offline ready"
-                  : "Local & private"
+                  : "Saved here"
                 : "Offline mode"}
             </span>
             <button
@@ -411,309 +434,18 @@ export default function App() {
               </>
             )}
           </div>
+          <PageHelp page={tab} />
           {tab === "Dashboard" && (
-            <>
-              <PageHeading
-                eyebrow={
-                  analysis.programs.length
-                    ? "YOUR NEXT CHAPTER"
-                    : "FROM “WHAT’S MISSING?” TO “WHAT’S NEXT?”"
-                }
-                title={
-                  analysis.programs.length
-                    ? "You have a way forward."
-                    : "One step. More possibilities."
-                }
-                action={
-                  <button
-                    className="button secondary"
-                    onClick={() =>
-                      analysis.programs.length
-                        ? navigate("PathFinder")
-                        : startDemo()
-                    }
-                  >
-                    {analysis.programs.length
-                      ? "Open PathFinder"
-                      : "Explore Demo"}
-                    <ArrowUpRight size={16} />
-                  </button>
-                }
-              >
-                {analysis.programs.length
-                  ? "Your preparation adapts as things change. Here’s where to focus today."
-                  : "Find the obstacle. See your options. Turn confusing requirements into a practical next step."}
-              </PageHeading>
-              <div className="dashboard-grid">
-                <section className="hero journey-hero">
-                  <div className="hero-copy">
-                    <span className="pill">
-                      {analysis.programs.length
-                        ? "PATHFINDER · YOUR NEXT BEST ACTION"
-                        : "MEET YOUR PREPARATION COMPANION"}
-                    </span>
-                    <h2>
-                      {next
-                        ? next.name
-                        : analysis.programs.length
-                          ? "Your preparation is ready."
-                          : "See what one document can unlock."}
-                    </h2>
-                    <p>
-                      {next
-                        ? next.explanation.summary
-                        : analysis.programs.length
-                          ? "Review your packet and confirm current instructions with a provider. Preparation never guarantees acceptance."
-                          : "A missing document can hold up more than one plan. BridgeBack shows the connection—and helps you find another route."}
-                    </p>
-                    <div className="inline-actions">
-                      <button
-                        className="button white"
-                        onClick={() =>
-                          analysis.programs.length
-                            ? navigate("PathFinder")
-                            : setOnboarding(true)
-                        }
-                      >
-                        {analysis.programs.length
-                          ? next
-                            ? "Take this step"
-                            : "Review my path"
-                          : local.workspace.onboarding.step
-                            ? "Continue my starting point"
-                            : "Find my starting point"}
-                        <ArrowRight size={17} />
-                      </button>
-                      {!analysis.programs.length && (
-                        <button
-                          className="hero-demo"
-                          onClick={() => startDemo()}
-                        >
-                          <Play size={15} />
-                          Explore a 2-minute demo
-                        </button>
-                      )}
-                    </div>
-                    <div className="hero-note">
-                      <ShieldCheck size={15} />
-                      No account. No uploads. At your pace.
-                    </div>
-                  </div>
-                  <div
-                    className="journey-preview"
-                    aria-label="Computed sample dependency preview"
-                  >
-                    <div className="preview-document">
-                      <FileCheck2 size={24} />
-                      <strong>One pay stub</strong>
-                      <span>Fictional example</span>
-                    </div>
-                    <div className="preview-branches" aria-hidden="true" />
-                    <div className="preview-plans">
-                      {example.programs.map((p) => (
-                        <div key={p.id}>
-                          <LockKeyhole size={14} />
-                          {programs.find((x) => x.id === p.id)?.shortName}
-                          <span>Form waiting</span>
-                        </div>
-                      ))}
-                    </div>
-                    <span className="preview-caption">
-                      Accepted explicitly by both sample plans
-                    </span>
-                  </div>
-                </section>
-                <section className="card readiness">
-                  <div className="card-top">
-                    <h2>Preparation readiness</h2>
-                  </div>
-                  <div
-                    className="progress-ring"
-                    style={{
-                      background: `conic-gradient(var(--teal) ${analysis.readiness}%, var(--border) 0)`,
-                    }}
-                  >
-                    <div>
-                      <strong>
-                        {analysis.readiness}
-                        <span>%</span>
-                      </strong>
-                      <small>prepared</small>
-                    </div>
-                  </div>
-                  <p>
-                    {analysis.programs.length
-                      ? `${analysis.complete} of ${analysis.total} milestones complete`
-                      : "Choose a plan to see your own progress."}
-                  </p>
-                  <div className="mini-divider" />
-                  <span className="tiny">
-                    Preparation progress, never an approval estimate
-                  </span>
-                </section>
-              </div>
-              {next && (
-                <div className="dashboard-explanation">
-                  <Explain explanation={next.explanation} />
-                </div>
-              )}
-              <div className="stats-grid">
-                <button className="stat" onClick={() => navigate("Discover")}>
-                  <span className="stat-icon mint">
-                    <Compass />
-                  </span>
-                  <div>
-                    <span>Plans in your workspace</span>
-                    <strong>
-                      {analysis.programs.length}
-                      <small>Program-specific rules</small>
-                    </strong>
-                  </div>
-                  <ChevronRight />
-                </button>
-                <button className="stat" onClick={() => navigate("PathFinder")}>
-                  <span className="stat-icon sand">
-                    <Route />
-                  </span>
-                  <div>
-                    <span>Steps ready to start</span>
-                    <strong>
-                      {analysis.actions.length}
-                      <small>Dependencies resolved</small>
-                    </strong>
-                  </div>
-                  <ChevronRight />
-                </button>
-                <button className="stat" onClick={() => navigate("Documents")}>
-                  <span className="stat-icon blue">
-                    <FileCheck2 />
-                  </span>
-                  <div>
-                    <span>Documents that can be reused</span>
-                    <strong>
-                      {
-                        analysis.documents.filter(
-                          (d) => d.programIds.length > 1,
-                        ).length
-                      }
-                      <small>Explicit acceptance only</small>
-                    </strong>
-                  </div>
-                  <ChevronRight />
-                </button>
-              </div>
-              <div className="lower-grid">
-                <section className="card">
-                  <div className="card-top">
-                    <h2>Your preparation routes</h2>
-                    <button
-                      className="text-button"
-                      onClick={() => navigate("Discover")}
-                    >
-                      Manage plans
-                      <ArrowRight size={15} />
-                    </button>
-                  </div>
-                  {analysis.programs.length ? (
-                    analysis.programs.map((p) => (
-                      <div className="dashboard-plan" key={p.id}>
-                        <div>
-                          <strong>{p.name}</strong>
-                          <span className="tag">FICTIONAL</span>
-                        </div>
-                        <Progress
-                          value={p.readiness}
-                          label={`${p.complete} of ${p.total} milestones`}
-                        />
-                        <p>{p.screening.result} under fictional criteria</p>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="empty">
-                      <span className="empty-icon">
-                        <GitBranch size={30} />
-                      </span>
-                      <h2>Start with a route, not a blank form.</h2>
-                      <p>
-                        Your next action comes from actual requirements and
-                        accepted alternatives. Try it with a fictional
-                        applicant.
-                      </p>
-                      <button
-                        className="button secondary"
-                        onClick={() => startDemo()}
-                      >
-                        Try a guided demo
-                        <ArrowRight size={16} />
-                      </button>
-                    </div>
-                  )}
-                  <div className="gentle-note">
-                    <Leaf size={17} />
-                    Small steps still move you forward.
-                  </div>
-                </section>
-                <section className="card">
-                  <div className="card-top">
-                    <h2>
-                      {analysis.barriers.length
-                        ? "BarrierBreak · what’s in the way"
-                        : "Clarity before commitment"}
-                    </h2>
-                  </div>
-                  {analysis.barriers.length ? (
-                    <>
-                      <div className="dashboard-barrier">
-                        <span className="tag">HIGHEST DOWNSTREAM IMPACT</span>
-                        <h3>{analysis.barriers[0].name}</h3>
-                        <p>{analysis.barriers[0].explanation.summary}</p>
-                        <button
-                          className="button secondary"
-                          onClick={() => navigate("PathFinder")}
-                        >
-                          Explore the alternatives
-                          <ArrowRight size={16} />
-                        </button>
-                      </div>
-                      <Explain explanation={analysis.barriers[0].explanation} />
-                    </>
-                  ) : (
-                    <div className="tips">
-                      <div>
-                        <span>01</span>
-                        <div>
-                          <strong>Understand the obstacle</strong>
-                          <p>
-                            See which requirements are holding up your next
-                            steps.
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        <span>02</span>
-                        <div>
-                          <strong>Try a different route</strong>
-                          <p>
-                            Simulate a document or find an accepted alternative.
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        <span>03</span>
-                        <div>
-                          <strong>Make one useful move</strong>
-                          <p>Update once. Every selected plan recalculates.</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="deadline-note">
-                    No verified upcoming deadlines are loaded. Check directly
-                    with each official provider.
-                  </div>
-                </section>
-              </div>
-            </>
+            <Overview
+              analysis={analysis}
+              example={example}
+              resume={local.workspace.onboarding.step > 0}
+              onStart={() => setOnboarding(true)}
+              onDemo={() => startDemo()}
+              onDiscover={() => navigate("Discover")}
+              onPath={() => navigate("PathFinder")}
+              onDocuments={() => navigate("Documents")}
+            />
           )}
           {tab === "Discover" && (
             <Discover
@@ -807,12 +539,17 @@ export default function App() {
               }}
             />
           )}
+          <HelpGuide
+            open={helpOpen}
+            onClose={() => setHelpOpen(false)}
+            page={tab}
+          />
           <footer>
             <span className="footer-brand">BridgeBack</span>
             <span>Your path to housing, made clear.</span>
             <span>
               <LockKeyhole size={13} />
-              Local-first. Human-centered.
+              Your checklist stays in this browser.
             </span>
           </footer>
         </main>
@@ -826,7 +563,7 @@ export default function App() {
           setOnboarding(false);
           navigate(state.selectedProgramIds.length ? "PathFinder" : "Discover");
           setNotification(
-            "Your starting point is saved. Explore the next steps and the reasons behind them.",
+            "Your answers are saved. Choose a plan or open your checklist to see what to gather first.",
           );
         }}
       />

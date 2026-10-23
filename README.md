@@ -4,9 +4,19 @@
 
 Phase 2 evolves the original Next.js/TypeScript, Dexie and graph-engine foundation. It adds meaningful planning capabilities without a backend, account, uploads or AI service.
 
+## What changed in the interface
+
+BridgeBack now uses plain page names: **Find help**, **My checklist**, **Documents**, and **Activity**. The overview explains how to start and includes an interactive pay-stub example that does not change personal progress. Each page has “How to use this page,” and **Help** explains common terms with concrete examples.
+
+The design uses a navy navigation rail, a document-folder layout for the main task, and locally hosted Atkinson Hyperlegible fonts. The checklist comes before optional planning tools. Document descriptions explain what the paper is, what counts in each example plan and what checking a box means. See the [design rationale and public skills consulted](docs/DESIGN.md).
+
+![BridgeBack overview: a practical getting-started checklist and an interactive pay-stub example](docs/screenshots/overview-desktop.png)
+
+[Phone layout](docs/screenshots/overview-mobile.png) · [Dark theme](docs/screenshots/overview-dark.png)
+
 ## Try the signature experience
 
-Start the app and choose **Explore Demo**. A seven-scene guide introduces PathFinder, BarrierBreak, a real what-if simulation, actual progress, shared documents and a printable/exportable action plan. The fictional demo is temporary and does not overwrite personal progress.
+Start the app and choose **Explore Demo** or **Try a guided example**. A seven-scene guide introduces PathFinder, BarrierBreak, a real what-if simulation, actual progress, shared documents and a printable/exportable action plan. The fictional demo is temporary and does not overwrite personal progress.
 
 - **PathFinder:** connected program-specific requirements, interactive unified graph, focused routes, accessible checklist, dynamic readiness and immediate unlock announcements.
 - **BarrierBreak:** ranks currently unresolved obstacles by blocked downstream requirements and distinguishes them from actual immediate unlocks.
@@ -34,7 +44,7 @@ npm run build
 npm start
 ```
 
-The postbuild step generates `public/sw.js` from `service-worker/worker.js`, stamped with the completed build ID. It is generated output and should not be edited. Service-worker registration is production-only. When developing after a production run, unregister the old worker/clear app caches in browser tools to avoid a cached old shell.
+The postbuild step generates `public/sw.js` from `service-worker/worker.js`, stamped with the completed build ID. It is generated output and should not be edited. Service-worker registration is production-only. When developing after a production run, unregister the old worker in browser tools to avoid a cached production shell. After rebuilding a production version, close all old BridgeBack tabs and reopen the app so a waiting update can activate. Your IndexedDB checklist stays separate from cached app files.
 
 ## Validate
 
